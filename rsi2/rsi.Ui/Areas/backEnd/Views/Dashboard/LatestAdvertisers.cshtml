@@ -1,0 +1,69 @@
+﻿@model  IEnumerable<rsi.Entities.Advertiser>
+
+<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title">anunciantes - últimas inclusões</h3>
+        <div class="box-tools pull-right">
+            <span class="label label-danger">8 novos</span>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body no-padding">
+        <ul class="users-list clearfix">
+            @{                
+                foreach (var _item in Model)
+                {
+                    string _name = rsi.Apps.Functions.__maximumSizeOfTheText(_item.Name,20);
+                    string _data = _item.AddDate.ToString("dd") + "/" +  _item.AddDate.ToString("MMM");
+                    var _imgLogo = rsi.Entities.configurations.theSetup.noImage_path;
+
+                    foreach (var _item2 in _item.MediaList.OrderBy(x => x.DisplayOrder))
+                    {
+                        if (_item2.Type == rsi.Entities.AdvertiserDetails.mediaType.logo)
+                        {
+                            _imgLogo = rsi.Entities.configurations.thePaths.advertisersImages + _item2.FileName;
+                            break;
+                        }
+                    }
+                <li>
+                    @*<a href="#" class="detailsAdvertiserytr168" role="button" data-advertiserId="@_item.Id"><img src="@Url.Content(_imgLogo)" alt="User Image"></a>*@
+                    <a href="#" onclick="advertiserModalViewDetails(@_item.Id)"><img src="@Url.Content(_imgLogo)" alt="imagem do anunciante"></a>                   
+                    <span class="users-list-date">@_data</span>
+                </li>
+                    }
+                }
+        </ul>
+    </div>
+    <div class="box-footer text-center">
+        <a href="/backEnd/Advertisers/List" class="uppercase">ver todos os anunciantes...</a>
+    </div>
+</div>
+
+<div class="modal" id="modalDetailsAdvertiser966u343"></div><!-- div usada para abrir o modal -->
+<div class="modal" id="modalDetailsAdvertiser4345"></div><!-- div usada para abrir o modal -->
+
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+<script>
+    //abrir o modal de visulização do registro
+    $(function () {
+        $(".detailsAdvertiserytr168").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-advertiserId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            $("#modalDetailsAdvertiser966u343").load("/backEnd/Advertisers/_modalAdvertiserView?id=" + id, function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modalDetailsAdvertiser966u343").modal();
+            })
+        });
+    })
+    function advertiserModalViewDetails(_advertiserId) {
+        console.log("advertiserModalViewDetails id: " + _advertiserId);
+        $("#modalDetailsAdvertiser4345").load("/backEnd/Advertisers/_modalAdvertiserView?id=" + _advertiserId, function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+            $("#modalDetailsAdvertiser4345").modal();
+        })
+    }
+</script>

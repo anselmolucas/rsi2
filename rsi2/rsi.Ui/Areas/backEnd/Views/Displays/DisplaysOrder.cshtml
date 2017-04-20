@@ -1,0 +1,21 @@
+﻿<!--
+    view...........: List.cshtml
+    local..........: ~/Views/PageElements/List.cshtml
+    controller.....: PageElements
+    system.........: rsi
+    descrição......: listar os anúncios, showcases, widgets e elementos da home page (sobre nós, nosso time, porque anunciar aqui, tem interesse em anunciar, nossos números, contato)
+    author.........: anselmolucas@gmail.com
+    date...........: 06/set/2016
+    status.........: 70% ok (paginação, ordenação de colunas e search por javascript)
+-->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Partial("~/Areas/backEnd/Views/Displays/_partialViews/_displaysOrderView_sideBarLeft.cshtml")
+        </div>
+        <div class="col-md-9">
+            @Html.Action("_displaysOrderView", "Displays", new { id = ViewBag.Id }); @*("~/Areas/backEnd/Views/_partialViews/displays/_displaysOrderView.cshtml", (IEnumerable<rsi.Entities.Display>)@ViewBag.DisplaysList)*@            
+        </div>
+    </div>
+</div>

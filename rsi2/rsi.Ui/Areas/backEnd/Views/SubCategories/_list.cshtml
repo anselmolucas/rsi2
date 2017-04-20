@@ -1,0 +1,72 @@
+﻿@model IEnumerable<rsi.Entities.SubCategory>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box box-purple">
+            <div class="box-header">                
+                <a href="@Url.Action("Maintenance","SubCategories", new { id = 0, o = "a" })" class="modalAddresAdd modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>st</th>
+                            <th>ícone</th>
+                            <th>categoria</th>
+                            <th>nome</th>
+                            <th>detalhes</th>
+                            <th>anunciantes vinculados</th>
+                            <th>data</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int _registersCount = 1;
+                            foreach (var _item in Model)
+                            {
+                                string _name = Functions.__maximumSizeOfTheText(_item.Name, 20);
+                                string _nameCategory = Functions.__maximumSizeOfTheText(_item.CategoryObj.Name, 20);
+                                string _details = Functions.__maximumSizeOfTheText(_item.Details, 30);
+                                string _img = Functions.__displayIconFileName(_item.FileName, "SubCategories");
+                                string _day = Functions.__displayDateinFormat_ddmmm(_item.AddDate);
+                                string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                            _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                            "glyphicon glyphicon-exclamation-sign";
+                                <tr>
+                                    <td>@_registersCount</td>
+                                    <td>@_item.Id</td>
+                                    <td><i class="@_stx"></i></td>
+                                    <td><img src="@Url.Content(_img)" width="40" /></td>
+                                    <td>@_nameCategory</td>
+                                    <td><a href="#" onclick="subCategoryView(@_item.Id);">@_name</a></td>
+                                    <td>@_details</td>
+                                    <td>@_item.LinkedRecords</td>
+                                    <td>@_day</td>
+
+                                    <td>
+                                        <a href="@Url.Action("Maintenance","SubCategories", new { id = _item.Id, o = "v" })"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="@Url.Action("Maintenance","SubCategories", new { id = _item.Id, o = "e" })"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a href="@Url.Action("Maintenance","SubCategories", new { id = _item.Id, o = "d" })"><span class="glyphicon glyphicon-trash"></span></a>
+                                    </td>
+                                </tr>
+
+                                _registersCount++;
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalSubCategory"></div><!-- div usada para abrir o modal -->
+

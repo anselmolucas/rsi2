@@ -1,0 +1,118 @@
+﻿@model IEnumerable<rsi.Entities.EmailBox>
+
+<div class="box box-purple">
+
+    <div class="box-header with-border">
+        <h3 class="box-title">@ViewBag.PageTitle</h3>
+        @if (Model.Count() > 0)
+        {
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    <input type="text" class="form-control input-sm" placeholder="procurar mensagem" disabled>
+                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <div class="box-body no-padding">
+            <div class="mailbox-controls">
+                <button type="button" class="btn btn-default btn-sm checkbox-toggle" disabled>
+                    <i class="fa fa-square-o"></i>
+                </button>
+                <div class="btn-group">
+                    <a href="@Url.Action("Trash","EmailBox", new { id = "inbox"})" type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-trash-o" ></i></a>
+                    <a href="#" type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-reply"></i></a>
+                    <a href="#" type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-share" ></i></a>
+                </div>
+                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                <div class="pull-right">
+                    @*1-50/200*@
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-chevron-left"></i></button>
+                        <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive mailbox-messages">
+                @{
+                    if (ViewBag.InboxList != null)
+                    {
+                        <table class="table table-hover table-striped">
+                            <tbody>
+                                @foreach (var _item in Model.OrderByDescending(x => x.AddDate))
+                                {
+                                    var _subject = (_item.Email_Subject.Length > 31 ? _item.Email_Subject.Substring(0, 30) + " (...)" : _item.Email_Subject);
+                                    var _message = (_item.Email_Body.Length > 31 ? _item.Email_Body.Substring(0, 30) : _item.Email_Body) + "...";
+                                    var _text = _subject + _message;
+                                    string _data = _item.AddDate.ToLongDateString() + " - " + _item.AddDate.ToShortTimeString();
+
+                                    <tr>
+                                        <td><input type="checkbox" disabled></td>
+                                        @if (_item.ReadingStatus != rsi.Entities.readingStatus.Unread)
+                                        {
+                                            <td class="mailbox-star"><a href="#"><i class="fa fa-eye text-gray"></i></a></td>
+                                        }
+                                        @if (_item.ReadingStatus == rsi.Entities.readingStatus.Unread)
+                                        {
+                                            <td class="mailbox-star"><a href="#"><i class="fa fa-eye text-red"></i></a></td>
+
+                                        }
+                                        @{
+                                            ViewBag.ViewMessageObj = _item;
+                                            Session["ViewMessageObj"] = _item;
+                                        }
+                                        <td class="mailbox-name"><a href="@Url.Action("View","EmailBox", new { id = _item.Id, o = ViewBag.PageTitle})">@_item.Email_Sender_Name</a></td>
+                                        <td class="mailbox-name"><a href="@Url.Action("View","EmailBox", new { id = _item.Id, o = ViewBag.PageTitle})">@_item.Email_Sender</a></td>
+                                        <td class="mailbox-name"><a href="@Url.Action("View","EmailBox", new { id = _item.Id, o = ViewBag.PageTitle})">@_item.Email_To</a></td>
+                                        <td class="mailbox-subject">
+                                            <b><a href="@Url.Action("View","EmailBox", new { id = _item.Id, o = ViewBag.PageTitle})">@_subject</a></b> - @_message
+                                        </td>
+                                        <td class="mailbox-date">@_data</td>
+                                    </tr>
+                                            }
+
+                            </tbody>
+                        </table>
+                                            }
+                                            else
+                                            {
+                                                <br /><br /><br />
+                                                <h1>não há mensagens disponíveis em @ViewBag.PageTitle...</h1>
+                                            }
+                }
+
+            </div>
+        </div>
+        <div class="box-footer no-padding">
+            <div class="mailbox-controls">
+                <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                    <i class="fa fa-square-o"></i>
+                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-trash-o"></i></button>
+                    <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-reply"></i></button>
+                    <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-share"></i></button>
+                </div>
+                <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-refresh"></i></button>
+                <div class="pull-right">
+                    @*1-50/200*@
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-chevron-left"></i></button>
+                        <button type="button" class="btn btn-default btn-sm" disabled><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="box-body no-padding">
+            <br /><br />
+            <h3 style="text-align:center;">não há mensagens disponíveis em @ViewBag.PageTitle...</h3>
+            <br /><br />
+        </div>                                           
+    }
+</div>

@@ -1,0 +1,151 @@
+﻿<!--
+    view (partial).: ListMediaList.cshtml
+    local..........: ~/Views/SideBar/ListMediaList.cshtml
+    controller.....: SideBars (é chamada por /SideBar/Maintenance)
+    system.........: rsi
+    descrição......: manutenção de anúncios
+    author.........: anselmolucas@gmail.com
+    date...........: 07/set/2016
+    status.........: 80% ok (falta paginação)
+-->
+
+@model rsi.Entities.Display
+
+<div class="col-md-12">
+    <div class="box box-purple">
+
+        <div class="box-header">
+            <h3 class="box-title">medias vinculadas</h3>
+            <br />
+            @*<a href="#" class="modalSideBarAdd8992" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>*@
+            <a href="#" class="modalSideBarAdd89923" role="button" data-viewId="@Model.Id"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;vincular nova media</a>
+            @*<a href="#" class="modalSideBarView878" role="button" data-viewId="@Model.SideBarObj.Id">@Model.SideBarObj.Type</a>*@
+        </div>
+        <div class="box-body">
+            <table class="table table-hover table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th>media</th>
+                        <th>#</th>
+                        <th>id</th>
+                        <th>título</th>
+                        <th>descrição</th>
+                        <th>tp</th>
+                        <th>st</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var _item in Model.Ad_MediaList)
+                    {
+                        var _img = "";
+
+                        if ((_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider) && !String.IsNullOrEmpty(_item.MediaFileName))
+                        {
+                            _img = rsi.Entities.configurations.thePaths.advertisingsImages + _item.MediaFileName;
+                        }
+                        else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.youtube && !String.IsNullOrEmpty(_item.URL))
+                        {
+                            _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconYoutube;
+                        }
+                        else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.vimeo && !String.IsNullOrEmpty(_item.URL))
+                        {
+                            _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconVimeo;
+                        }
+                        else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.soundCloud && !String.IsNullOrEmpty(_item.URL))
+                        {
+                            _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconSoundCloud;
+                        }
+                        else
+                        {
+                            _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconNoImage;
+                        }
+
+                        <tr>
+                            @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider && !String.IsNullOrEmpty(_item.MediaFileName))
+                            {
+                                <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id"><img src="@Url.Content(_img)" width="30" class="img-thumbnail img-responsive" /></a><span class="label label-warning">slider</span></td>
+                            }
+                            else
+                            {
+                                <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id"><img src="@Url.Content(_img)" width="50" class="img-thumbnail img-responsive" /></a></td>
+                            }
+
+                            <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id">@_item.DisplayOrder</a></td>
+                            <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id">@_item.Id</a></td>
+                            <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id">@_item.Title</a></td>
+                            <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id">@_item.Description</a></td>
+                            <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id">@_item.Media_type</a></td>
+                            <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id">@_item.St</a></td>
+                            <td>
+                                <a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a href="#" class="modalSideBarEditcv923" role="button" data-adId="@_item.Id"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="#" class="modalSideBarDel89923" role="button" data-viewId="@_item.Id"><span class="glyphicon glyphicon-remove"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            <br />
+
+            <h5><b>@ViewBag.MediaListCountThisDisplay_ad</b> medias vinculadas a essa vitrine de <b>@ViewBag.MediaListCount</b> medias totais (obs.: @ViewBag.MediaListOffCount registros desabilitados)</h5>
+        </div>
+    </div>
+</div>
+
+<!-- le modais-->
+
+<script src="~/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+
+<div class="modal" id="modal_AdMediaList61545"></div><!-- div usada para abrir o modal -->
+
+
+<script>
+    //abrir o modal de visulização do registro
+    $(function () {
+        $(".modalSideBarViewcv923").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-viewId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            $("#modal_AdMediaList61545").load("/backEnd/Displays_AdMediaList/_modal_AdMediaListManutenece?id=" + id + "&vId=0&o=v", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modal_AdMediaList61545").modal();
+            })
+        });
+    })
+
+    //abrir o modal de edição do registro
+    $(function () {
+        $(".modalSideBarEditcv923").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-adId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            $("#modal_AdMediaList61545").load("/backEnd/Displays_AdMediaList/_modal_AdMediaListManutenece?id=" + id + "&vId=" + @Model.Id + "&o=e", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modal_AdMediaList61545").modal();
+            })
+        });
+    })
+
+    //abrir o modal de add de registros
+    $(function () {
+        $(".modalSideBarAdd89923").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-viewId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            console.log("incluir media de anúncio");
+            $("#modal_AdMediaList61545").load("/backEnd/Displays_AdMediaList/_modal_AdMediaListManutenece?id=0&vId=" + id + "&o=a", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modal_AdMediaList61545").modal();
+            })
+        });
+    })
+
+    //abrir o modal de exclusão de registros
+    $(function () {
+        $(".modalSideBarDel89923").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-viewId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            $("#modal_AdMediaList61545").load("/backEnd/Displays_AdMediaList/_modal_AdMediaListManutenece?id=" + id + "&vId=0&o=d", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modal_AdMediaList61545").modal();
+            })
+        });
+    })
+</script>

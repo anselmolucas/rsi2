@@ -1,0 +1,142 @@
+﻿<!--
+    view (partial).: Index.cshtml
+    local..........: ~/Views/_partialViews/emailBox/_sideBarLeft.cshtml
+    controller.....: 
+    system.........: rsi
+    descrição......: menu lateral das mensagens
+    author.........: anselmolucas@gmail.com
+    date...........: 01/set/2016
+    status.........: 90% ok (falta atualizar via javascrpt a opção ativa no momento)    
+-->
+
+<a href="@Url.Action("ReplyForwardCompose","EmailBox", new { id = 0, o = "compose"})" class="btn btn-primary btn-block margin-bottom">criar email</a>   
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">pastas</h3>
+        <div class="box-tools">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body no-padding">
+        <ul id="messages" class="nav nav-pills nav-stacked">
+            <li id="messagesInbox" class="active">
+                <a href="@Url.Action("List","EmailBox", new { id = "inbox"})">
+                    @if (ViewBag.InboxListCount > 0)
+                    {
+                        <i class="fa fa-inbox text-red"></i><span>inbox (novas)</span>
+                            <span class="label label-danger pull-right">@ViewBag.InboxListCount</span>
+                    }
+                    else
+                    {
+                        <i class="fa fa-inbox"></i>
+                        <span>inbox (vazio)</span>
+                    }
+                </a>
+            </li>
+
+            <li id="messagesRSI">
+                <a href="@Url.Action("List", "EmailBox", new { id = "RSI"})">
+                    @if (ViewBag.MessagesToSiteOwnerListCount > 0)
+                    {
+                        <i class="fa fa-envelope-o text-orange"></i><span>RSI</span>
+                        if (ViewBag.MessagesToSiteOwnerListCountNotRead > 0)
+                        {
+                            <span class="label label-warning pull-right" title="mensagens novas">@ViewBag.MessagesToSiteOwnerListCountNotRead</span>
+                        }
+
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesToSiteOwnerListCount</span>
+                    }
+                    else
+                    {
+                        <i class="fa fa-envelope-o"></i>
+                        <span>RSI</span>
+                    }
+                </a>
+            </li>
+
+            <li id="messagesAdvertisers">
+                <a href="@Url.Action("List", "EmailBox", new { id = "anunciantes"})">
+                    @if (ViewBag.MessagesToAdvertiserListCount > 0)
+                    {
+                        <i class="fa fa-envelope-o text-green"></i><span>anunciantes</span>
+                        if (ViewBag.MessagesToSiteOwnerListCountNotRead > 0)
+                        {
+                            <span class="label label-success pull-right" title="mensagens novas">@ViewBag.MessagesToAdvertiserListCountNotRead</span>
+                        }
+
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesToAdvertiserListCount</span>
+                    }
+                    else
+                    {
+                        <i class="fa fa-envelope-o"></i>
+                        <span>anunciantes</span>
+                    }
+                </a>
+            </li>
+
+            <li id="messagesBudgetRequest">
+                <a href="@Url.Action("List", "EmailBox", new { id = "orçamento"})">
+                    @if (ViewBag.MessagesToAdvertiserBudgetRequestListCount > 0)
+                    {
+                        <i class="fa fa-envelope-o text-blue"></i><span>orçamento</span>
+                        if (ViewBag.MessagesToAdvertiserBudgetRequestListCountNotRead > 0)
+                        {
+                            <span class="label label-info pull-right" title="mensagens novas">@ViewBag.MessagesToAdvertiserBudgetRequestListCountNotRead</span>
+                        }
+
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesToAdvertiserBudgetRequestListCount</span>
+                    }
+                    else
+                    {
+                        <i class="fa fa-envelope-o"></i>
+                        <span>orçamento</span>
+                    }
+                </a>
+            </li>
+
+            <li id="messagesArchived">
+                <a href="@Url.Action("List", "EmailBox", new { id = "arquivo"})">
+                    <i class="fa fa-file-text-o"></i> arquivo
+                    @if (ViewBag.MessagesArchivedListCount > 0)
+                    {
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesArchivedListCount</span>
+                    }     
+                </a>
+            </li>
+
+            <li id="messagesDraft">
+                <a href="@Url.Action("List", "EmailBox", new { id = "rascunho"})">
+                    <i class="fa fa-file-archive-o"></i> rascunho
+                    @if (ViewBag.MessagesDraftListCount > 0)
+                    {
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesDraftListCount</span>
+                    }
+                </a>
+            </li>
+
+            <li id="messagesSent">
+                <a href="@Url.Action("List", "EmailBox", new { id = "enviadas"})">
+                    <i class="fa fa-send-o"></i> enviadas
+                    @if (ViewBag.MessagesArchivedListCount > 0)
+                    {
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesSentListCount</span>
+                    }   
+                </a>
+            </li>
+
+            <li id="messagesTrash">
+                <a href="@Url.Action("List", "EmailBox", new { id = "lixeira"})">
+                    <i class="fa fa-trash-o"></i> lixeira
+                    @if (ViewBag.MessagesArchivedListCount > 0)
+                    {
+                        <span class="label label-default pull-right" title="mensagens totais">@ViewBag.MessagesDeletedListCount</span>
+                    }
+                </a>
+            </li>        
+        </ul>
+    </div>
+</div>
+

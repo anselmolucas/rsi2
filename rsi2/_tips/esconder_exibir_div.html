@@ -1,0 +1,29 @@
+﻿<script>
+    $(document).ready(function () {
+        $("#MostrarMensagem").click(MostrarMensagem);
+        $("#EsconderMensagem").click(EsconderMensagem);
+        $("#MostrarEsconderMensagem").click(MostrarEsconderMensagem);
+    });
+
+    function MostrarForm() {
+        event.preventDefault();
+
+        //com jquery
+        $("#DisplayOrder_address").focus();
+        $("#adressesMaintenanceForm").slideDown(2000);
+        $("#adressesMaintenanceForm").show();
+        $("#adressesMaintenanceForm").show('slow');
+
+        //com javascript
+        document.getElementById("adressesMaintenanceForm").style.display = 'block';
+        
+    }
+    function EsconderForm() {
+        event.preventDefault();
+        $("#adressesMaintenanceForm").slideUp(2000);
+        $("#adressesMaintenanceForm").hide('fast');
+    }
+    function MostrarEsconderMensagem() {
+        $("#adressesMaintenanceForm").toggle();
+    }
+</script>

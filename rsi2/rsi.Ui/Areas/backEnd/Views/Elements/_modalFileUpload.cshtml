@@ -1,0 +1,116 @@
+﻿@model rsi.ViewModels.fileUpload
+@using rsi.Entities.configurations
+@using rsi.Apps
+@{ 
+    ViewBag.ImgActual = Model.fileName;
+
+}
+
+<div class="modal-dialog">
+    <div class="modal-content ">
+        <div class="modal-header">
+            <a href="" type="button" class="close linkum" data-dismiss="modal" aria-hidden="true">
+                ×
+            </a>
+            <h3 class="modal-title" id="myModalLabel">
+                manutenção de imagens
+            </h3>
+
+        </div>
+
+        <div class="modal-body">
+            <div class="col-md-12">               
+                
+                @{
+                    string _img = !string.IsNullOrEmpty(ViewBag.FileImage) ? ViewBag.FileImagePath + ViewBag.FileImage : rsi.Entities.configurations.theSetup.noImage_path;                    
+
+                    <div class="pull-right">
+                        <img id="imgActual" src="@Url.Content(_img)" class="img-thumbnail img-responsive" width="100" />
+                    </div>
+                }
+
+                <p>por gentileza, selecione a imagem desejada...</p>
+                
+                <br />
+                @using (Html.BeginForm("_modalFileUpload", "Elements", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.tableRecordId)
+                        @Html.HiddenFor(model => model.table)
+                        @Html.HiddenFor(model => model.fileName)
+
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                @if (!String.IsNullOrEmpty(Model.fileName))
+                                {
+                                    @Html.Label("substituir arquivo de mídia")
+                                }
+                                else
+                                {
+                                    @Html.Label("inserir arquivo arquivo de mídia")
+                                }
+
+                            </div>
+
+                            <div class="col-sm-10">
+                                <label id="inputFileText" for='__file'>Selecionar um arquivo &#187;</label>
+                                <input type="file" id="__file" name="__file" class="form-control">
+                                <p class="help-block">você importa imagens (.jpg, .png)</p>
+                            </div>
+                        </div>
+
+                        <br /><br />
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                    @{
+                                        string _imgActual = Functions.__displayIconFileName(ViewBag.FileImage, "SubCategories");
+                                    }
+                                    <button id="returnButton_inModal" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true" title="fechar janela"><span class="glyphicon glyphicon-off"></span></button>
+                                    <button id="resetButton_inModal" onclick="resetImagFileUpload('@_imgActual')" type="button" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                                    <button id="saveButton_inModal" type="submit" name="operation" value="save" class="btn btn-primary submitButton" title="salvar alterações"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }<!-- fim do formulário -->
+
+            </div>
+
+        </div><!-- /.modal-content -->
+        <div class="modal-footer"></div>
+    </div>
+</div>
+
+
+<script>
+   
+    // fonte: http://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded
+    $("#__file").change(function () {
+        readURL(this);
+    });
+</script>
+<style>
+    /* Esconde o input */
+input[type='file'] {
+  display: none
+}
+
+/* Aparência que terá o seletor de arquivo */
+#inputFileText {
+  background-color: #3498db;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin: 10px;
+  padding: 6px 20px
+}
+</style>

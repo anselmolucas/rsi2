@@ -1,0 +1,160 @@
+﻿<style>
+    #offerCarousel .item {
+        margin: 3px;
+    }
+
+        #offerCarousel .item img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+    #offerCarousel-thumbnails .item {
+        margin: 3px;
+    }
+
+        #offerCarousel-thumbnails .item img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+</style>
+<!-- Page Content -->
+<div class="container">
+    <!-- Page Heading/Breadcrumbs -->
+    <div class="row">
+        <div class="col-lg-12">
+
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index.html">São Paulo</a>
+                </li>
+                <li class="active">Restaurantes</li>
+            </ol>
+
+            <h1 class="page-header">
+                Tantra - Granja Viana
+                <br />
+                <small>Escolha entre Mongolian Grill ou Couvert com Mongolian Grill e Sobremesa. Buffet à vontade com Show de dança egípcia!</small>
+            </h1>
+        </div>
+    </div>
+    <!-- /.row -->
+    <!-- Portfolio Item Row -->
+    <div class="row">
+
+        <div class="col-md-8"> 
+            <div id="imageFeaturedDiv">
+                <img src="~/content/details/1.jpg" id="imageFeatured" class="img-responsive" width="100%"/> 
+            </div>
+                      
+            <div id="offerCarouselx" class="owl-carousel owl-theme">
+                <div class="item"><img src="~/content/details/1.jpg" id="img1"></div>
+                <div class="item"><img src="~/content/details/2.jpg" class="item-img" alt="GTA V"></div>
+                <div class="item"><img src="~/content/details/3.jpg" class="item-img" alt="Mirror Edge"></div>
+                <div class="item"><img src="~/content/details/4.jpg" class="item-img" alt="The Last of us"></div>
+                <div class="item"><img src="~/content/details/5.jpg" class="item-img" alt="GTA V"></div>
+                <div class="item"><img src="~/content/details/6.jpg" class="item-img" alt="Mirror Edge"></div>
+                <div class="item"><img src="~/content/details/7.jpg" class="item-img" alt="The Last of us"></div>
+            </div>
+
+            <div id="offerCarousel-thumbnails" class="owl-carousel owl-theme">
+                <div onclick="thumbnailChangeImage('~/content/details/1.jpg')" class="item item_thumbnail"><img src="~/content/details/1.jpg" alt="The Last of us"></div>
+                <div onclick="thumbnailChangeImage('~/content/details/2.jpg')"  class="item item_thumbnail"><img src="~/content/details/2.jpg" alt="GTA V"></div>
+                <div onclick="thumbnailChangeImage('~/content/details/3.jpg')"  class="item item_thumbnail"><img src="~/content/details/3.jpg" alt="Mirror Edge"></div>
+                <div onclick="thumbnailChangeImage('~/content/details/4.jpg')"  class="item item_thumbnail"><img src="~/content/details/4.jpg" alt="The Last of us"></div>
+                <div onclick="thumbnailChangeImage('~/content/details/5.jpg')"  class="item item_thumbnail"><img src="~/content/details/5.jpg" alt="GTA V"></div>
+                <div onclick="thumbnailChangeImage('~/content/details/6.jpg')"  class="item item_thumbnail"><img src="~/content/details/6.jpg" alt="Mirror Edge"></div>
+                <div onclick="thumbnailChangeImage('~/content/details/7.jpg')"  class="item item_thumbnail"><img src="~/content/details/7.jpg" alt="The Last of us"></div>
+            </div>
+
+            <hr />
+            <h3>Tantra - Granja Viana</h3>
+            <p>O Tantra Granja Viana possui um espaço kids seguro com playground e gramado para crianças de todas as idades se divertirem enquanto os pais aproveitam o restaurante. Aos domingos, no almoço, além de monitores, o espaço reserva atividades diferenciadas para as crianças.</p>
+            <p>O Tantra conta com uma fusão da culinária asiática e atende ao paladar dos adeptos com o melhor do Exotic Asian Fusion Food. A diversidade de molhos e tempero dá o tom do Mongolian Grill, um sistema em que o cliente veste o chapéu do chef e escolhe sua combinação predileta ao montar seu prato, para então o cozinheiro prepará-lo enquanto o ambiente, relaxante e descontraído, envolve e conforta os convidados.</p>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <h4>a partir de</h4>
+                <h1>R$ 32,90</h1>
+                <br />
+                <a href="project_details_1.html" class="btn btn-primary btn-lgt">compre já!</a>
+                <br /><br />
+                <span><b>1558</b></span>
+                <br />
+                <span>cupons vendidos</span>
+                <hr />
+                <span><b>3003-0202</b></span>
+                <br />
+                <span><b>Compre pelo telefone</b></span>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <!-- Related Projects Row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Itens relacionados</h3>
+            @Html.Action("_offersRelated", "ShowCases")
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/stylesAndScripts/jquery/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#offerCarousel").owlCarousel({
+            navigation: false, // Show next and prev buttons
+            slideSpeed: 300,
+            paginationSpeed: 400,
+            singleItem: true,
+            stopOnHover: true,
+            pagination: false
+        });
+    });
+
+    $(document).ready(function () {
+        $("#offerCarousel-thumbnails").owlCarousel({
+            autoPlay: 9000, //Set AutoPlay to 9 seconds
+            items: 4,
+            itemsDesktop: [1199, 3],
+            itemsDesktopSmall: [979, 3],
+            navigation: true,
+            navigationText: ["anterior", "próximo"]
+        });
+    });
+
+    //$(".item_thumbnail").on("click", "li", function () {
+    //    $(this).remove();
+    //});
+
+    $(".item_thumbnailx").click(function () {
+        console.log("clicou em uma imagem");
+        var xx = $(this).attr('src');
+        console.log(xx);
+        console.log($(this).attr("src"));
+        thumbnailChangeImage($(this).attr("src"));
+    });
+
+    function thumbnailChangeImage(image)
+    {
+        console.log(image);
+        //$(".item-img").src = image.substring(1);
+        //$(".item-img").attr('src', image.substring(1)); // versão para localhost
+        $(".item-img").attr('src', "/rsi2/" + image.substring(1)); // versão para localhost
+        //imageFeatured
+        //$("#imageFeatured").attr("src", image);
+        //$("#imageFeatured").remove();
+        //readImageURL(this, 'imageFeatured');
+        //document.getElementById("imageFeatured").src = image.substring(1); // versão para localhost
+        //document.getElementById("imageFeatured").src = "/rsi2/" + image.substring(1); // versão para internet
+        $("#imageFeatured").fadeIn(6000).attr('src', "/rsi2/" + image.substring(1));
+        //$("#imageFeatured").fadeIn(6000).attr('src', image.substring(1));
+        //var img = document.createElement("imageFeatured");
+        //img.src = image;
+        //document.getElementById('imageFeaturedDiv').appendChild(img);
+
+        //var img = '<img src="' + image + '" id="imageFeatured" />';
+        //$(img).appendTo("#imageFeaturedDiv");
+    }
+</script>

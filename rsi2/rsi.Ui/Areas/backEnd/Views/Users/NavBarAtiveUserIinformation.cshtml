@@ -1,0 +1,63 @@
+﻿@model rsi.Entities.User
+@using rsi.Apps
+@using rsi.Entities.configurations
+
+<li class="dropdown user user-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">        
+        @{
+            string _img = theSetup.noImage_path;
+            string _userName = "not logged in";
+
+            if (Model != null)
+            {
+                _img = Functions.__displayIconFileName(Model.FileName, "Users").ToLower().Trim();
+                _userName = Functions.__maximumSizeOfTheText(Model.UserFirstName, 20);
+            }
+            <span class="hidden-xs">@_userName</span>
+            <img src="@Url.Content(_img)" class="user-image" alt="User Image" />
+        }      
+    </a>
+
+    @if (Model != null)
+    {
+        <ul class="dropdown-menu">
+            <!-- User image -->
+            <li class="user-header">
+                <img src="@Url.Content(_img)" class="img-circle" alt="User Image" />
+                <p>
+                    @if (Model != null)
+                {
+                        <span>@Model.UserLastName, @Model.UserFirstName - @Model.UserPower</span>
+                        <small>membro desde @Model.AddDate.ToString("Y")</small>
+                    }
+                </p>
+            </li>
+            <!-- Menu Body -->
+            <li class="user-body">
+                <div class="col-xs-4 text-center">
+                    <a href="#">alterar senha</a>             
+
+                </div>
+                <div class="col-xs-4 text-center">
+                    <a href="#">blá blá blá</a>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <a href="#">blá blá blá</a>
+                </div>
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+                <div class="pull-left">
+                    @{ 
+                        string _profileLink = "/backEnd/Users/UserProfile/" + Model.Id.ToString();
+                        string _profileLogout = "/backEnd/Users/UserProfile/" + Model.Id.ToString();
+                    }
+                    <a href="@Url.Content(_profileLink)" class="btn btn-default btn-flat">Profile</a>
+                </div>
+                <div class="pull-right">
+                    <a href="#" class="btn btn-default btn-flat">logout</a>
+                </div>
+            </li>
+        </ul>
+                        }    
+</li>

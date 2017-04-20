@@ -1,0 +1,6 @@
+﻿@model rsi.Entities.ImageMedia
+
+<img src="@Url.Action("ObterImagem","Images", new { Model.Id})" />
+
+<br /><br />
+@Html.ActionLink("Retornar", "Index", "images", new { area = "backEnd"})

@@ -1,0 +1,19 @@
+﻿<ul class="nav nav-tabs pull-right">
+    <li class="active"><a href="#tab_1-1" data-toggle="tab">dados</a></li>
+    <li><a href="#tab_2-2" data-toggle="tab">imagem</a></li>
+    <li class="pull-left header">   
+        <i class="fa fa-th"></i>&nbsp;
+        @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_headerSecondary.cshtml")  
+    </li>
+    <li>
+        <div style="float:left;margin-right:30px;margin-top:10px;">
+            @{
+                string _linkSearchKey = ViewBag.FormHeaderAux["Link"] + ViewBag.FormHeaderAux["Id"] + "?o=c";
+                string _advertiserId = ViewBag.FormHeaderAux["Id"];
+            }
+
+            @*<a href="@Url.Content(_linkSearchKey)"><span class="glyphicon glyphicon-share-alt" title="ver no site" alt="ver no site"></span></a>*@
+        </div>
+    </li>
+</ul>
+

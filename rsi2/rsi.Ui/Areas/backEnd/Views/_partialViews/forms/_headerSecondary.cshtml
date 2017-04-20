@@ -1,0 +1,12 @@
+﻿@{
+    string _stxAux = ViewBag.FormHeaderAux["St"] == "off" ? ViewBag.FormHeaderAux["Operation"] == "a" ? "glyphicon glyphicon-exclamation-sign text-danger" : "glyphicon glyphicon-thumbs-down text-danger" :
+                         ViewBag.FormHeaderAux["St"] == "on" ? "glyphicon glyphicon-thumbs-up text-primary" : "glyphicon glyphicon-exclamation-sign";
+}
+
+<span id="@ViewBag.FormHeaderAux["FormIdIcon"]"><i class="@_stxAux"></i></span>
+@if (ViewBag.FormHeaderAux["Operation"] != "a")
+{
+    <span>&nbsp;#&nbsp;&nbsp;</span><span id="@ViewBag.FormHeaderAux["idInHeader"]">@ViewBag.FormHeaderAux["Id"]</span><span> - </span>
+}
+
+@ViewBag.FormHeaderAux["Name"] (<span id="@ViewBag.FormHeaderAux["operationInHeader"]">@ViewBag.FormHeaderAux["FormTitle"]</span>)

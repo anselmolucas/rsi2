@@ -1,0 +1,333 @@
+﻿@model rsi.Entities.Menu
+
+<div class="modal-dialog">
+    <div class="modal-content ">
+        <div class="modal-header">
+            <a href="" type="button" class="close linkum" data-dismiss="modal" aria-hidden="true">
+                ×
+            </a>
+            <h3 class="modal-title" id="myModalLabel">
+                @{
+                    string _stx = "";
+
+                    if (Model.Id < 1)
+                    {
+                        _stx = "glyphicon glyphicon-exclamation-sign";
+                    }
+                    else if (Model.St == rsi.Entities.status.off)
+                    {
+                        _stx = "glyphicon glyphicon-thumbs-down text-danger";
+                    }
+                    else if (Model.St == rsi.Entities.status.on)
+                    {
+                        _stx = "glyphicon glyphicon-thumbs-up text-primary";
+                    }
+                    else
+                    {
+                        _stx = "glyphicon glyphicon-exclamation-sign";
+                    }
+
+                    string _title = "menu sub-categorias  " + (Model.Id > 0 ? "#" + Model.Id : " ") + "  (" + ViewBag.OperationTitle + ")";
+                }
+
+                <i class="fa fa-th"></i>&nbsp;&nbsp;#&nbsp;&nbsp;@ViewBag.DisplaysObj.Id - @ViewBag.DisplaysObj.Title (@ViewBag.DisplaysObj.Alias)
+            </h3>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="nav-tabs-custom">
+                @*<ul class="nav nav-tabs pull-right">
+                    <li class="active"><a href="#tab_1-1Modal" data-toggle="tab">dados</a></li>
+                    <li><a href="#tab_2-2Modal" data-toggle="tab">imagem</a></li>
+                    <li class="pull-left header">
+                        <h5><i class="@_stx"></i>&nbsp;  @_title</h5>
+                    </li>
+                </ul>*@
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1-1Modal">
+                        <div id="AdMediasForm">
+                            @using (Html.BeginForm("_modal_DirectAccessMenuItemMaintenance", "Displays", FormMethod.Post, new { enctype = "multipart/form-data", i = "commentForm", @class = "form-horizontal" }))
+                            {
+                                <div class="form-horizontal">
+
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    @Html.HiddenFor(model => model.Id)
+                                    @Html.HiddenFor(model => model.DisplaysId)
+                                   
+                                    <div class="box-body">
+
+                                        <div class="col-md-12">
+
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <div class="col-sm-3 control-label">
+                                                        @*@Html.LabelFor(model => model.DisplayOrder)*@
+                                                        ordem
+                                                    </div>
+
+                                                    <div class="col-sm-9">
+                                                        @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control", @placeholder = "ordem" } })
+                                                        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-3 control-label">
+                                                        @*@Html.LabelFor(model => model.Media_type)*@
+                                                        tipo
+                                                    </div>
+
+                                                    <div class="col-sm-9">
+                                                        @Html.EnumDropDownListFor(model => model.Media_type, "qual o tipo?", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Media_type, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>                                           
+
+                                            <div class="col-md-4">
+                                                @{
+                                                    string _imgUrl = rsi.Entities.configurations.thePaths.displaysImages + Model.MediaFileName;
+
+                                                    if (Model.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image || Model.Media_type == rsi.Entities.AdvertiserDetails.mediaType.logo || Model.Media_type == rsi.Entities.AdvertiserDetails.mediaType.mainImage)
+                                                    {
+                                                        if (!String.IsNullOrEmpty(Model.MediaFileName))
+                                                        {
+                                                            if (Model.MediaFileName.ToLower().Contains(".jpg") || Model.MediaFileName.ToLower().Contains(".png") || Model.MediaFileName.ToLower().Contains(".jpeg") || Model.MediaFileName.ToLower().Contains(".gif") || Model.MediaFileName.ToLower().Contains(".bmp")) /*images*/
+                                                            {
+                                                                <img id="imageIndModal" src="@Url.Content(_imgUrl)" width="220" class="img-responsive img-thumbnail" />
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (Model.Media_type == rsi.Entities.AdvertiserDetails.mediaType.url || Model.Media_type == rsi.Entities.AdvertiserDetails.mediaType.html || Model.Media_type == rsi.Entities.AdvertiserDetails.mediaType.site)
+                                                    {
+                                                        if (!String.IsNullOrEmpty(Model.URL))
+                                                        {
+                                                            <iframe width="100%" scrolling="no" frameborder="no" src="@Url.Content(Model.URL)"></iframe>
+                                                        }
+                                                        else if (!String.IsNullOrEmpty(Model.Icon))
+                                                        {
+                                                            <span class="@Model.Icon"></span>
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+
+                                            <div class="row"></div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.LabelFor(model => model.Title)
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @placeholder = "título / nome" } })
+                                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.LabelFor(model => model.Description)
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "descrição" } })
+                                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.LabelFor(model => model.Icon)
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    @Html.EditorFor(model => model.Icon, new { htmlAttributes = new { @class = "form-control", @placeholder = "ícone" } })
+                                                    @Html.ValidationMessageFor(model => model.Icon, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.LabelFor(model => model.URL)
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    @Html.EditorFor(model => model.URL, new { htmlAttributes = new { @class = "form-control", @placeholder = "url (endereço na internet)" } })
+                                                    @Html.ValidationMessageFor(model => model.URL, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.LabelFor(model => model.Link)
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control", @placeholder = "Link da mídia" } })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.LabelFor(model => model.MediaFileName)
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    @Html.EditorFor(model => model.MediaFileName, new { htmlAttributes = new { @class = "form-control", @placeholder = "nome do arquivo", @readonly = true } })
+                                                    @Html.ValidationMessageFor(model => model.MediaFileName, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @if (!String.IsNullOrEmpty(Model.MediaFileName))
+                                                    {
+                                                        @Html.Label("substituir arquivo de mídia")
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Label("inserir arquivo arquivo de mídia")
+                                                    }
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    <label id="inputFileTextInModal" for='__fileInModal'>Selecionar um arquivo &#187;</label>
+                                                    <input type="file" id="__fileInModal" name="__fileInModal" accept="image/*" multiple class="form-control">
+                                                    <p class="help-block">você importa imagens (.jpg, .png)</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- ------------------------------------------------------------------
+                                                status do registro
+                                            ------------------------------------------------------------------- -->
+                                            <fieldset>
+                                                <legend>status do registro</legend>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.St)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.RadioButtonFor(model => model.St, "on")
+                                                        <span>registo ativo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        @Html.RadioButtonFor(model => model.St, "off")
+                                                        <span>registro inativo</span>
+                                                        @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                      
+                                        <div class="form-group">
+                                            <div class="col-sm-6">
+                                                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                                    <button id="returnButton_inModal" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true" title="fechar janela"><span class="glyphicon glyphicon-off"></span></button>
+                                                    <button id="resetButton_inModal" type="reset" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                                                    <button id="saveButton_inModal345" type="submit" name="operation" value="save" class="btn btn-primary submitButton" data-jsonUrl="/SubCategories/jsonMaintenance" title="salvar alterações"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                                    <button id="deleteButton_inModal" onclick="Mudarestado('deleteRegisterConfirm_inModal')" type="button" class="btn btn-danger" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- div escondida para confirmação da exclusão do registro -->
+                                            <div id="deleteRegisterConfirm_inModal" class="col-sm-12" style="display:none;">
+
+                                                <div class="form-group">
+
+                                                    <h2 style="text-align:center;color:red;">*** confirmar exclusão ***</h2>
+
+                                                    <div class="col-md-6">
+                                                        <div class="pull-left" role="group">
+                                                            <button id="deleteButton_inModal" onclick="Mudarestado('deleteRegisterConfirm_inModal')" type="button" class="btn btn-default" title="retornar ao anunciante (fecha janela)">desistir</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="pull-right" role="group">
+                                                            <button type="submit" class="btn btn-danger" name="operation" value="delete" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @*<div class="tab-pane" id="tab_2-2Modal">
+                        @if (Model.Id > 0)
+                        {
+                            @Html.Action("_fileUpload", "Elements", new { id = Model.Id, tab = "DirectMenu", imageId = "imageInModal" })
+                        }
+                        else
+                        {
+                            <h2>adicionar imagem</h2>
+                            <hr />
+                            <h4>*** para ativar essa função é necessário criar um novo registro ou atualizar um já existente!</h4>
+                        }
+                    </div>*@
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script src="~/assets/stylesAndScripts/this/myScripts.js"></script>
+
+<script>
+    // fonte: http://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded
+    $("#__fileInModal").change(function () {
+        document.getElementById("saveButton_inModal").disabled = false;
+        document.getElementById("resetButton_inModal").disabled = false;
+
+        readImageURL(this, "imageIndModal");
+    });
+
+    $(document).ready(function () {
+        document.getElementById("saveButton_inModal").disabled = true;
+        document.getElementById("resetButton_inModal").disabled = true;
+    })
+
+    function readImageURL(input, idImage) {
+
+        console.log("imagem: " + idImage);
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                $('#' + idImage).attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<style>
+    /* Esconde o input */
+    #__fileInModal{
+        display: none;
+    }
+
+    /* Aparência que terá o seletor de arquivo */
+    #inputFileTextInModal {
+        background-color: #3498db;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        margin: 10px;
+        padding: 6px 20px;
+    }
+</style>

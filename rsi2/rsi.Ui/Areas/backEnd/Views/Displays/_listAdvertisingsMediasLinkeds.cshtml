@@ -1,0 +1,127 @@
+﻿<!--
+    view (partial).: ListMediaList.cshtml
+    local..........: ~/Views/SideBar/ListMediaList.cshtml
+    controller.....: SideBars (é chamada por /SideBar/Maintenance)
+    system.........: rsi
+    descrição......: manutenção de anúncios
+    author.........: anselmolucas@gmail.com
+    date...........: 07/set/2016
+    status.........: 80% ok (falta paginação)
+-->
+
+@model rsi.Entities.Display
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box box-purple">
+            <div class="box-header">
+                @*<a href="#" onclick="adMediaMaintenance('@Model.Id')" class="addButton_inList" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>*@
+                <a href="#" onclick="adMediaMaintenance( 0, @Model.Id, 'a')" class="addButton_inList" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>ordem</th>
+                            <th>st</th>
+                            <th>ícone</th>
+                            <th>título</th>
+                            <th>descrição</th>
+                            <th>tp</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int _registersCount = 1;
+                            foreach (var _item in Model.Ad_MediaList)
+                            {
+                                var _title = Functions.__maximumSizeOfTheText(_item.Title, 20);
+                                var _description = Functions.__maximumSizeOfTheText(_item.Description, 20);
+                                var _img = "";
+
+                                if ((_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.logo || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.icon || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.gallery || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.banner) && !String.IsNullOrEmpty(_item.MediaFileName))
+                                {
+                                    _img = Functions.__displayIconFileName(_item.MediaFileName, "AdMedias");
+                                }
+                                else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.youtube && !String.IsNullOrEmpty(_item.URL))
+                                {
+                                    _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconYoutube;
+                                }
+                                else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.vimeo && !String.IsNullOrEmpty(_item.URL))
+                                {
+                                    _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconVimeo;
+                                }
+                                else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.soundCloud && !String.IsNullOrEmpty(_item.URL))
+                                {
+                                    _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconSoundCloud;
+                                }
+                                else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.googleMaps && !String.IsNullOrEmpty(_item.URL))
+                                {
+                                    _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconMap;
+                                }
+                                else if ((_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.url || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.site || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.html) && !String.IsNullOrEmpty(_item.URL))
+                                {
+                                    _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconSite;
+                                }
+                                else
+                                {
+                                    _img = rsi.Entities.configurations.theSetup.noImage_path;
+                                }
+                                string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                            _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                            "glyphicon glyphicon-exclamation-sign";
+                                <tr>
+                                    <td>@_registersCount</td>
+                                    <td>@_item.Id</td>
+                                    <td>@_item.DisplayOrder</td>
+                                    <td><i class="@_stx"></i></td>
+                                    @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider && !String.IsNullOrEmpty(_item.MediaFileName))
+                                    {
+                                        <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id"><img src="@Url.Content(_img)" width="30" class="img-thumbnail img-responsive" /></a><span class="label label-warning">slider</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><a href="#" class="modalSideBarViewcv923" role="button" data-viewId="@_item.Id"><img src="@Url.Content(_img)" width="50" class="img-thumbnail img-responsive" /></a></td>
+                                    }
+                                    <td>@_title</td>
+                                    <td>@_description</td>
+                                    <td>@_item.Media_type</td>
+
+                                    <td>
+                                        <a href="#" onclick="adMediaMaintenance(@_item.Id, @_item.DisplaysId,'v')" class="viewButton_inList"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="#" onclick="adMediaMaintenance(@_item.Id, @_item.DisplaysId,'e')" class="editMediasEdit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a href="#" onclick="adMediaMaintenance(@_item.Id, @_item.DisplaysId,'d')" class="deleteMediasDelete"><span class="glyphicon glyphicon-trash"></span></a>
+                                    </td>
+                                </tr>
+
+                                _registersCount++;
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modal_AdMedia"></div><!-- div usada para abrir o modal -->
+
+<script>   
+    //abrir o modal de manutenção do registro de mídia
+    function adMediaMaintenance(__mediaId, __displaysId, __operation) {
+        console.log("adMediaMaintenance");
+        console.log("mediaId: " + __mediaId + "   displaysId: " + __displaysId + "  operation:" + __operation);
+        $("#modal_AdMedia").load("/backEnd/Displays_AdMedias/_modalAdMediaListManutenece?__mediaId=" + __mediaId + "&__displaysId=" + __displaysId + "&__operation=" + __operation, function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+            $("#modal_AdMedia").modal();
+        })
+    }
+</script>
+

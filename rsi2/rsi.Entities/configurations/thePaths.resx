@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="advertisersImages" xml:space="preserve">
+    <value>~/content/advertisers/</value>
+    <comment>local de armazenamento de imagens </comment>
+  </data>
+  <data name="AdvertisersLogo" xml:space="preserve">
+    <value>~/content/advertisers/logos/</value>
+  </data>
+  <data name="elementsImages" xml:space="preserve">
+    <value>~/assets/images/elements/</value>
+  </data>
+  <data name="icons" xml:space="preserve">
+    <value>~/assets/images/icons/</value>
+  </data>
+  <data name="logoImages" xml:space="preserve">
+    <value>~/assets/images/logos/</value>
+  </data>
+  <data name="stripes" xml:space="preserve">
+    <value>~/assets/images/elements/stripes/</value>
+  </data>
+  <data name="categoriesImages" xml:space="preserve">
+    <value>~/content/categories/</value>
+  </data>
+  <data name="fullPathRSI_iPhotel" xml:space="preserve">
+    <value>http://dea0f0e8.iphotel.info/</value>
+  </data>
+  <data name="usersImages" xml:space="preserve">
+    <value>~/content/users/</value>
+  </data>
+  <data name="vitrinesImages" xml:space="preserve">
+    <value>~/content/vitrines/</value>
+  </data>
+  <data name="vitrinesViews" xml:space="preserve">
+    <value>~/Views/_partialViews/Vitrines/</value>
+  </data>
+  <data name="advertisingsImages" xml:space="preserve">
+    <value>~/content/advertisings/</value>
+  </data>
+  <data name="showCasesImages" xml:space="preserve">
+    <value>~/content/showcases/</value>
+  </data>
+  <data name="displaysImages" xml:space="preserve">
+    <value>~/content/displays/</value>
+  </data>
+  <data name="subCategoriesImages" xml:space="preserve">
+    <value>~/content/subCategories/</value>
+  </data>
+  <data name="showCase_model_10_list_withFilter" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_10_list_withFilter.cshtml</value>
+  </data>
+  <data name="showCase_model_11_slider" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_11_slider.cshtml</value>
+  </data>
+  <data name="showCase_model_1_grid" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_1_grid.cshtml</value>
+  </data>
+  <data name="showCase_model_2_grid_withFilter" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_2_grid_withFilter.cshtml</value>
+  </data>
+  <data name="showCase_model_3_gridCarousel" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_3_gridCarousel.cshtml</value>
+  </data>
+  <data name="showCase_model_4_gridCarousel_withFilter" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_4_gridCarousel_withFilter.cshtml</value>
+  </data>
+  <data name="showCase_model_5_carousel" xml:space="preserve">
+    <value>/ShowCases/CarouselOneLine</value>
+  </data>
+  <data name="showCase_model_6_carousel_withFilter" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_6_carousel_withFilter.cshtml</value>
+  </data>
+  <data name="showCase_model_7_carousel2" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_7_carousel2.cshtml</value>
+    <comment>galeria vip</comment>
+  </data>
+  <data name="showCase_model_8_metro" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_8_metro.cshtml</value>
+  </data>
+  <data name="showCase_model_9_list" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_9_list.cshtml</value>
+  </data>
+  <data name="showCase_model_12_grid_oneLine" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_12_grid_oneLine.cshtml</value>
+  </data>
+  <data name="showCase_model_13_brandsCarousel" xml:space="preserve">
+    <value>~/Views/_partialViews/displays/_showCase_model_13_brandsCarousel.cshtml</value>
+  </data>
+  <data name="menuImages" xml:space="preserve">
+    <value>~/content/menus/</value>
+  </data>
+  <data name="advertising_model_1_sideBar_unicModel" xml:space="preserve">
+    <value>~/Views/_partialViews/Vitrines/_ad_sideBar.cshtml</value>
+  </data>
+  <data name="section_model_1_home_contact" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_contactMe.cshtml</value>
+  </data>
+  <data name="section_model_3_home_ourTeam" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_ourTeam.cshtml</value>
+  </data>
+  <data name="section_model_4_home_ourNumbers" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_ourNumbers.cshtml</value>
+  </data>
+  <data name="section_model_5_home_ourNumbers" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_whoWeAre.cshtml</value>
+  </data>
+  <data name="section_model_6_home_aboutUs" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_aboutUs.cshtml</value>
+  </data>
+  <data name="section_model_7_home_welcome" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_welcome.cshtml</value>
+  </data>
+  <data name="section_model_8_home_whyAdvertiseHere" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_whyAdvertiseHere.cshtml</value>
+  </data>
+  <data name="section_model_9_home_youWantToAdvertiseHe" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_youWantToAdvertiseHere.cshtml</value>
+  </data>
+  <data name="widget_model_1_home_categoriesMenu" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_categoriesMenu.cshtml</value>
+  </data>
+  <data name="widget_model_2_sideBar_categoriesMenu" xml:space="preserve">
+    <value>~/Views/_partialViews/sideBar/_categoriesMenu.cshtml</value>
+  </data>
+  <data name="widget_model_3_sideBar_tagsCloud" xml:space="preserve">
+    <value>~/Views/_partialViews/sideBar/_tagsCloud.cshtml</value>
+  </data>
+  <data name="widget_model_4_sideBar_google_AdWords" xml:space="preserve">
+    <value>~/Views/_partialViews/sideBar/_googleAdWords_sidebar.cshtml</value>
+  </data>
+  <data name="widget_model_5_home_google_AdWords" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_googleAdWords.cshtml</value>
+  </data>
+  <data name="widget_model_7_home_welcome" xml:space="preserve">
+    <value>~/Views/_partialViews/home/_welcome.cshtml</value>
+  </data>
+  <data name="widget_model_8_header_mainMenu" xml:space="preserve">
+    <value>~/Views/_partialViews/header/_mainMenu.cshtml</value>
+  </data>
+  <data name="siteRSI_url" xml:space="preserve">
+    <value>http://dea0f0e8.iphotel.info</value>
+  </data>
+  <data name="fullPathRSI" xml:space="preserve">
+    <value>A:/_cloudDrives/Dropbox/developer/projects/rsi/rsi.Ui/</value>
+  </data>
+  <data name="servidor" xml:space="preserve">
+    <value>localhost</value>
+    <comment>dois valores possíveis: localhost ou webServer, irá definir onde as informações serão armazenadas</comment>
+  </data>
+  <data name="searchNotFoundImagePath" xml:space="preserve">
+    <value>~/assets/images/elements/searchNotFoundImage.png</value>
+  </data>
+</root>

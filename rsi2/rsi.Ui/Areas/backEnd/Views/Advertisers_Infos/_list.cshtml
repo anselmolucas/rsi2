@@ -1,0 +1,61 @@
+﻿@model IEnumerable<rsi.Entities.AdvertiserDetails.Info>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">textos cadastrados</h3>
+                <br />
+                <a href="#" onclick="advInfosMaintenance2('0', @ViewBag.AdvertiserId, 'a')" class="modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>st</th>
+                            <th>Text</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var _items in Model)
+                        {
+                            string _text = Functions.__maximumSizeOfTheText(_items.Text, 170);
+                            string _stx = _items.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                            _items.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                            "glyphicon glyphicon-exclamation-sign";
+
+                            ViewBag.AdvertiserId = _items.AdvertiserId;
+
+                            <tr>
+                                <td>@_items.DisplayOrder</td>
+                                <td><i class="@_stx"></i></td>
+                                <td>@_text</td>
+                                
+                                <td>
+                                    <a href="#"  onclick="advInfosMaintenance2(@_items.Id, @_items.AdvertiserId, 'v')" class="modalInfosView" role="button" data-viewId="@_items.Id"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#"  onclick="advInfosMaintenance2(@_items.Id, @_items.AdvertiserId, 'e')" class="modalInfosEdit" role="button" data-viewId="@_items.Id"><span class="glyphicon glyphicon-pencil editButton_inList"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<script>
+    //abrir o modal de manutenção de registros
+    function advInfosMaintenance2(_id, _advertiserId, _operation) {
+        $("#modalAdvertiser").load("/backEnd/Advertisers_Infos/_modalView_Infos?id=" + _id + "&advId=" + _advertiserId + "&o=" + _operation, function () {
+            $("#modalAdvertiser").modal();
+        })
+    }
+</script>

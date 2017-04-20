@@ -1,0 +1,8 @@
+﻿@model IEnumerable<rsi.Entities.ImageMedia>
+
+<h1>imagens já cadastradas</h1>
+@foreach (var _item in Model)
+{
+    <img src="@Url.Action("ObterImagem","Images", new { _item.Id})"  width="100" class="img-responsive img-thumbnail"/>
+    <br />
+}

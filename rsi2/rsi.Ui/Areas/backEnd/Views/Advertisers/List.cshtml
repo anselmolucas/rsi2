@@ -1,0 +1,27 @@
+﻿<!--
+    view...........: List.cshtml
+    local..........: ~/Areas/backEnd/Views/Advertisers/List.cshtml
+    controller.....: Advertisers
+    system.........: rsi
+    descrição......: listar as categorias
+    author.........: anselmolucas@gmail.com
+    date...........: 18/jan/2017
+    status.........: 80% ok
+    pendências.....:
+-->
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/css/jquery.dataTables_themeroller.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    @Html.Action("_list", "Advertisers")
+</div>
+
+@section Scripts
+{
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Data-menu.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Data.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Simple-menu.js"></script>
+}
+

@@ -1,0 +1,102 @@
+﻿
+<br />
+@{ 
+    string _divIdToshowHideDeleteButtonOnClick = ViewBag.FormHeaderAux["divIdToshowHideDeleteButtonOnClick"];
+}
+<div class="form-groupx">
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                @if (ViewBag.FormHeaderAux["thisScreenIs"] != null)
+                {
+                    if (ViewBag.FormHeaderAux["thisScreenIs"] == "main")
+                    {
+                        <a href="@Url.Action("List")" type="button" class="btn btn-default" title="retornar à lista"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                    }
+                    else
+                    {
+                        <button id="returnButton_aux" onclick="EsconderForm('@ViewBag.FormHeaderAux["DivId"]')" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true" title="fechar janela"><span class="glyphicon glyphicon-off"></span></button>
+                    }
+                }
+                
+                @if (ViewBag.FormHeaderAux["Operation"] == "a" || ViewBag.FormHeaderAux["Operation"] == "e")
+                {
+                    string _formId = ViewBag.FormHeaderAux["FormId"];
+                    string _resetFormButtonId = ViewBag.FormHeaderAux["resetFormButtonId"];
+                    string _saveFormButtonId = ViewBag.FormHeaderAux["saveFormButtonId"];
+                    string _resetFormButtonFunction = ViewBag.FormHeaderAux["resetFormButtonFunction"];
+
+                    <button id="@_resetFormButtonId" onclick='@_resetFormButtonFunction' type="button" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                }  
+                
+                @if (ViewBag.FormHeaderAux["thisScreenIs"] != null)
+                {
+                    if (ViewBag.FormHeaderAux["thisScreenIs"] == "main")
+                    {
+                        if (ViewBag.FormHeaderAux["Operation"] == "e" || ViewBag.FormHeaderAux["Operation"] == "v" || ViewBag.FormHeaderAux["Operation"] == "d")
+                        {
+                            <button id="addFormButton" type="submit" class="btn btn-default" title="inserir um novo registro" name="operation" value="add"><span class="glyphicon glyphicon-plus"></span></button>
+                            if (ViewBag.FormHeaderAux["Operation"] == "v" || ViewBag.FormHeaderAux["Operation"] == "d")
+                            {
+                                <button id="enabletheEditFormButton" type="button" onclick="enableTheEditForm();" class="btn btn-default" title="habilitar a edição do registro"><span class="glyphicon glyphicon-pencil"></span></button>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ViewBag.FormHeaderAux["Operation"] == "e")
+                        {
+                            <button id="addButton_aux" onclick='@ViewBag.FormHeaderAux["addButton_aux"]' type="button" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-plus"></span></button>
+                        }
+                    }
+                }                
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                @if (ViewBag.FormHeaderAux["Operation"] == "e" || ViewBag.FormHeaderAux["Operation"] == "a")
+                {
+                    <button id='@ViewBag.FormHeaderAux["saveFormButtonId"]' type="submit" name="operation" value="save" class="btn btn-primary submitButton" title="salvar alterações"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                }
+                @if (ViewBag.FormHeaderAux["Operation"] == "e" || ViewBag.FormHeaderAux["Operation"] == "d")
+                {                    
+                    <button id="deleteButton_aux" onclick="Show_Hide('@_divIdToshowHideDeleteButtonOnClick')" type="button" class="btn btn-danger" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span></button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- div escondida para confirmação da exclusão do registro -->
+    <div id="@_divIdToshowHideDeleteButtonOnClick" class="row form-group" style="display:none;">
+        <br />
+        <h2 style="text-align:center;color:red;">*** confirmar exclusão ***</h2>
+        <br />
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                <button id="deleteButton_aux" onclick="Show_Hide('@_divIdToshowHideDeleteButtonOnClick')" type="button" class="btn btn-default" title="retornar ao anunciante (fecha janela)">desistir</button>
+            </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                
+                @if (ViewBag.FormHeaderAux["thisScreenIs"] != null)
+                {
+                    if (ViewBag.FormHeaderAux["thisScreenIs"] == "main")
+                    {
+                        <button type="submit" class="btn btn-danger" name="operation" value="delete" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                    }
+                    else
+                    {
+                        var _deleteButtonOnClick = ViewBag.FormHeaderAux["deleteButtonOnClick"];
+                        <button onclick="@_deleteButtonOnClick" type="button" class="btn btn-danger" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                    }
+                }                
+            </div>
+        </div>
+    </div>
+
+    <br /><br />
+</div>
+

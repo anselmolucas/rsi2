@@ -1,0 +1,1324 @@
+﻿<!--
+    view...........: Maintenance.cshtml
+    local..........: ~/Areas/backEnd/Views/Displays/Maintenance.cshtml
+    controller.....: Displays
+    system.........: rsi
+    descrição......: manutenção de categorias
+    author.........: anselmolucas@gmail.com
+    date...........: 18/jan/2017
+    status.........: 80% ok
+    pendências.....: falta inserir instruções de uso/help e revisão geral e pequenos detalhes
+-->
+
+@model rsi.Entities.Display
+@using rsi.Apps
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs pull-right">
+                    <li class="active"><a href="#tab_1-1" data-toggle="tab">dados</a></li>
+                    <li><a href="#tab_2-2" data-toggle="tab">imagem</a></li>
+                    <li class="pull-left header">
+                        @{
+                            string _stx = "";
+
+                            if (Model.St == rsi.Entities.status.off)
+                            {
+                                _stx = "glyphicon glyphicon-thumbs-down text-danger";
+                            }
+                            else if (Model.St == rsi.Entities.status.on)
+                            {
+                                _stx = "glyphicon glyphicon-thumbs-up text-primary";
+                            }
+                            else
+                            {
+                                _stx = "glyphicon glyphicon-exclamation-sign";
+                            }
+                       
+                            string _viewTitle = Model.Id == 0 ?
+                                                "displays - criar novo registro" :
+                                                Model.Name + " #" + Model.Id.ToString();
+                        }
+
+                        <i class="fa fa-th"></i>&nbsp;&nbsp;<i class="@_stx"></i><span id="registerScreenTitle">@_viewTitle</span>
+                    </li>
+                    <li>
+                        <div style="float:left;margin-right:30px;margin-top:10px;">
+                            <a href="#" class="detailsAdvertiser" role="button" data-advertiserId="@Model.Id" title="visualizar" alt="visualizar"><span class="glyphicon glyphicon-eye-open"></span></a>&nbsp;&nbsp;
+                            @{
+                                string _siteRSI_url = rsi.Entities.configurations.thePaths.siteRSI_url;// + "/advertisers/Details/" + Model.Id.ToString();
+                            }
+                            <a href="@Url.Content(_siteRSI_url)"><span class="glyphicon glyphicon-share-alt" title="ver no site" alt="ver no site"></span></a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1-1">
+                        <div class="box box-purple">                           
+                            <div id="AdvertiserForm">
+                                @using (Html.BeginForm("Maintenance", "Displays", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+                                {
+                                    <div class="form-horizontal">
+
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        @Html.HiddenFor(model => model.Id)
+                                        <input type="hidden" name="view" value="@ViewBag.View" />
+
+                                        <div class="box-body">
+                                            <!-- ------------------------------------------------------------------
+                                                informações de identificação da pageElement
+                                            ------------------------------------------------------------------- -->
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Title)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.DisplayFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })                                                        
+                                                    </div>
+                                                </div>
+                                                <legend>informações de identificação da display (site views)</legend>
+                                                <div class="form-group ">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Alias)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.Alias, new { htmlAttributes = new { @class = "form-control", @placeholder = "apelido", @id = "alias" } })
+                                                        @Html.ValidationMessageFor(model => model.Alias, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Name)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "nome", @id = "nome" } })
+                                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Objectives)
+                                                    </div>
+
+                                                    <div class="col-sm-10 disabled">
+
+                                                        @Html.TextAreaFor(model => model.Objectives, new { @class = "form-control", @rows = 5, @placeholder = "objetivos", @id = "objetivos" })
+                                                        @Html.ValidationMessageFor(model => model.Objectives, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>
+                                            <br />
+                                            <!-- ------------------------------------------------------------------
+                                                informações de configuração
+                                            ------------------------------------------------------------------- -->
+                                            <fieldset>
+                                                <legend>informações de configuração</legend>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.MaximumNumberOfRecords)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.MaximumNumberOfRecords, new { htmlAttributes = new { @class = "form-control", @placeholder = "número máximo de registros", @id = "maxRegs" } })
+                                                        @Html.ValidationMessageFor(model => model.MaximumNumberOfRecords, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.DisplayListInRandomOrder)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.CheckBoxFor(model => model.DisplayListInRandomOrder)
+                                                        &nbsp;&nbsp;<span>(marque para exibição aleatória dos registros)</span>
+                                                        @Html.ValidationMessageFor(model => model.DisplayListInRandomOrder, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                @if (ViewBag.View == "adv")
+                                                {
+                                                    <!-- campos específicos para showCases (vitrines de anunciantes)-->
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.FieldToSselectRecords_criterionSelect)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.FieldToSselectRecords_criterionSelect, "qual o critério de seleção de registros?", new { @class = "form-control", @id = "criterion" })
+                                                                @Html.ValidationMessageFor(model => model.FieldToSselectRecords_criterionSelect, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.FieldToSselectRecords_criterion)
+                                                                campo desabilitado
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EditorFor(model => model.FieldToSselectRecords_criterion, new { htmlAttributes = new { @class = "form-control", @placeholder = "nome do campo que será usado para seleção dos registros", @id = "criterion_text" } })
+                                                                @Html.ValidationMessageFor(model => model.FieldToSselectRecords_criterion, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.FieldToSselectRecords_criterionValue)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EditorFor(model => model.FieldToSselectRecords_criterionValue, new { htmlAttributes = new { @class = "form-control", @placeholder = "valor do campo de critério para seleção de registros", @id = "criterion_value" } })
+                                                                @Html.ValidationMessageFor(model => model.FieldToSselectRecords_criterionValue, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- um erro está ocorrendo com a categoria impedindo que ModelState.IsValid seja true -->
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.CategoryId)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.DropDownListFor(model => model.CategoryId, (SelectList)ViewBag.Ddl_Categories, "-- qual a categoria? --", new { @class = "form-control", @data_val = false, @id = "category" })
+                                                                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.SubCategoryId)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.DropDownListFor(model => model.SubCategoryId, (SelectList)ViewBag.Ddl_SubCategories, "-- qual a sub-categoria? --", new { @class = "form-control", @data_val = false, @id = "subCategory" })
+                                                                @Html.ValidationMessageFor(model => model.SubCategoryId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.Stripe)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.Stripe, "-- qual a stripe? --", new { @class = "form-control", @data_val = false, @id = "stripe" })
+                                                                @Html.ValidationMessageFor(model => model.Stripe, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.CityId)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.DropDownListFor(model => model.CityId, (SelectList)ViewBag.Ddl_Cities, "-- qual a cidade? --", new { @class = "form-control", @data_val = false, @id = "city" })
+                                                                @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.SortRegisters_criterion)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EditorFor(model => model.SortRegisters_criterion, new { htmlAttributes = new { @class = "form-control", @placeholder = "campo / critério ou expressão para classificação dos registros", @id = "sort" } })
+                                                                @Html.ValidationMessageFor(model => model.SortRegisters_criterion, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.ShowCase_model)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.ShowCase_model, "qual showCase usar?", new { @class = "form-control", @id = "model" })
+                                                                @Html.ValidationMessageFor(model => model.ShowCase_model, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.FilterExpression)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EditorFor(model => model.FilterExpression, new { htmlAttributes = new { @class = "form-control", @placeholder = "lista de palavras a serem usadas como filtro - separe por vírgulas", @id = "filter" } })
+                                                                @Html.ValidationMessageFor(model => model.FilterExpression, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.ShowCaseMedia_selected)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.ShowCaseMedia_selected, "qual media usar?", new { @class = "form-control", @id = "showCaseMedia" })
+                                                                @Html.ValidationMessageFor(model => model.ShowCaseMedia_selected, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                    </fieldset>
+                                                }
+
+                                                @if (ViewBag.View == "ads")
+                                                {
+                                                    <!-- campos específicos para anúncios-->
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.Advertising_model)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.Advertising_model, "qual o tipo de anúncio?", new { @class = "form-control", @id = "advertisingModel" })
+                                                                @Html.ValidationMessageFor(model => model.Advertising_model, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                }
+
+                                                @if (ViewBag.View == "wid")
+                                                {
+                                                    <!-- campos específicos para widgets-->
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.Widget_model)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.Widget_model, "qual o modelo?", new { @class = "form-control", @id = "widget_model" })
+                                                                @Html.ValidationMessageFor(model => model.Widget_model, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                }
+
+                                                @if (ViewBag.View == "sec")
+                                                {
+                                                    <!-- campos específicos para seções-->
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2 control-label">
+                                                                @Html.LabelFor(model => model.Section_model)
+                                                            </div>
+
+                                                            <div class="col-sm-10">
+                                                                @Html.EnumDropDownListFor(model => model.Section_model, "qual o modelo?", new { @class = "form-control", @id = "section_model" })
+                                                                @Html.ValidationMessageFor(model => model.Section_model, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                }
+                                                <fieldset>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2 control-label">
+                                                            @Html.LabelFor(model => model.ViewPath)
+                                                        </div>
+
+                                                        <div class="col-sm-10">
+                                                            @Html.EditorFor(model => model.ViewPath, new { htmlAttributes = new { @class = "form-control", @placeholder = "endereço da view", @readonly = true, @id = "ViewPath" } })
+                                                            @Html.ValidationMessageFor(model => model.ViewPath, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2 control-label">
+                                                            @Html.LabelFor(model => model.LocalDisplay)
+                                                        </div>
+
+                                                        <div class="col-sm-10">
+                                                            @Html.EnumDropDownListFor(model => model.LocalDisplay, "qual o local?", new { @class = "form-control", @id = "local" })
+                                                            @Html.ValidationMessageFor(model => model.LocalDisplay, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-sm-2 control-label">
+                                                            @Html.LabelFor(model => model.Display_type)
+                                                        </div>
+
+                                                        <div class="col-sm-10">
+                                                            @Html.EnumDropDownListFor(model => model.Display_type, "qual o tipo de display?", new { @class = "form-control", @readonly = true, @id = "display_type" })
+                                                            @Html.ValidationMessageFor(model => model.Display_type, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </fieldset>
+                                            <br />
+                                            <!-- ------------------------------------------------------------------
+                                                informações a serem exibidas na view no site frontEnd (RSI)
+                                            ------------------------------------------------------------------- -->
+                                            <fieldset>
+                                                <legend>p/exibição no site principal - RSI</legend>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Title)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @placeholder = "Title", @id = "title" } })
+                                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.SubTitle)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.SubTitle, new { htmlAttributes = new { @class = "form-control", @placeholder = "SubTitle", @id = "subTitle" } })
+                                                        @Html.ValidationMessageFor(model => model.SubTitle, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Paragraph1)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.TextAreaFor(model => model.Paragraph1, new { @class = "form-control", @rows = 5, @placeholder = "Paragraph1", @id = "paragraph1" })  @*o parâmetro @cols = 80 parece não ter efeito*@
+                                                        @Html.ValidationMessageFor(model => model.Paragraph1, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Paragraph2)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.TextAreaFor(model => model.Paragraph2, new { @class = "form-control", @rows = 5, @placeholder = "Paragraph2", @id = "paragraph2" })
+                                                        @Html.ValidationMessageFor(model => model.Paragraph2, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.BackgroundColor)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.BackgroundColor, new { htmlAttributes = new { @class = "form-control", @placeholder = "BackgroundColor", @id = "backgroundColor" } })
+                                                        @Html.ValidationMessageFor(model => model.BackgroundColor, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.TextColor)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.TextColor, new { htmlAttributes = new { @class = "form-control", @placeholder = "TextColor", @id = "textColor" } })
+                                                        @Html.ValidationMessageFor(model => model.TextColor, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>
+                                            <br />
+                                            
+                                            <hr />
+                                            <!-- ------------------------------------------------------------------
+                                                status do registro
+                                            ------------------------------------------------------------------- -->
+                                            <fieldset>
+                                                <legend>status da display (site view)</legend>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.St)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.RadioButtonFor(model => model.St, "on", new { @id = "st1" })
+                                                        <span>registo ativo</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        @Html.RadioButtonFor(model => model.St, "off", new { @id = "st2" })
+                                                        <span>registro inativo</span>
+                                                        @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                        <div class="box-footer">
+                                            <div class="col-sm-6">
+                                                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                                    <a href="@Url.Action("List")" type="button" class="btn btn-default" title="retornar à lista"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                                                    <button id="resetFormButton" type="reset" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                                                    <button id="addFormButton" type="submit" class="btn btn-default" title="inserir um novo registro" name="operation" value="add"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    <button id="enabletheEditFormButton" type="button" onclick="enableTheEditFormButtons();" class="btn btn-default" title="habilitar a edição do registro"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                                                    <button id="saveFormButton" type="submit" class="btn btn-primary" title="salvar alterações" name="operation" value="save"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                                    <button id="deleteFormButton" type="button" class="btn btn-danger" title="excluir o registro" onclick="Mudarestado('deleteRegisterConfirm')"><span class="glyphicon glyphicon-trash"></span></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- div escondida para confirmação da exclusão do registro -->
+                                            <div id="deleteRegisterConfirm" class="col-sm-12" style="display:none;">
+                                                <div class="form-group">
+                                                    <h2 style="text-align:center;color:red;">*** confirmar exclusão ***</h2>
+                                                    <div class="col-md-6">
+                                                        <div class="pull-left" role="group">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal" title="retornar ao anunciante (fecha janela)" onclick="Mudarestado('deleteRegisterConfirm')">desistir</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="pull-right" role="group">
+                                                            <button type="submit" class="btn btn-danger" name="operation" value="delete" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div><!-- end form-->
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab_2-2">
+                        @if (Model.Id > 0 && ViewBag.Operation != "v" && ViewBag.Operation != "d")
+                        {
+                            @Html.Action("_fileUpload", "Elements", new { id = Model.Id, tab = "Displays" })
+                        }
+                        else
+                        {
+                            <h2>adicionar / imagem </h2>
+                            <hr />
+                            <h4>*** função disponível apenas no modo de edição de registros !!!</h4>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <br />
+            <div class="row" id="_lists">
+                <div class="container-fluid">
+                    @if (ViewBag.View == "adv")
+                    {
+                        <h2>anunciantes vinculados à esse display</h2>
+                        @Html.Action("_list", "Advertisers_ShortList", new { __id = Model.Id, __type = Model.ShowCaseMedia_selected, __tabId = Model.Id })
+                    }
+                    else if (ViewBag.View == "ads")
+                    {
+                        <h2>mídias vinculadas à esse display</h2>
+                        @Html.Action("_listAdvertisingsMediasLinkeds", "Displays", new { __id = Model.Id })
+
+                        @*@Html.Partial("~/Areas/backEnd/Views/_partialViews/_list_ad_mediaList_Display.cshtml", (rsi.Entities.Display)@Model)*@
+                    }
+                    else if (ViewBag.View == "wid" && (Model.Widget_model == rsi.Entities.Display.widgetModel.categoriesMenu ||
+                        Model.Widget_model == rsi.Entities.Display.widgetModel.categoriesMenu_sideBar ||
+                        Model.Widget_model == rsi.Entities.Display.widgetModel.mainMenu ||
+                        Model.Widget_model == rsi.Entities.Display.widgetModel.topMenu))
+                    {
+                        @Html.Partial("~/Areas/backEnd/Views/Displays/_partialViews/_list_menuList.cshtml", (rsi.Entities.Display)@Model)
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- display medias sideBar Right-->
+        <div class="col-md-3">
+
+            <!-- se não for add, exibir o botão para clonagem de displays-->
+            @if (ViewBag.Operation == "e")
+            {
+                using (Html.BeginForm("CloneDisplay", "Displays", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", id = "cloneDisplay" }))
+                {
+                    <input hidden name="_view" value="@ViewBag.View" />
+                    <button type="submit" name="_displayId" value="@Model.Id" class="btn btn-primary btn-block margin-bottom" @ViewBag.AllowEnabletheCloneButton><span class="glyphicon glyphicon-copy"></span> clonar display</button>
+                }
+            }
+            <!-- exibe o ícone do showcase se houver arquivo associado-->
+            @if (Model.MediaFileName != null)
+            {
+                <div class="box box-purple">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">ícone</h3>
+                        <div class="box-tools">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            @{
+                                string _img = Functions.__displayIconFileName(Model.MediaFileName, "Displays");
+                                
+                                <img src="@Url.Content(_img)" class="img-circle img-responsive img-thumbnail" width="100%" />
+                            }
+                        </div>
+                    </div>
+                </div>
+                                }
+            <!-- se for um widget de tags-->
+            @if (Model.Widget_model == rsi.Entities.Display.widgetModel.TagsCloud_sidebar)
+            {
+                <div>
+                    @using (Html.BeginForm("TagsListProcess", "Tags", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @*@Html.HiddenFor(model => model.Id)*@
+                        <input type="hidden" name="view" value="@ViewBag.View" />
+                        <input type="hidden" name="id" value="@Model.Id" />
+
+                        <button type="submit" nave="operation" value="updateVitrineListTable" class="btn btn-primary btn-block margin-bottom">atualizar lista de tags</button>
+                    }
+                    @{
+                        rsi.Apps.Context _context = new rsi.Apps.Context();
+                        int _tagsCount = _context.Tags.Where(x => x.St == rsi.Entities.status.on).ToList().Count();
+
+                        var _cloudList = _context.Tags.Where(x => x.St == rsi.Entities.status.on).ToList();
+                        var _cloudListTotal = _cloudList.OrderBy(x => x.TagText);
+
+                        if (Model.DisplayListInRandomOrder)
+                        {
+                            _cloudList = _cloudList.OrderBy(n => Guid.NewGuid()).ToList();
+                        }
+                        else
+                        {
+                            _cloudList = _cloudList.OrderBy(x => x.TagText).ToList();
+                        }
+
+                        if (Model.MaximumNumberOfRecords > 0)
+                        {
+                            _cloudList = _cloudList.Take(Model.MaximumNumberOfRecords).ToList();
+                        }
+
+                        <div class="box box-purple">
+                            <div class="box-header">
+                                <h3 class="box-title">tags</h3>
+                                <span class="label label-success">@_tagsCount</span>
+                                @if (Model.DisplayListInRandomOrder)
+                                {
+                                    <span class="label label-danger">rand</span>
+                                }
+                                <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <div class="box-body">
+                                @{
+                                    if (!String.IsNullOrEmpty(Model.Title))
+                                    {
+                                        <h3>@Model.Title</h3>
+                                    }
+                                    if (!String.IsNullOrEmpty(Model.SubTitle))
+                                    {
+                                        <h4>@Model.SubTitle</h4>
+                                    }
+                                    if (!String.IsNullOrEmpty(Model.Paragraph1))
+                                    {
+                                        <p>@Model.Paragraph1</p>
+                                    }
+                                }
+
+                                @Html.Partial("~/Areas/backEnd/Views/_partialViews/_list_tags_Tags.cshtml", (IEnumerable<rsi.Entities.AdvertiserDetails.Tag>)@_cloudList)
+                                @if (!String.IsNullOrEmpty(Model.Paragraph2))
+                                {
+                                    <br />
+                                    <p>@Model.Paragraph2</p>
+                                }
+                            </div>
+
+                            <div class="box-footer">
+
+                                <h5>
+                                    tags a exibir: @_cloudList.Count
+                                    <br />
+                                    (de @_tagsCount tags totais)
+                                </h5>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="box box-purple">
+                            <div class="box-header">
+                                <h3 class="box-title">tags totais</h3>
+                                <span class="label label-success">@_tagsCount</span>
+
+                                <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <div class="box-body" style="display:none;">
+
+                                @Html.Partial("~/Areas/backEnd/Views/_partialViews/_list_tags_Tags.cshtml", (IEnumerable<rsi.Entities.AdvertiserDetails.Tag>)@_cloudListTotal)
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            <!-- se existirem medias associadas exibir (somente para anúncios)-->
+            <div>
+                @if (Model.Ad_MediaList != null)
+                {
+                    int _imageTypeCount = 0;
+                    int _sliderTypeCount = 0;
+                    int _youtubeCount = 0;
+                    int _vimeoCount = 0;
+                    int _soundCloudCount = 0;
+
+                    foreach (var _item in Model.Ad_MediaList)
+                    {
+                        _imageTypeCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image) ? 1 : 0;
+                        _sliderTypeCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider) ? 1 : 0;
+                        _youtubeCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.youtube) ? 1 : 0;
+                        _vimeoCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.vimeo) ? 1 : 0;
+                        _soundCloudCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.soundCloud) ? 1 : 0;
+                    }
+
+                    if (_sliderTypeCount > 0)
+                    {
+                        <div class="box box-purple">
+
+                            <div class="box-header with-border">
+                                <h3 class="box-title">anúncio (slider)</h3>
+                                <span class="label label-success">@_sliderTypeCount</span>
+                                <div class="box-tools">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="box-body">
+                                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        @{
+                                            int _contador = 0;
+                                            var _statusSlider = "active";
+                                            foreach (var _item in Model.Ad_MediaList.OrderBy(x => x.DisplayOrder))
+                                            {
+                                                if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider && !String.IsNullOrEmpty(_item.MediaFileName))
+                                                {
+                                                    <li data-target="#carousel-example-generic" data-slide-to="@_contador" class="@_statusSlider"></li>
+                                                    _contador++;
+                                                    _statusSlider = "";
+                                                }
+                                            }
+                                        }
+
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        @{
+                                            var _statusSlider2 = "active";
+
+                                            foreach (var _item in Model.Ad_MediaList)
+                                            {
+                                                if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.slider && !String.IsNullOrEmpty(_item.MediaFileName))
+                                                {
+                                                    var _imgMain = rsi.Entities.configurations.thePaths.advertisingsImages + _item.MediaFileName;
+
+                                                    <div class="item @_statusSlider2">
+                                                        <img src="@Url.Content(_imgMain)">
+                                                        <div class="carousel-caption">
+                                                            @_item.Description
+                                                        </div>
+                                                        @{
+                                                            _statusSlider2 = "";
+                                                        }
+                                                    </div>
+                                                                }
+                                                            }
+                                        }
+                                    </div>
+                                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                        <span class="fa fa-angle-left"></span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                        <span class="fa fa-angle-right"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                                                            }
+                                                            if (_imageTypeCount > 0)
+                                                            {
+                                                                <div class="box box-purple">
+
+                                                                    <div class="box-header with-border">
+                                                                        <h3 class="box-title">anúncio (imagem simples)</h3>
+                                                                        <span class="label label-success">@_imageTypeCount</span>
+                                                                        <div class="box-tools">
+                                                                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                                                <i class="fa fa-minus"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="box-body">
+                                                                        @{
+                                                                            foreach (var _item in Model.Ad_MediaList)
+                                                                            {
+                                                                                <div class="boxxxx">
+
+                                                                                    @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image && !String.IsNullOrEmpty(_item.MediaFileName))
+                                                                                    {
+                                                                                        <div class="box-body">
+                                                                                            @{
+                                                                                                string _img = rsi.Entities.configurations.thePaths.advertisingsImages;
+
+                                                                                                if (!String.IsNullOrEmpty(_item.MediaFileName))
+                                                                                                {
+                                                                                                    _img += _item.MediaFileName;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    _img += rsi.Entities.configurations.theSetup.noImage;
+                                                                                                }
+                                                                                                <img src="@Url.Content(_img)" class="img-responsive" width="100%" />
+                                                                                            }
+                                                                                            <h6>(#@_item.Id) @_item.Title</h6>
+                                                                                            <br />
+                                                                                        </div>
+                                                                                                }
+                                                                                </div>
+                                                                                                }
+                                                                        }
+                                                                    </div>
+
+                                                                    @if (_imageTypeCount > 1 && Model.Advertising_model != rsi.Entities.Display.advertising_model.metro)
+                                                                    {
+                                                                        <div class="callout callout-warning">
+                                                                            <h4>*** lembrete:</h4>
+                                                                            <p>para medias desse tipo, só a primeira imagem, de acordo com a ordem de exibição será exibida</p>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                                                                }
+                                                                                                if (_youtubeCount > 0)
+                                                                                                {
+                                                                                                    <div class="box box-purple">
+
+                                                                                                        <div class="box-header with-border">
+                                                                                                            <h3 class="box-title">youtube</h3>
+                                                                                                            <span class="label label-success">@_youtubeCount</span>
+                                                                                                            <div class="box-tools">
+                                                                                                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                                                                                    <i class="fa fa-minus"></i>
+                                                                                                                </button>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="box-body">
+                                                                                                            @{
+                                                                                                                foreach (var _item in Model.Ad_MediaList)
+                                                                                                                {
+                                                                                                                    <div>
+                                                                                                                        @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.youtube && !String.IsNullOrEmpty(_item.URL))
+                                                                                                                        {
+                                                                                                                            <div class="box-body">
+                                                                                                                                <iframe width="100%" src="@Url.Content(_item.URL)" frameborder="0" allowfullscreen></iframe>
+
+                                                                                                                                <h6>(#@_item.Id) @_item.Title</h6>
+                                                                                                                                <br />
+                                                                                                                            </div>
+                                                                                                                        }
+                                                                                                                    </div>
+                                                                                                                }
+                                                                                                            }
+                                                                                                        </div>
+
+                                                                                                        @if (_youtubeCount > 1)
+                                                                                                        {
+                                                                                                            <div class="callout callout-warning">
+                                                                                                                <h4>*** lembrete:</h4>
+                                                                                                                <p>para medias desse tipo, só o primeiro vídeo, de acordo com a ordem de exibição, será exibido</p>
+                                                                                                            </div>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                                }
+                                                                                                                if (_vimeoCount > 0)
+                                                                                                                {
+                                                                                                                    <div class="box box-purple">
+
+                                                                                                                        <div class="box-header with-border">
+                                                                                                                            <h3 class="box-title">vimeo</h3>
+                                                                                                                            <span class="label label-success">@_vimeoCount</span>
+                                                                                                                            <div class="box-tools">
+                                                                                                                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                                                                                                    <i class="fa fa-minus"></i>
+                                                                                                                                </button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="box-body">
+                                                                                                                            @{
+                                                                                                                                foreach (var _item in Model.Ad_MediaList)
+                                                                                                                                {
+                                                                                                                                    <div>
+                                                                                                                                        @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.vimeo && !String.IsNullOrEmpty(_item.URL))
+                                                                                                                                        {
+                                                                                                                                            <div class="box-body">
+                                                                                                                                                <iframe width="100%" src="@Url.Content(_item.URL)" frameborder="0" allowfullscreen></iframe>
+
+                                                                                                                                                <h6>(#@_item.Id) @_item.Title</h6>
+                                                                                                                                                <br />
+                                                                                                                                            </div>
+                                                                                                                                        }
+                                                                                                                                    </div>
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        </div>
+
+                                                                                                                        @if (_vimeoCount > 1)
+                                                                                                                        {
+                                                                                                                            <div class="callout callout-warning">
+                                                                                                                                <h4>*** lembrete:</h4>
+                                                                                                                                <p>para medias desse tipo, só o primeiro vídeo, de acordo com a ordem de exibição, será exibido</p>
+                                                                                                                            </div>
+                                                                                                                        }
+                                                                                                                    </div>
+                                                                                                                                }
+                                                                                                                                if (_soundCloudCount > 0)
+                                                                                                                                {
+                                                                                                                                    <div class="box box-purple">
+
+                                                                                                                                        <div class="box-header with-border">
+                                                                                                                                            <h3 class="box-title">sound cloud</h3>
+                                                                                                                                            <span class="label label-success">@_soundCloudCount</span>
+                                                                                                                                            <div class="box-tools">
+                                                                                                                                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                                                                                                                    <i class="fa fa-minus"></i>
+                                                                                                                                                </button>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+
+                                                                                                                                        <div class="box-body">
+                                                                                                                                            @{
+                                                                                                                                                foreach (var _item in Model.Ad_MediaList)
+                                                                                                                                                {
+                                                                                                                                                    <div>
+                                                                                                                                                        @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.soundCloud && !String.IsNullOrEmpty(_item.URL))
+                                                                                                                                                        {
+                                                                                                                                                            <div class="box-body">
+                                                                                                                                                                <iframe width="100%" scrolling="no" frameborder="no" src="@Url.Content(_item.URL)"></iframe>
+
+                                                                                                                                                                <h6>(#@_item.Id) @_item.Title</h6>
+                                                                                                                                                                <br />
+                                                                                                                                                            </div>
+                                                                                                                                                        }
+                                                                                                                                                    </div>
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        </div>
+
+                                                                                                                                        @if (_vimeoCount > 1)
+                                                                                                                                        {
+                                                                                                                                            <div class="callout callout-warning">
+                                                                                                                                                <h4>*** lembrete:</h4>
+                                                                                                                                                <p>para medias desse tipo, só o primeiro vídeo, de acordo com a ordem de exibição, será exibido</p>
+                                                                                                                                            </div>
+                                                                                                                                        }
+                                                                                                                                    </div>
+                                                                                                                                                    }
+                                                                                                                                                }
+            </div>
+
+            <!-- se existirem medias associadas exibir (somente para anunciantes)-->
+            <div>
+                <!-- se a opção de seleção automática for diferente de manual, mostrar o botão de seleção automática de registros-->
+               
+
+                @if (Model.AdvertisersShortList != null)
+                {
+                    if (Model.AdvertisersShortList.Count > 0)
+                    {
+                        <!-- slider -->
+                        <div class="box box-purple">
+
+                            <div class="box-header with-border">
+                                <h3 class="box-title">anunciantes vinculados (slider)</h3>
+                                <span class="label label-success">@Model.AdvertisersShortList.Count</span>
+                                <div class="box-tools">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="box-body">
+                                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        @{
+                                            int _contador = 0;
+                                            var _statusSlider = "active";
+                                            foreach (var _item in Model.AdvertisersShortList.OrderBy(x => x.DisplayOrder))
+                                            {
+                                                <li data-target="#carousel-example-generic" data-slide-to="@_contador" class="@_statusSlider"></li>
+                                                _contador++;
+                                                _statusSlider = "";
+                                            }
+                                        }
+                                    </ol>
+                                    <div class="carousel-inner">
+                                        @{
+                                            var _statusSlider3 = "active";
+
+                                            foreach (var _item in Model.AdvertisersShortList.OrderBy(x => x.DisplayOrder))
+                                            {
+                                                if ((_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.logo) && !String.IsNullOrEmpty(_item.MediaFileName))
+                                                {                                                    
+                                                    var _img = Functions.__displayIconFileName(_item.MediaFileName, "Advertisers");
+                                                    <div class="item @_statusSlider3">
+                                                        <img src="@Url.Content(_img)">
+                                                        <div class="carousel-caption">
+                                                            @_item.Info
+                                                        </div>
+                                                        @{
+                                                            _statusSlider3 = "";
+                                                        }
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                        <span class="fa fa-angle-left"></span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                        <span class="fa fa-angle-right"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- imagens simples -->
+                        <div class="box box-purple">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">anunciantes vinculados</h3>
+                                <span class="label label-success">@Model.AdvertisersShortList.Count</span>
+                                <div class="box-tools">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body" style="display:none;">
+                                <!-- style com displya none faz que o box inicie fechado-->
+                                <div class="form-group">
+                                    @foreach (var _item in Model.AdvertisersShortList.OrderBy(x => x.DisplayOrder))
+                                    {
+                                        var _img = Functions.__displayIconFileName(_item.MediaFileName, "Advertisers");
+                                        <img src="@Url.Content(_img)" class="img-thumbnail img-responsive" with="100%" />
+                                        <h6>@_item.Name</h6>
+                                        <br /><br />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                            }
+                        }
+            </div>
+
+            <!-- se existirem medias associadas exibir (somente para menus)-->
+            <div>
+                @if (Model.MenuList != null)
+                {
+                    int _imageTypeCount = 0;
+                    int _urlCount = 0;
+
+
+                    foreach (var _item in Model.MenuList)
+                    {
+                        _imageTypeCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image) ? 1 : 0;
+                        _urlCount += (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.url) ? 1 : 0;
+                    }
+
+                    if (_imageTypeCount > 0)
+                    {
+                        <div class="box box-purple">
+
+                            <div class="box-header with-border">
+                                <h3 class="box-title">anúncio (imagem simples)</h3>
+                                <span class="label label-success">@_imageTypeCount</span>
+                                <div class="box-tools">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="box-body">
+                                @{
+                                    foreach (var _item in Model.MenuList)
+                                    {
+                                        <div class="boxxxx">
+
+                                            @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image && !String.IsNullOrEmpty(_item.MediaFileName))
+                                            {
+                                                <div class="box-body">
+                                                    @{
+                                                        string _img = rsi.Entities.configurations.thePaths.menuImages;
+
+                                                        if (!String.IsNullOrEmpty(_item.MediaFileName))
+                                                        {
+                                                            _img += _item.MediaFileName;
+                                                        }
+                                                        else
+                                                        {
+                                                            _img += rsi.Entities.configurations.theSetup.noImage;
+                                                        }
+
+                                                        if (String.IsNullOrEmpty(_item.Link))
+                                                        {
+                                                            <img src="@Url.Content(_img)" class="img-responsive" width="100%" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Content(_item.Link)" title="link: @_item.Link" alt="link: @_item.Link"><img src="@Url.Content(_img)" class="img-responsive" width="100%" /></a>
+                                                        }
+
+                                                    }
+                                                    <h6>(#@_item.Id) @_item.Title</h6>
+                                                    <br />
+                                                </div>
+                                                        }
+                                        </div>
+                                                        }
+                                }
+                            </div>
+
+                        </div>
+                                                        }
+                                                        if (_urlCount > 0)
+                                                        {
+                                                            <div class="box box-purple">
+
+                                                                <div class="box-header with-border">
+                                                                    <h3 class="box-title">url</h3>
+                                                                    <span class="label label-success">@_urlCount</span>
+                                                                    <div class="box-tools">
+                                                                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                                            <i class="fa fa-minus"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="box-body">
+                                                                    @{
+                                                                        foreach (var _item in Model.Ad_MediaList)
+                                                                        {
+                                                                            <div>
+                                                                                @if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.url && !String.IsNullOrEmpty(_item.URL))
+                                                                                {
+                                                                                    <div class="box-body">
+                                                                                        <iframe width="100%" src="@Url.Content(_item.URL)" frameborder="0" allowfullscreen></iframe>
+
+                                                                                        <h6>(#@_item.Id) @_item.Title</h6>
+                                                                                        <br />
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                                            }
+                                                                        }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalDetailsAdvertiser116343"></div><!-- div usada para abrir o modal -->
+<div class="modal" id="modalDisplay"></div><!-- div usada para abrir o modal -->
+<div class="modal" id="modalAdvertiser"></div><!-- div usada para abrir o modal -->
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/this/myStyle.css" rel="stylesheet" />
+
+
+<script>
+    /*************************************************************************
+        formulário: Maintenance
+        full path.: ~/Areas/backEnd/Views/Advertisers/Maintenance.cshtml
+     ************************************************************************/
+    //  1.1.1) funções anônimas
+
+    //  + theBegin: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+    $(document).ready(function () {
+
+        var _op = "@ViewBag.Operation";
+        console.log("operation: " + _op);
+        var _view = "@ViewBag.View";
+        console.log("view: " + _view);
+
+            if (_op == "v" || _op == "d") { // view ou delete
+
+                //  + theBegin: desabilitando a edição
+
+                    // + theBegin: fields
+                        document.getElementById("alias").disabled = true;
+                        document.getElementById("nome").disabled = true;
+                        document.getElementById("objetivos").disabled = true;
+                        document.getElementById("maxRegs").disabled = true;
+                        document.getElementById("DisplayListInRandomOrder").disabled = true;
+
+                        if (_view == "adv") {
+                            document.getElementById("criterion").disabled = true;
+                            document.getElementById("criterion_text").disabled = true;
+                            document.getElementById("criterion_value").disabled = true;
+                            //document.getElementById("category").disabled = true;
+                            document.getElementById("subCategory").disabled = true;
+                            document.getElementById("stripe").disabled = true;
+                            document.getElementById("city").disabled = true;
+                            document.getElementById("sort").disabled = true;
+                            document.getElementById("model").disabled = true;
+                            document.getElementById("filter").disabled = true;
+                            document.getElementById("showCaseMedia").disabled = true;
+                        }
+                        else if (_view == "ads")
+                        {
+                            document.getElementById("advertisingModel").disabled = true;
+                        }
+                        else if (_view == "wid")
+                        {
+                            document.getElementById("widget_model").disabled = true;
+                        }
+                        else if (_view == "sec")
+                        {
+                            document.getElementById("section_model").disabled = true;
+                        }
+
+                        document.getElementById("local").disabled = true;
+                        //document.getElementById("display_type").disabled = true;
+                        document.getElementById("title").disabled = true;
+                        document.getElementById("subTitle").disabled = true;
+                        document.getElementById("paragraph1").disabled = true;
+                        document.getElementById("paragraph2").disabled = true;
+                        document.getElementById("backgroundColor").disabled = true;
+                        document.getElementById("textColor").disabled = true;
+                        document.getElementById("st1").disabled = true;
+                        document.getElementById("st2").disabled = true;
+                    // - theEnd: fields                        
+                        $('.removeButton_inList').hide(); // esconder o botão revome da lista de anunciantes vinculados
+                        $('.modalAddbutton').hide(); // esconder o botão add lista de anunciantes vinculados
+                        $('.addButton_inList').hide(); // esconder o botão add novo
+                        $('.editButton_inList').hide(); // esconder o botão edit registro
+                        $('.deleteButton_inList').hide(); // esconder o botão delete registro
+                        //$('#tab_2-2').hide();
+
+                    // buttons
+                    disableTheEditFormButtons(_op);
+
+                //  - theEnd: desabilitando a edição
+
+            } else if (_op == "a" || _op == "e") {
+
+                //  + theBegin: desabilitando a edição
+
+                    // + theBegin: fields
+                        document.getElementById("alias").disabled = false;
+                        document.getElementById("nome").disabled = false;
+                        document.getElementById("objetivos").disabled = false;
+                        document.getElementById("maxRegs").disabled = false;
+                        document.getElementById("DisplayListInRandomOrder").disabled = false;
+
+                        if (_view == "adv") {
+                            document.getElementById("criterion").disabled = false;
+                            document.getElementById("criterion_text").disabled = false;
+                            document.getElementById("criterion_value").disabled = false;
+                            //document.getElementById("category").disabled = false;
+                            document.getElementById("subCategory").disabled = false;
+                            document.getElementById("stripe").disabled = false;
+                            document.getElementById("city").disabled = false;
+                            document.getElementById("sort").disabled = false;
+                            document.getElementById("model").disabled = false;
+                            document.getElementById("filter").disabled = false;
+                            document.getElementById("showCaseMedia").disabled = false;
+                        }
+                        else if (_view == "ads") {
+                            document.getElementById("advertisingModel").disabled = false;
+                        }
+                        else if (_view == "wid") {
+                            document.getElementById("widget_model").disabled = false;
+                        }
+                        else if (_view == "sec") {
+                            document.getElementById("section_model").disabled = false;
+                        }
+
+                        document.getElementById("local").disabled = false;
+                        //document.getElementById("display_type").disabled = false;
+                        document.getElementById("title").disabled = false;
+                        document.getElementById("subTitle").disabled = false;
+                        document.getElementById("paragraph1").disabled = false;
+                        document.getElementById("paragraph2").disabled = false;
+                        document.getElementById("backgroundColor").disabled = false;
+                        document.getElementById("textColor").disabled = false;
+                        document.getElementById("st1").disabled = false;
+                        document.getElementById("st2").disabled = false;
+                    // - theEnd: fields
+
+                    // buttons
+                    enableTheEditFormButtons(_op);
+
+                    //$('.editButton_inList').hide(); // esconder o botão edit da lista de mídias
+                    //$('.deleteButton_inList').hide(); // esconder o botão delete da lista de mídias
+                    //$('.addButton_inList').hide(); // esconder o botão add em todas as mídias
+                    if (_op == "a")
+                    {
+                        $('#imageBox').hide(); // esconder a imagem
+                        $('#_lists').hide(); // esconder as listas                        
+                    }
+                    else {
+                        $('#imageBox').show(); // exibir a imagem
+                        $('#_lists').show(); // esconder as listas
+                    }
+
+                //  - theEnd: desabilitando a edição
+        }
+    });
+    //  - theEnd: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+
+    function addRegister() {
+        console.log("addRegister");
+    }
+
+    function enableTheEditButton() {
+        document.getElementById("saveButton").disabled = false;
+        document.getElementById("resetButton").disabled = false;
+        document.getElementById("additionButton").disabled = false;
+        document.getElementById("deleteButton").disabled = false;
+        document.getElementById("enabletheEditButton").disabled = true;
+        //$('#statusWithRadioButton').show(); // exibir os radios bottons de mudança do status do registro
+
+        //  + theBegin: habilitando a edição
+            //document.getElementById("name").disabled = false;
+           // document.getElementById("details").disabled = false;
+        //  - theEnd: habilitando a edição
+    }
+</script>
+

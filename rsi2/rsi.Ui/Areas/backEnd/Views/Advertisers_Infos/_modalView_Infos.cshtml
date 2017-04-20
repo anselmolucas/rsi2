@@ -1,0 +1,178 @@
+﻿@model rsi.Entities.AdvertiserDetails.Info
+@using rsi.Entities.configurations
+
+<div class="modal-dialog">
+    <div class="modal-content ">
+        <div class="modal-header">
+            <a href="" type="button" class="close linkum" data-dismiss="modal" aria-hidden="true">
+                ×
+            </a>
+            <h3 class="modal-title" id="myModalLabel">
+                @{
+                    string _stx = "";
+
+                    if (Model.St == rsi.Entities.status.off)
+                    {
+                        _stx = "glyphicon glyphicon-thumbs-down text-danger";
+                    }
+                    else if (Model.St == rsi.Entities.status.on)
+                    {
+                        _stx = "glyphicon glyphicon-thumbs-up text-primary";
+                    }
+                    else
+                    {
+                        _stx = "glyphicon glyphicon-exclamation-sign";
+                    }
+                }
+                #&nbsp;&nbsp;anunciante: @ViewBag.AdvertiserObj.Id - @ViewBag.AdvertiserObj.Name
+            </h3>
+            <h5><i class="@_stx"></i>&nbsp; informações #@Model.Id (@ViewBag.OperationTitle)</h5>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="col-md-12">
+                @using (Html.BeginForm("_modalView", "Advertisers_Infos", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+                        @Html.HiddenFor(model => model.AdvertiserId)
+
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                @Html.LabelFor(model => model.DisplayOrder)
+                            </div>
+
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control", @placeholder = "ordem", @id = "order_inModal" } })
+                                @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                            </div>
+                                
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                @Html.LabelFor(model => model.Text)
+                            </div>
+
+                            <div class="col-sm-10">
+                                @Html.TextAreaFor(model => model.Text, new { @class = "form-control", @rows = 10, @placeholder = "parágrafo com texto com os detalhes sobre o anunciante", @id = "text_inModal" })  @*o parâmetro @cols = 80 parece não ter efeito*@
+                                @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                        <div id="statusWithRadioButton_inModal" class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.Label("status")
+                            </div>
+
+                            <div class="col-sm-9">
+                                <div id="registerStatus_row">
+                                    @Html.RadioButtonFor(model => model.St, "on", new { htmlAttributes = new { @id = "st1_inModal" } })
+                                    <span>ativo</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    @Html.RadioButtonFor(model => model.St, "off", new { htmlAttributes = new { @id = "st2_inModal" } })
+                                    <span>inativo</span>
+                                    @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                    <button id="returnButton_inModal" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true" title="fechar janela"><span class="glyphicon glyphicon-off"></span></button>
+                                    <button id="resetButton_inModal" type="reset" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                                    <button id="saveButton_inModal" type="submit" name="operation" value="save" class="btn btn-primary submitButton"  title="salvar alterações"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                    <button id="deleteButton_inModal" onclick="Mudarestado('deleteRegisterConfirm_inModal')" type="button" class="btn btn-danger" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span></button>
+                                </div>
+                            </div>
+
+                            <!-- div escondida para confirmação da exclusão do registro -->
+                            <div id="deleteRegisterConfirm_inModal" class="col-sm-12" style="display:none;">
+
+                                <div class="form-group">
+
+                                    <h2 style="text-align:center;color:red;">*** confirmar exclusão ***</h2>
+
+                                    <div class="col-md-6">
+                                        <div class="pull-left" role="group">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" title="retornar ao anunciante (fecha janela)" onclick="Mudarestado('deleteRegisterConfirm_inModal')">desistir</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="pull-right" role="group">
+                                            <button type="submit" class="btn btn-danger" name="operation" value="delete" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }<!-- fim do formulário -->
+
+            </div>
+        </div><!-- /.modal-content -->
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script src="~/assets/stylesAndScripts/this/myScripts.js"></script>
+<script>
+    //  + theBegin: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+        $(document).ready(function () {
+            //ViewBag.OperationTitle = o == "a" ? "adicionar novo registro" : o == "e" ? "editar registro" : o == "d" ? "excluir registro" : o == "v" ? "visualizar registro" : "*** operação não definida ***";
+            var _op = "@ViewBag.Operation";            
+
+            if (_op == "v" || _op == "d") { // view ou delete
+                console.log("inibindo campos");
+                //  + theBegin: desabilitando a edição
+                    document.getElementById("order_inModal").disabled = true;
+                    document.getElementById("text_inModal").disabled = true;
+                //  - theEnd: desabilitando a edição
+
+                //  - theBegin: esconder trechos do formulário
+                    if (_op == "d") { // delete
+                        $('#deleteButton_inModal').show();
+                    }
+                    else {
+                        $('#deleteButton_inModal').hide();
+                    }
+                    $('#resetButton_inModal').hide();
+                    $('#saveButton_inModal').hide();
+
+                    $('#statusWithRadioButton_inModal').hide(); // esconder os radios bottons de mudança do status do registro
+                //  - theEnd: esconder trechos do formulário
+
+            } else {
+
+                //  + theBegin: habilitando a edição            
+                    document.getElementById("order_inModal").disabled = false;
+                    document.getElementById("text_inModal").disabled = false;
+                //  - theEnd: habilitando a edição
+
+                //  - theBegin: exibir trechos do formulário
+                    if (_op == "a") { // add
+                        $('#deleteButton_inModal').hide();
+                    }
+                    else {
+                        $('#deleteButton_inModal').show();
+                    }
+                    $('#resetButton_inModal').show();
+                    $('#saveButton_inModal').show();
+                    $('#statusWithRadioButton_inModal').show(); // esconder os radios bottons de mudança do status do registro
+                //  - theEnd: exibir trechos do formulário
+            }
+        });
+    //  - theEnd: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+</script>
+
+
+

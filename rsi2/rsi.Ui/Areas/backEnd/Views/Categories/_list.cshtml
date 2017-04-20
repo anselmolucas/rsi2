@@ -1,0 +1,73 @@
+﻿@model IEnumerable<rsi.Entities.Category>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box box-purple">
+            <div class="box-header">
+                <a href="@Url.Action("Maintenance","Categories", new { id = 0, o = "a" })" class="modalAddresAdd modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                @if (Model == null)
+                {
+                    <h1>*** ainda não existem registros cadastrados!!!</h1>
+                }
+                else
+                {
+                    <table id="example1" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>id</th>
+                                <th>st</th>
+                                <th>ícone</th>
+                                <th>nome</th>
+                                <th>detalhes</th>
+                                <th>anunciantes vinculados</th>
+                                <th>data</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @{
+                                int _registersCount = 1;
+                                foreach (var _item in Model)
+                                {
+                                    var _name = Functions.__maximumSizeOfTheText(_item.Name, 20);
+                                    var _details = Functions.__maximumSizeOfTheText(_item.Details, 30);
+                                    var _img = Functions.__displayIconFileName(_item.FileName, "Categories");
+                                    var _day = Functions.__displayDateinFormat_ddmmm(_item.AddDate);
+                                    string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                                _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                                "glyphicon glyphicon-exclamation-sign";
+                                    <tr>
+                                        <td>@_registersCount</td>
+                                        <td>@_item.Id</td>
+                                        <td><i class="@_stx"></i></td>
+                                        <td><img src="@Url.Content(_img)" width="40" /></td>
+                                        <td><a href="@Url.Action("Maintenance","Categories", new { id = _item.Id, o = "v" })">@_name</a></td>
+                                        <td>@_details</td>
+                                        <td>@_item.LinkedRecords</td>
+                                        <td>@_day</td>
+
+                                        <td>
+                                            <a href="@Url.Action("Maintenance","Categories", new { id = _item.Id, o = "v" })"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                            <a href="@Url.Action("Maintenance","Categories", new { id = _item.Id, o = "e" })"><span class="glyphicon glyphicon-pencil"></span></a>
+                                            <a href="@Url.Action("Maintenance","Categories", new { id = _item.Id, o = "d" })"><span class="glyphicon glyphicon-trash"></span></a>
+                                        </td>
+                                    </tr>
+
+                                    _registersCount++;
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                }                
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<rsi.Entities.AdvertiserDetails.Contact>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">contatos cadastrados</h3>
+                <br />
+                <a href="#" onclick="advContactsMaintenance('0','@ViewBag.AdvertiserId','a')" class="modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>st</th>
+                            <th>ddd</th>
+                            <th>tel</th>
+                            <th>e-mail</th>
+                            <th>tp</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var _items in Model)
+                        {
+                            string _email = Functions.__maximumSizeOfTheText(_items.Email, 30);                       
+                            string _stx = _items.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                            _items.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                            "glyphicon glyphicon-exclamation-sign";
+
+                            ViewBag.AdvertiserId = _items.AdvertiserId;
+
+                            <tr>
+                                <td>@_items.DisplayOrder</td>
+                                <td><i class="@_stx"></i></td>
+                                <td>@_items.Ddd</td>
+                                <td>@_items.Number</td>
+                                <td>@_email</td>
+                                <td>@_items.Type</td>
+
+                                <td>
+                                    <a href="#" onclick="advContactsMaintenance(@_items.Id,@_items.AdvertiserId,'v')" role="button" data-viewId="@_items.Id"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#" onclick="advContactsMaintenance(@_items.Id,@_items.AdvertiserId,'e')" role="button" data-viewId="@_items.Id"><espan class="glyphicon glyphicon-pencil editButton_inList"></espan></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- le modais-->
+<div class="modal" id="modalContactsView"></div><!-- div usada para abrir o modal -->
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<script>
+    //abrir o modal de manutenção de registros
+    function advContactsMaintenance(_id, _advertiserId, _operation) {
+        $("#modalAdvertiser").load("/backEnd/Advertisers_Contacts/_modalView?id=" + _id + "&advId=" + _advertiserId + "&o=" + _operation, function () {
+            $("#modalAdvertiser").modal();
+        })
+    }    
+</script>

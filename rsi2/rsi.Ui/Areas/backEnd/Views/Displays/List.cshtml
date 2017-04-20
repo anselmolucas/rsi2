@@ -1,0 +1,108 @@
+﻿<!--
+    view...........: List.cshtml
+    local..........: ~/Areas/backEnd/Views/Displays/List.cshtml
+    controller.....: Displays
+    system.........: rsi
+    descrição......: listar as showcases
+    author.........: anselmolucas@gmail.com
+    date...........: 18/jan/2017
+    status.........: 80% ok
+    pendências.....:
+-->
+
+@model IEnumerable<rsi.Entities.Display>
+@using rsi.Apps
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/css/jquery.dataTables_themeroller.css" rel="stylesheet" />
+
+<div class="container-fluid">
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="box box-purple">
+                    <div class="box-header">
+                        <a href="@Url.Action("Maintenance","Displays", new { id = 0, view = ViewBag.View, o = "a" })" class="modalAddresAdd modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+                    </div>
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>id</th>
+                                    <th>st</th>
+                                    <th>ícone</th>
+                                    <th>apelido</th>
+                                    <th>nome</th>
+                                    <th>título</th>                                   
+                                    <th>modelo</th>
+                                    <th>local</th>
+                                    <th>medias</th>
+                                    <th>data</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    int _registersCount = 1;
+                                    foreach (var _item in Model)
+                                    {
+                                        var _alias = Functions.__maximumSizeOfTheText(_item.Alias, 15);
+                                        var _name = Functions.__maximumSizeOfTheText(_item.Name, 20);
+                                        var _title = Functions.__maximumSizeOfTheText(_item.Title, 20);
+                                        string _modelo = ViewBag.View == "ads" ? _item.Advertising_model.ToString() :
+                                                                  ViewBag.View == "adv" ? _item.ShowCase_model.ToString() :
+                                                                  ViewBag.View == "wid" ? _item.Widget_model.ToString() :
+                                                                  ViewBag.View == "sec" ? _item.Section_model.ToString() : "";
+                                        string _tipo = _item.Display_type.ToString();
+                                        var _img = Functions.__displayIconFileName(_item.MediaFileName, "Displays");
+                                        var _day = Functions.__displayDateinFormat_ddmmm(_item.AddDate);
+                                        string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                                            _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                                            "glyphicon glyphicon-exclamation-sign";
+                                        <tr>
+                                            <td>@_registersCount</td>
+                                            <td>@_item.Id</td>
+                                            <td><i class="@_stx"></i></td>
+                                            <td><img src="@Url.Content(_img)" width="40" /></td>
+                                            <td>@_alias</td>
+                                            <td>@_name</td>
+                                            <td>@_title</td>                                            
+                                            <td>@_modelo</td>
+                                            <td>@_item.LocalDisplay</td>
+                                            <td>@_item.TotalRegisters</td>
+                                            <td>@_day</td>
+
+                                            <td>
+                                                <a href="@Url.Action("Maintenance","Displays", new {id = _item.Id, view = ViewBag.View, o = "v" })"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                                <a href="@Url.Action("Maintenance","Displays", new { id = _item.Id, view = ViewBag.View, o = "e" })"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                <a href="@Url.Action("Maintenance","Displays", new { id = _item.Id, view = ViewBag.View, o = "d" })"><span class="glyphicon glyphicon-trash"></span></a>
+                                            </td>
+                                        </tr>
+
+                                        _registersCount++;
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Data-menu.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Data.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Simple-menu.js"></script>
+}

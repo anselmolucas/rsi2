@@ -1,0 +1,349 @@
+﻿<!--
+    view...........: Maintenance.cshtml
+    local..........: ~/Areas/backEnd/Views/Users/List.cshtml
+    controller.....: Users
+    system.........: rsi
+    descrição......: manutenção de usuários
+    author.........: anselmolucas@gmail.com
+    date...........: 18/jan/2017
+    status.........: 80% ok
+    pendências.....: falta inserir instruções de uso/help e revisão geral e pequenos detalhes
+-->
+
+@model rsi.Entities.User
+@using rsi.Apps
+@using rsi.Entities.configurations
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs pull-right">
+                    <li class="active"><a href="#tab_1-1" data-toggle="tab">dados</a></li>
+                    <li><a href="#tab_2-2" data-toggle="tab">imagem</a></li>
+                    <li class="pull-left header">
+                        @{
+                            string _viewTitle = Model.Id == 0 ?
+                                                "usuários - criar novo registro" :
+                                                Model.UserFirstName + " " + Model.UserLastName;
+                        }
+
+                        <i class="fa fa-th"></i>&nbsp;&nbsp;<span id="registerScreenTitle">@_viewTitle</span>
+                    </li>
+                    <li>
+                        <div style="float:left;margin-right:30px;margin-top:10px;">
+                            <a href="/teste" class="detailsAdvertiser" role="button" data-advertiserId="@Model.Id" title="visualizar" alt="visualizar"><span class="glyphicon glyphicon-eye-open"></span></a>&nbsp;&nbsp;
+                            <a href="http://www.greenfactor.somee.com/advertisers/Details/@Model.Id"><span class="glyphicon glyphicon-share-alt" title="ver no site" alt="ver no site"></span></a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1-1">
+                        <div class="box box-purple">
+                            <div class="box-header with-border">
+                                @{
+                                    string _stx = "";
+
+                                    if (Model.St == rsi.Entities.status.off)
+                                    {
+                                        _stx = "glyphicon glyphicon-thumbs-down text-danger";
+                                    }
+                                    else if (Model.St == rsi.Entities.status.on)
+                                    {
+                                        _stx = "glyphicon glyphicon-thumbs-up text-primary";
+                                    }
+                                    else
+                                    {
+                                        _stx = "glyphicon glyphicon-exclamation-sign";
+                                    }
+                                }
+
+                                <i class="@_stx"></i><h2 class="box-title"><small>usuário:</small> #&nbsp;@Model.Id <small>&nbsp;(@ViewBag.CurrentScreen)</small></h2>                                
+                            </div>
+                            <br /><br />
+
+                            <div id="AdvertiserForm">
+                                @using (Html.BeginForm("Maintenance", "Users", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+                                {
+                                    <div class="form-horizontal">
+
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        @Html.HiddenFor(model => model.Id)
+
+                                        <div class="box-body">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.UserEmail)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.UserEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "email", @id = "email"} })
+                                                        @Html.ValidationMessageFor(model => model.UserEmail, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.UserFirstName)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.UserFirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "primeiro nome", @id = "userFirstName" } })
+                                                        @Html.ValidationMessageFor(model => model.UserFirstName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.UserLastName)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.UserLastName, new { htmlAttributes = new { @class = "form-control", @placeholder = "sobrenome", @id = "userLastName" } })
+                                                        @Html.ValidationMessageFor(model => model.UserLastName, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.UserPower)
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        @Html.EnumDropDownListFor(model => model.UserPower, "qual o poder?", new { @class = "form-control", @id = "userPower" })
+                                                        @Html.ValidationMessageFor(model => model.UserPower, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.Department)
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        @Html.EnumDropDownListFor(model => model.Department, "qual o dpto?", new { @class = "form-control", @id = "department" })
+                                                        @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                @*<div id="passwords" class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.UserPassword)
+                                                    </div>
+
+                                                    <div class="col-sm-5">
+                                                        @Html.PasswordFor(model => model.UserPassword, new { @class = "form-control", @placeholder = "senha", @id = "userPassword" })
+                                                        @Html.ValidationMessageFor(model => model.UserPassword, "", new { @class = "text-danger" })
+                                                    </div>
+
+                                                    <div class="col-sm-5">
+                                                        @Html.PasswordFor(model => model.UserPasswordReType, new { @class = "form-control", @placeholder = "redigitar a senha", @id = "userPasswordReType" })
+                                                        @Html.ValidationMessageFor(model => model.UserPasswordReType, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>*@
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-2 control-label">
+                                                        @Html.LabelFor(model => model.FileName)
+                                                    </div>
+
+                                                    <div class="col-sm-10">
+                                                        @Html.EditorFor(model => model.FileName, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                            <fieldset id="statusFormRadioButtons" class="form-group">
+                                                <div class="col-sm-2 control-label">
+                                                    @Html.Label("status")
+                                                </div>
+
+                                                <div class="col-sm-10">
+                                                    <div id="registerStatus_row">
+                                                        @Html.RadioButtonFor(model => model.St, "on", new { htmlAttributes = new { @id = "st1" } })
+                                                        <span>ativo</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                        @Html.RadioButtonFor(model => model.St, "off", new { htmlAttributes = new { @id = "st2" } })
+                                                        <span>inativo</span>
+                                                        @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                        <div class="box-footer">
+                                            <div class="col-sm-6">
+                                                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                                    <a href="@Url.Action("List")" type="button" class="btn btn-default" title="retornar à lista"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                                                    <button id="resetFormButton" type="reset" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                                                    <button id="addFormButton" type="submit" class="btn btn-default" title="inserir um novo registro" name="operation" value="add"><span class="glyphicon glyphicon-plus"></span></button>
+                                                    <button id="enabletheEditFormButton" type="button" onclick="enableTheEditFormButtons();" class="btn btn-default" title="habilitar a edição do registro"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                                                    <button id="saveFormButton" type="submit" class="btn btn-primary" title="salvar alterações" name="operation" value="save"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                                    <button id="deleteFormButton" type="button" class="btn btn-danger" title="excluir o registro" onclick="Mudarestado('deleteRegisterConfirm')"><span class="glyphicon glyphicon-trash"></span></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- div escondida para confirmação da exclusão do registro -->
+                                            <div id="deleteRegisterConfirm" class="col-sm-12" style="display:none;">
+                                                <div class="form-group">
+                                                    <h2 style="text-align:center;color:red;">*** confirmar exclusão ***</h2>
+                                                    <div class="col-md-6">
+                                                        <div class="pull-left" role="group">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal" title="retornar ao anunciante (fecha janela)" onclick="Mudarestado('deleteRegisterConfirm')">desistir</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="pull-right" role="group">
+                                                            <button type="submit" class="btn btn-danger" name="operation" value="delete" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }<!-- end form-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab_2-2">
+                        @if (Model.Id > 0)
+                        {
+                            @Html.Action("_fileUpload", "Elements", new { id = Model.Id, tab = "Users" })
+                        }
+                        else
+                        {
+                            <h2>adicionar imagem</h2>
+                            <hr />
+                            <h4>*** para ativar essa função é necessário criar um novo registro ou atualizar um já existente!</h4>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- display medias sideBar Right-->
+        <div class="col-md-3">
+            @{
+                string _img = theSetup.noImage_path;
+
+                if (!String.IsNullOrEmpty(Model.FileName))
+                {
+                    _img = Functions.__displayIconFileName(Model.FileName, "Users");
+                }
+            }            
+                <div class="box box-purple">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">imagem</h3>
+                        <div class="box-tools">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">                            
+                            
+                            <img src="@Url.Content(_img)" class="img-circle img-responsive img-thumbnail" width="100%" />
+                        </div>
+                    </div>
+                </div>
+                       
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalDetailsAdvertiser116343"></div><!-- div usada para abrir o modal -->
+<div class="modal" id="modalAdvertiser"></div><!-- div usada para abrir o modal -->
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/this/myStyle.css" rel="stylesheet" />
+
+<script>
+    /*************************************************************************
+        formulário: Maintenance
+        full path.: ~/Areas/backEnd/Views/Advertisers/Maintenance.cshtml
+     ************************************************************************/
+    //  1.1.1) funções anônimas
+
+    //  + theBegin: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+    $(document).ready(function () {
+        
+        var _op = "@ViewBag.Operation";
+        console.log("operação: " + _op);
+
+        //$('#passwords').hide();
+        
+        if (_op == "v" || _op == "d") { // view ou delete
+
+            //  + theBegin: desabilitando a edição
+
+                // fields
+                document.getElementById("email").disabled = true;                
+                document.getElementById("userFirstName").disabled = true;
+                document.getElementById("userLastName").disabled = true;
+                document.getElementById("userPower").disabled = true;
+                document.getElementById("department").disabled = true;
+
+                // buttons
+                disableTheEditFormButtons(_op);
+
+            //  - theEnd: desabilitando a edição
+
+        } else if (_op == "a" || _op == "e") {
+
+            //  + theBegin: desabilitando a edição
+
+                // fields
+                document.getElementById("email").disabled = false;                
+                document.getElementById("userFirstName").disabled = false;
+                document.getElementById("userLastName").disabled = false;
+                document.getElementById("userPower").disabled = false;
+                document.getElementById("department").disabled = false;
+                document.getElementById("userPassword").disabled = false;
+                document.getElementById("userPasswordReType").disabled = false;
+
+                // buttons
+                enableTheEditFormButtons(_op);
+
+                if (_op == "a")
+                {
+                    $('#imageBox').hide(); // esconder a imagem
+                    //$('#passwords').show();
+                }
+                else {
+                    $('#imageBox').show(); // exibir a imagem
+                    //$('#passwords').hide();
+
+                }
+
+            //  - theEnd: desabilitando a edição
+        }
+    });
+    //  - theEnd: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+
+    function addRegister() {
+        console.log("addRegister");
+    }
+
+    function enableTheEditButton() {
+        document.getElementById("saveButton").disabled = false;
+        document.getElementById("resetButton").disabled = false;
+        document.getElementById("additionButton").disabled = false;
+        document.getElementById("deleteButton").disabled = false;
+        document.getElementById("enabletheEditButton").disabled = true;
+        $('#statusWithRadioButton').show(); // exibir os radios bottons de mudança do status do registro
+
+        //  + theBegin: habilitando a edição
+            document.getElementById("name").disabled = false;
+            document.getElementById("details").disabled = false;
+        //  - theEnd: habilitando a edição
+    }
+</script>
+

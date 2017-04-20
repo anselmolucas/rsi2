@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="email_Cc" xml:space="preserve">
+    <value>anselmo@softbox.com.br</value>
+  </data>
+  <data name="email_client_Credentials" xml:space="preserve">
+    <value>anselmolucas@gmail.com</value>
+  </data>
+  <data name="email_client_Credentials_password" xml:space="preserve">
+    <value>Shyv@1966</value>
+  </data>
+  <data name="email_client_Host" xml:space="preserve">
+    <value>smtp.gmail.com</value>
+  </data>
+  <data name="email_senderName" xml:space="preserve">
+    <value>visitante do site RSI</value>
+  </data>
+  <data name="email_To" xml:space="preserve">
+    <value>anselmo.lucas@hotmail.com</value>
+  </data>
+  <data name="favicon" xml:space="preserve">
+    <value>~/assets/images/logos/favicon.png</value>
+  </data>
+  <data name="iconAdress" xml:space="preserve">
+    <value>icon_address.png</value>
+  </data>
+  <data name="iconAlelo" xml:space="preserve">
+    <value>icon_alelo.png</value>
+  </data>
+  <data name="iconBlog" xml:space="preserve">
+    <value>icon_noImage.png</value>
+  </data>
+  <data name="iconBoleto" xml:space="preserve">
+    <value>icon_boleto.png</value>
+  </data>
+  <data name="iconBradesco" xml:space="preserve">
+    <value>icon_bradesco.png</value>
+  </data>
+  <data name="iconClock" xml:space="preserve">
+    <value>icon_clock.png</value>
+  </data>
+  <data name="iconEmail" xml:space="preserve">
+    <value>icon_email.png</value>
+  </data>
+  <data name="iconFacebook" xml:space="preserve">
+    <value>icon_facebook.png</value>
+  </data>
+  <data name="iconFlickr" xml:space="preserve">
+    <value>icon_noImage.png</value>
+  </data>
+  <data name="iconGallery" xml:space="preserve">
+    <value>icon_gallery.png</value>
+  </data>
+  <data name="iconGooglePlus" xml:space="preserve">
+    <value>icon_googlePlus.png</value>
+  </data>
+  <data name="iconInstagram" xml:space="preserve">
+    <value>icon_instagram.png</value>
+  </data>
+  <data name="iconItau" xml:space="preserve">
+    <value>icon_itau.png</value>
+  </data>
+  <data name="iconLinkedin" xml:space="preserve">
+    <value>icon_linkedin.png</value>
+  </data>
+  <data name="iconMap" xml:space="preserve">
+    <value>icon_map.png</value>
+  </data>
+  <data name="iconMaster" xml:space="preserve">
+    <value>icon_master.ico</value>
+  </data>
+  <data name="iconMoney" xml:space="preserve">
+    <value>icon_money.png</value>
+  </data>
+  <data name="iconMySpace" xml:space="preserve">
+    <value>icon_noImage.png</value>
+  </data>
+  <data name="iconPagSeguro" xml:space="preserve">
+    <value>icon_pagseguro.gif</value>
+  </data>
+  <data name="iconPaypal" xml:space="preserve">
+    <value>icon_paypal.png</value>
+  </data>
+  <data name="iconPicture" xml:space="preserve">
+    <value>icon_picture.png</value>
+  </data>
+  <data name="iconPinterest" xml:space="preserve">
+    <value>icon_noImage.png</value>
+  </data>
+  <data name="iconSite" xml:space="preserve">
+    <value>icon_site.png</value>
+  </data>
+  <data name="iconSkype" xml:space="preserve">
+    <value>icon_noImage.png</value>
+  </data>
+  <data name="iconSoundCloud" xml:space="preserve">
+    <value>icon_soundCloud.ico</value>
+  </data>
+  <data name="iconTel" xml:space="preserve">
+    <value>icon_tel.png</value>
+  </data>
+  <data name="iconTwitter" xml:space="preserve">
+    <value>icon_twitter.png</value>
+  </data>
+  <data name="iconVideo" xml:space="preserve">
+    <value>icon_video.png</value>
+  </data>
+  <data name="iconVimeo" xml:space="preserve">
+    <value>icon_vimeo.png</value>
+  </data>
+  <data name="iconVisa" xml:space="preserve">
+    <value>icon_visa.png</value>
+  </data>
+  <data name="iconWhatsApp" xml:space="preserve">
+    <value>icon_whatsapp.png</value>
+  </data>
+  <data name="iconYoutube" xml:space="preserve">
+    <value>icon_youtube.png</value>
+  </data>
+  <data name="logo" xml:space="preserve">
+    <value>~/assets/images/logos/logo.png</value>
+  </data>
+  <data name="siteDescription" xml:space="preserve">
+    <value>RSI - Rosana Scott Indica</value>
+  </data>
+  <data name="slogan" xml:space="preserve">
+    <value>As melhores opções de compras e serviços</value>
+  </data>
+  <data name="stripe1_right" xml:space="preserve">
+    <value>stripe_right_hot2.png</value>
+  </data>
+  <data name="stripe2_right" xml:space="preserve">
+    <value>stripe_right_sale.png</value>
+  </data>
+  <data name="xmlPath" xml:space="preserve">
+    <value>c:/Users/ansel/xml/config.xml</value>
+  </data>
+  <data name="iconTxt" xml:space="preserve">
+    <value>icon_txt.png</value>
+  </data>
+  <data name="noImage" xml:space="preserve">
+    <value>icon_noImage.png</value>
+  </data>
+  <data name="prefixAdvertiserImag" xml:space="preserve">
+    <value>_adv</value>
+  </data>
+  <data name="prefixCategoryImage" xml:space="preserve">
+    <value>_cat</value>
+  </data>
+  <data name="prefixUserImag" xml:space="preserve">
+    <value>_use</value>
+  </data>
+  <data name="prefixVitrineImag" xml:space="preserve">
+    <value>_vit</value>
+  </data>
+  <data name="vitrineView_carouselOneLine" xml:space="preserve">
+    <value>_display_carouselOneLine.cshtml</value>
+  </data>
+  <data name="vitrineView_carouselOneLine_withFilter" xml:space="preserve">
+    <value>_display_carouselOneLine_withFilter.cshtml</value>
+  </data>
+  <data name="vitrineView_grid" xml:space="preserve">
+    <value>_display_grid.cshtml</value>
+  </data>
+  <data name="vitrineView_grid_withFilter" xml:space="preserve">
+    <value>_display_grid_withFilter.cshtml</value>
+  </data>
+  <data name="carousel_pictureAndSlogan" xml:space="preserve">
+    <value>_display_carousel_pictureAndSlogan.cshtml</value>
+  </data>
+  <data name="carousel_pictureAndSlogan_With_Filter" xml:space="preserve">
+    <value>_display_carousel_pictureAndSlogan_With_Filter.cshtml</value>
+  </data>
+  <data name="iconNoImage" xml:space="preserve">
+    <value>icon_pirate.jpg</value>
+  </data>
+  <data name="view_ad_sidebar" xml:space="preserve">
+    <value>~/Views/_partialViews/Vitrines/_ad_sideBar.cshtml</value>
+  </data>
+  <data name="noImage_path" xml:space="preserve">
+    <value>~/assets/images/icons/icon_noImage.png</value>
+  </data>
+  <data name="prefixSubCategoryImage" xml:space="preserve">
+    <value>_sub</value>
+  </data>
+  <data name="prefixDisplayImage" xml:space="preserve">
+    <value>_dsp</value>
+  </data>
+  <data name="prefixAdvertisingImag" xml:space="preserve">
+    <value>_ad-</value>
+  </data>
+  <data name="image_advertising_height" xml:space="preserve">
+    <value>165</value>
+  </data>
+  <data name="image_advertising_width" xml:space="preserve">
+    <value>250</value>
+  </data>
+  <data name="image_icon_height" xml:space="preserve">
+    <value>155</value>
+  </data>
+  <data name="image_icon_width" xml:space="preserve">
+    <value>155</value>
+  </data>
+  <data name="image_mainImage_height" xml:space="preserve">
+    <value>350</value>
+  </data>
+  <data name="image_mainImage_width" xml:space="preserve">
+    <value>450</value>
+  </data>
+  <data name="iconUrl" xml:space="preserve">
+    <value>icon_url.png</value>
+  </data>
+  <data name="iconPdf" xml:space="preserve">
+    <value>icon_pdf.png</value>
+  </data>
+  <data name="prefixDisplaysMenuDirectImage" xml:space="preserve">
+    <value>_mn-</value>
+  </data>
+  <data name="searchbar_text" xml:space="preserve">
+    <value>Encontre aqui tudo o que você procura...</value>
+  </data>
+</root>

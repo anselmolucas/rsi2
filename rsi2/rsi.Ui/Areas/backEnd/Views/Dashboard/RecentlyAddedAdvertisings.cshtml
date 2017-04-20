@@ -1,0 +1,42 @@
+﻿@model  IEnumerable<rsi.Entities.Display>
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">anúncios adicionados recentemente</h3>
+        <div class="box-tools pull-right">
+            <span class="label label-danger">4 novos</span>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <ul class="products-list product-list-in-box">
+            @foreach (var _item in Model)
+            {
+                string _img = rsi.Entities.configurations.thePaths.displaysImages + _item.MediaFileName;
+                <li class="item">
+                    <div class="product-img">
+                        <a href="#"><img src="@Url.Content(_img)" alt="imagem do anúncio" width="50" height="50"></a>
+                    </div>
+                    <div class="product-info">
+                        <a href="javascript::;" class="product-title">
+                            @_item.Name
+                            <span class="label label-warning pull-right">$1800</span>
+                        </a>
+                        <span class="product-description">
+                            @_item.Title
+                        </span>
+                    </div>
+                </li>
+            }
+            
+
+
+        </ul>
+    </div>
+    <div class="box-footer text-center">
+        <a href="/backEnd/Displays/List/ads" class="uppercase">veja todos os anúncios...</a>
+    </div>
+</div>

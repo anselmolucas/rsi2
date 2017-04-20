@@ -1,0 +1,78 @@
+﻿@model IEnumerable<rsi.Entities.AdvertiserDetails.SocialMedia>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">mídias sociais</h3>
+                <br />
+                <a href="#" onclick="advMediasMaintenance4('0', @ViewBag.AdvertiserId, 'a')" class="modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>st</th>
+                            <th>url</th>
+                            <th>tp</th>
+                            <th>conta</th>                            
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var _items in Model)
+                        {
+                            string _url = Functions.__maximumSizeOfTheText(_items.URL, 30);
+                            string _stx = _items.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                            _items.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                            "glyphicon glyphicon-exclamation-sign";
+
+                            ViewBag.AdvertiserId = _items.AdvertiserId;
+
+                            <tr>
+                                <td>@_items.DisplayOrder</td>
+                                <td><i class="@_stx"></i></td>
+                                @if (!string.IsNullOrEmpty(_items.URL))
+                                {
+                                    <td><a href="@Url.Content(_items.URL)" class="modalAddresMap">@_url</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                
+                                <td>@_items.Type</td>
+                                <td>@_items.Account</td>
+
+                                <td>
+                                    <a href="#" onclick="advMediasMaintenance4(@_items.Id, @_items.AdvertiserId, 'v')" role="button" data-viewId="@_items.Id"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#" onclick="advMediasMaintenance4(@_items.Id, @_items.AdvertiserId, 'e')" role="button" data-viewId="@_items.Id"><span class="glyphicon glyphicon-pencil editButton_inList"></span></a>
+                                  
+                                    @if (!string.IsNullOrEmpty(_items.URL))
+                                    {
+                                        <a href="@Url.Content(_items.URL)" class="modalAddresMap"><span class="glyphicon glyphicon-globe"></span></a>
+                                    }                                   
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<script>
+    //abrir o modal de manutenção de registros
+    function advMediasMaintenance4(_id, _advertiserId, _operation) {
+        $("#modalAdvertiser").load("/backEnd/Advertisers_SocialMedias/_modalView?id=" + _id + "&advId=" + _advertiserId + "&o=" + _operation, function () {
+            $("#modalAdvertiser").modal();
+        })
+    }
+</script>

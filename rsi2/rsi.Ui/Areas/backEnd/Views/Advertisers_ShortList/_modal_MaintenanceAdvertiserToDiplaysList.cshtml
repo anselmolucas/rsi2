@@ -1,0 +1,150 @@
+﻿@model rsi.Entities.AdvertisersShortList
+@using rsi.Entities.configurations
+
+<div class="modal-dialog">
+    <div class="modal-content ">
+        <div class="modal-header">
+            <a href="" type="button" class="close linkum" data-dismiss="modal" aria-hidden="true">
+                ×
+            </a>
+            <h3 class="modal-title" id="myModalLabel">
+                @{
+                    string _stx = "";
+
+                    if (ViewBag.DisplaysObj.St == rsi.Entities.status.off)
+                    {
+                        _stx = "glyphicon glyphicon-thumbs-down text-danger";
+                    }
+                    else if (ViewBag.DisplaysObj.St == rsi.Entities.status.on)
+                    {
+                        _stx = "glyphicon glyphicon-thumbs-up text-primary";
+                    }
+                    else
+                    {
+                        _stx = "glyphicon glyphicon-exclamation-sign";
+                    }
+                }
+
+                <i class="@_stx"></i>&nbsp;#&nbsp;&nbsp;@ViewBag.DisplaysObj.Id - @ViewBag.DisplaysObj.Name
+            </h3>
+            <h5> vincular um novo anunciante a este display (showCase)</h5>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="col-md-12">
+                @using (Html.BeginForm("_modal_MaintenanceAdvertiserToDiplaysList", "Advertisers_ShortList", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <input type="hidden" name="_advertiserId" value="@Model.AdvertiserId" />
+                      
+                        @if (Model.Id > 0)
+                        {
+                            @Html.HiddenFor(model => model.Id)
+                        }
+                        
+                        @Html.HiddenFor(model => model.DisplaysId)
+
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelFor(model => model.AdvertiserId)
+                            </div>
+
+                            <div class="col-sm-9">
+                                @Html.DropDownListFor(model => model.AdvertiserId, (SelectList)ViewBag.Ddl_Advertisers, "-- vincular um anunciante --", new { @class = "form-control", @id = "advertiser" })
+                                @Html.ValidationMessageFor(model => model.AdvertiserId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div id="statusWithRadioButton_inModal" class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.Label("status")
+                            </div>
+
+                            <div class="col-sm-9">
+                                <div id="registerStatus_row">
+                                    @Html.RadioButtonFor(model => model.St, "on", new { htmlAttributes = new { @id = "st1_inModal" } })
+                                    <span>ativo</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    @Html.RadioButtonFor(model => model.St, "off", new { htmlAttributes = new { @id = "st2_inModal" } })
+                                    <span>inativo</span>
+                                    @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                    <button id="returnButton_inModal" type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true" title="fechar janela"><span class="glyphicon glyphicon-off"></span></button>
+                                    <button id="resetButton_inModal2" type="reset" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">                                    
+                                    <button id="linkButton_inModal" type="submit" name="operation" value="save" class="btn btn-success" title="vincular anunciante à esse display"><span class="glyphicon glyphicon-pushpin"></span></button>
+                                    <button id="deleteButton_inModal" onclick="Mudarestado('deleteRegisterConfirm_inModal')" type="button" class="btn btn-warning" title="desvincular o registro"><span class="glyphicon glyphicon-remove"></span></button>
+                                </div>
+                            </div>
+
+                            <!-- div escondida para confirmação da exclusão do registro -->
+                            <div id="deleteRegisterConfirm_inModal" class="col-sm-12" style="display:none;">
+
+                                <div class="form-group">
+
+                                    <h2 style="text-align:center;color:red;">*** confirmar a retirada do vínculo ***</h2>
+
+                                    <div class="col-md-6">
+                                        <div class="pull-left" role="group">
+                                            <button id="deleteButton_inModal" onclick="Mudarestado('deleteRegisterConfirm_inModal')" type="button" class="btn btn-default" title="retornar ao anunciante (fecha janela)">desistir</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="pull-right" role="group">
+                                            <button type="submit" class="btn btn-warning" name="operation" value="delete" title="desvincular o registro"><span class="glyphicon glyphicon-remove"></span> desvincular !!!</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }<!-- fim do formulário -->
+
+            </div>
+
+        </div><!-- /.modal-content -->
+        <div class="modal-footer"></div>
+    </div>
+</div>
+<script src="~/assets/stylesAndScripts/this/myScripts.js"></script>
+<script>
+    $(document).ready(function () {
+        var e = document.getElementById("advertiser");
+        var _selectedItem = e.options[e.selectedIndex].value;
+        console.log("ver valor do dropdownlist: " + _selectedItem);
+        if (_selectedItem < 1)
+        {
+            document.getElementById("linkButton_inModal").disabled = true;
+            document.getElementById("resetButton_inModal2").disabled = true;
+        }       
+    })
+
+    $('#advertiser').on('change', function () {
+        var e = document.getElementById("advertiser");
+        var _selectedItem = e.options[e.selectedIndex].value;
+        console.log("ver o novo valor do dropdownlist: " + _selectedItem);
+        if (_selectedItem > 1) {
+            document.getElementById("linkButton_inModal").disabled = false;
+            document.getElementById("resetButton_inModal2").disabled = false;
+        }
+        else {
+            document.getElementById("linkButton_inModal").disabled = true;
+            document.getElementById("resetButton_inModal2").disabled = true;
+        }
+    });
+</script>
+

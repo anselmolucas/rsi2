@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>RSI - Rosana Scott Indica</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/assets/stylesAndScripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="~/assets/stylesAndScripts/bootstrap/css/modern-business.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="~/assets/stylesAndScripts/bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Owl Carousel Assets -->
+    <link href="~/assets/stylesAndScripts/plugins/owl/owl.carousel.css" rel="stylesheet" />
+    <link href="~/assets/stylesAndScripts/plugins/owl/owl.theme.css" rel="stylesheet" />
+    <link href="~/assets/stylesAndScripts/this/myStyle.css" rel="stylesheet" />
+    <style>
+        #owl-demo .item {
+            margin: 3px;
+        }
+
+            #owl-demo .item img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+
+        .legenda2 {
+            position: absolute;
+            top: 100px;
+            left: 6px;
+            color: white;
+            width: 100%;
+            text-align: center;
+        }
+
+        .bola { /*fonte: https://rubsphp.blogspot.com.br/2014/04/criando-bolas-e-circulos-com-css.html*/
+            border-radius: 50%;
+            display: inline-block;
+            height: 45px;
+            width: 45px;
+            border: 1px solid #000000;
+            background-color: red;
+            text-align: inherit;
+            padding-top: 10px;
+            padding-left: 2px;
+            padding-right: 2px;
+            padding-bottom: 2px;
+        }
+
+        .discount {
+            position: absolute;
+            top: 15px;
+            left: 100px;
+            color: white;
+            width: 100%;
+        }
+
+        .itemPrice_valor {
+            color: red;
+        }
+    </style>
+</head>
+<body style="margin-bottom:0px;padding-bottom:0px;">
+
+    @Html.Action("_header", "PageElements")
+
+    <!--slider-->
+    @RenderSection("slider", false)
+
+    <!--content-->
+    @RenderBody()
+
+    <!--markup footer-->
+    <div id="footer">
+        @Html.Action("_footer", "PageElements")
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/assets/stylesAndScripts/jquery/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/assets/stylesAndScripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="~/assets/stylesAndScripts/plugins/owl/owl.carousel.min.js"></script>
+    <!-- Script to Activate the Carousel -->
+    <script>
+        //$('.carousel').carousel({
+        //    interval: 5000 //changes the speed
+        //})
+
+        $(document).ready(function () {
+            $(".owl-demo").owlCarousel({
+                autoPlay: 9000, //Set AutoPlay to 9 seconds
+                items: 4,
+                itemsDesktop: [1199, 3],
+                itemsDesktopSmall: [979, 3]
+            });
+        });
+    </script>
+</body>
+</html>

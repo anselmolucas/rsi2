@@ -1,0 +1,68 @@
+﻿
+@{
+    Layout = null;
+}
+
+@*@model ead.Entities.User*@
+
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <!-- Sidebar user panel -->       
+        @Html.Action("SideBarAtiveUserIinformation", "Users")
+
+        <!-- search form -->
+        @*<form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="procurar..." />
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </form>*@
+        <!-- /.search form -->
+        <ul class="sidebar-menu">
+            <li class="header">menu principal</li>
+            <li id="left-sidebar-menu-widgets">
+                <a href="/Home/Index">
+                    <i class="fa fa-dashboard"></i> <span>site principal</span>
+                </a>
+            </li>
+
+            <li id="left-sidebar-menu-widgets">
+                <a href="/backEnd/Admin/Index">
+                    <i class="fa fa-dashboard"></i> <span>dashboard</span> 
+                </a>
+            </li>
+
+            <li id="left-sidebar-menu-cadastros" class="treeview">
+                <a href="#">
+                    <i class="fa fa-laptop"></i> <span>cadastros</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("List", "Offers")"><i class="fa fa-circle-o text-aqua"></i> ofertas</a></li>
+                    <li><a href="@Url.Action("List", "Advertisers")"><i class="fa fa-circle-o text-aqua"></i> anunciantes</a></li>
+                    <li><a href="@Url.Action("List", "Sections")"><i class="fa fa-circle-o text-aqua"></i> seções</a></li>
+                    <li><a href="@Url.Action("List", "Categories")"><i class="fa fa-circle-o text-aqua"></i> categorias</a></li>
+                    <li><a href="@Url.Action("List", "SubCategories")"><i class="fa fa-circle-o text-green"></i> sub categorias</a></li>
+                    <li><a href="@Url.Action("List", "Users")"><i class="fa fa-circle-o text-aqua"></i> usuários</a></li>
+                </ul>
+            </li>            
+
+            <li id="left-sidebar-menu-setUp" class="treeview">
+                <a href="#">
+                    <i class="fa fa-laptop"></i> <span>configurações</span> 
+                    <small class="label bg-red">em breve</small>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> cores</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> diagramação texto</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> configuração do sistema</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> processamentos</a></li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+</aside>

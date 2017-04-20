@@ -1,0 +1,77 @@
+﻿@model IEnumerable<rsi.Entities.AdvertiserDetails.Advertiser_SubCategory>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">sub-categorias</h3>
+                <br />
+                <a href="#" onclick="advSubCategoryLinkMaintenance(0,'@ViewBag.AdvertiserId','a')" class="modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>st</th>
+                            <th>ícone</th>
+                            <th>sub-categoria</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{ 
+                            int _registersCount = 1;
+                            foreach (var _items in Model)
+                            {
+                                string _category = Functions.__maximumSizeOfTheText(_items.CategoryObj.Name, 30);
+                                string _subCategory = Functions.__maximumSizeOfTheText(_items.SubCategoryObj.Name, 30);
+                                var _img = Functions.__displayIconFileName(_items.SubCategoryObj.FileName, "SubCategories");
+                                string _stx = _items.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                                                _items.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                                                "glyphicon glyphicon-exclamation-sign";
+                                string _stxSubCategory = _items.SubCategoryObj.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                                                _items.SubCategoryObj.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                                                "glyphicon glyphicon-exclamation-sign";
+
+                                ViewBag.AdvertiserId = _items.AdvertiserId;
+
+                                <tr>
+                                    <td>@_registersCount</td>
+                                    <td>@_items.Id</td>
+                                    <td><i class="@_stx"></i></td>  
+                                    <td><img src="@Url.Content(_img)" width="40" /></td>                            
+                                    <td><i class="@_stxSubCategory"></i> #@_items.SubCategoryId @_subCategory (@_category)</td>
+
+                                    <td>
+                                        <a href="#" onclick="advSubCategoryLinkMaintenance(@_items.Id,@_items.AdvertiserId,'v')"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="#" onclick="advSubCategoryLinkMaintenance(@_items.Id,@_items.AdvertiserId,'e')" class="linkButton_inList"><span class="glyphicon glyphicon-pushpin"></span></a>
+                                    </td>
+                                </tr>
+
+                                _registersCount++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+    //abrir o modal de manutenção de registros
+    function advSubCategoryLinkMaintenance(_id, _advertiserId, _operation)
+    {
+        $("#modalAdvertiser").load("/backEnd/Advertisers_SubCategories/_modalView?id=" + _id +"&advId=" + _advertiserId + "&o=" + _operation, function () {
+            $("#modalAdvertiser").modal();
+        })
+    }
+</script>

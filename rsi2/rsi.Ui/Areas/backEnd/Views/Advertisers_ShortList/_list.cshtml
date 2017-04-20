@@ -1,0 +1,96 @@
+﻿@model IEnumerable<rsi.Entities.AdvertisersShortList>
+@using rsi.Apps
+
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box box-purple">
+            <div class="box-header">
+                <a href="#" onclick="AdvertisersShortlist_addToDisplaysList(@ViewBag.TabId);" class="modalAddbutton" ><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>linha</th>
+                                <th>id</th>
+                                <th>st</th>
+                                <th>ícone</th>
+                                <th>nome</th>
+                                <th>filtro</th>
+                                <th>situação</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @{
+                                int _registersCount = 1;
+                                foreach (var _item in Model)
+                                {
+                                    var _name = Functions.__maximumSizeOfTheText(_item.Name, 20);
+                                    var _filterExpression = Functions.__maximumSizeOfTheText(_item.FilterExpression, 20);
+                                    var _img = Functions.__displayIconFileName(_item.MediaFileName, "Advertisers");
+                                    string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                "glyphicon glyphicon-exclamation-sign";
+
+                                    <tr id="_lineId_@_item.Id">
+                                        <td>@_registersCount</td>
+                                        <td>@_item.Id</td>
+                                        <td>@_item.AdvertiserId</td>
+                                        <td><i class="@_stx"></i></td>
+                                        <td><img src="@Url.Content(_img)" width="40" /></td>
+                                        <td><a href="#" onclick="advertiserView(@_item.AdvertiserId);" title="visualizar o anunciante" alt="visualizar o anunciante">@_name</a></td>
+                                        <td>@_filterExpression</td>
+                                        <td>@_item.Situation</td>
+
+                                        <td>
+                                            <a href="#" onclick="advertiserView(@_item.AdvertiserId);" title="visualizar o anunciante" alt="visualizar o anunciante"><span class="glyphicon glyphicon-eye-open"></span></a>                                            
+                                            <a href="#" onclick="AdvertisersShortlist_EditToDisplaysList(@ViewBag.TabId, @_item.Id, @_item.AdvertiserId);" title="visualizar o anunciante" alt="visualizar o anunciante"><span class="glyphicon glyphicon-pencil"></span></a>                                            
+                                            <a href="#" onclick="advertisersShortlist_removeFromList(@_item.Id);" title="remover o anunciante" alt="remover o anunciante" class="removeButton_inList"><span class="glyphicon glyphicon-remove"></span></a>
+                                        </td>
+                                    </tr>
+
+                                    _registersCount++;
+                                }
+                            }
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalAdvertisersShortList"></div><!-- div usada para abrir o modal -->
+<script>
+    function advertisersShortlist_removeFromList(__line_AdvertisersShortlistId)
+    {
+        $.ajax({
+            url: '/backEnd/Advertisers_ShortList/_json_RemoveAdvertiserFromTheShortList',
+            method: 'POST',
+            data: { __line_AdvertisersShortlistId: __line_AdvertisersShortlistId },
+            success: function (__lineToRemove) { $('#_lineId_' + __lineToRemove).remove() }
+            })
+    }
+
+    function AdvertisersShortlist_addToDisplaysList(__displayIdToAddRecord) {
+       
+        $("#modalAdvertisersShortList").load("/backEnd/Advertisers_ShortList/_modal_MaintenanceAdvertiserToDiplaysList?__displayIdToEditRecord=" + __displayIdToAddRecord , function () { 
+            $("#modalAdvertisersShortList").modal();
+        })
+    }
+
+    function AdvertisersShortlist_EditToDisplaysList(__displayIdToEditRecord, __line_AdvertisersShortlistId, __advertiserId){
+        $("#modalAdvertisersShortList").load("/backEnd/Advertisers_ShortList/_modal_MaintenanceAdvertiserToDiplaysList?__displayIdToEditRecord=" + __displayIdToEditRecord + "&__line_AdvertisersShortlistId="+__line_AdvertisersShortlistId + "&__advertiserId=" + __advertiserId, function () { 
+            $("#modalAdvertisersShortList").modal();
+        })
+    }
+</script>
+

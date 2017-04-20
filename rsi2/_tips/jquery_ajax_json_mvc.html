@@ -1,0 +1,215 @@
+﻿<script>
+    function advAdressesLinkMaintenance(__addressId, __operation) {
+        console.log("advAdressesLinkMaintenance");
+        event.preventDefault();
+        jQuery.ajax({
+			//data: JSON.stringify(jsonObject),
+            //data: { model: JSON.stringify(usersRoles) },
+            //contentType: "application/json; charset=utf-8",
+
+            type: "POST",
+            url: "/backEnd/Advertisers_adresses/_jsonAdressesFormFill/",
+            dataType: "json",
+            data: {__addressId: __addressId, __operation:__operation},
+
+            success: function (data) {
+                advAdressesFillNoRefreshForm(data, __operation);
+            }
+        });
+    }
+
+    function advAdressesFillNoRefreshForm(data, __operation) {
+        console.log("advAdressesRefreshForm");
+        $('#DisplayOrder_address').attr('value', data.DisplayOrder);
+        $('#Description_address').attr('value', data.Description);
+        $('#Street_address').attr('value', data.Street);
+        $('#OpeningHours_address').attr('value', data.OpeningHours);
+        $('#Type_address').attr('value', data.Type);
+        $('#ZipCode_address').attr('value', data.ZipCode);
+        document.getElementById("GoogleMaps_address").value = data.GoogleMaps;
+        document.getElementById("Type_address").value = parseInt(data.Type);
+        document.getElementById("Uf_address").value = data.Uf;
+        document.getElementById("CityId_address").value = data.CityId;
+
+        var _iconStatus = "glyphicon glyphicon-exclamation-sign";
+        if (parseInt(data.St) == 1) {
+            $('#St1').prop('checked', true);
+            _iconStatus = "glyphicon glyphicon-thumbs-up text-primary";
+        }
+        else {
+            $('#St2').prop('checked', true);
+            _iconStatus = "glyphicon glyphicon-thumbs-down text-danger";
+        }
+
+        //$("#stIconInTitle_address").empty(); // apagar o conteúdo de um elemento
+        $("#stIconInTitle_address").html('<i class="' + _iconStatus + '"></i>');
+        $("#idInTitle_address").html(data.Id);
+
+        var _operationTitle = "";
+        if (__operation == "a") {
+            _operationTitle = "incluir";
+        }
+        else if (__operation == "e") {
+            _operationTitle = "editar";
+        }
+        else if (__operation == "v") {
+            _operationTitle = "visualizar";
+        }
+        else if (__operation == "d") {
+            _operationTitle = "deletar";
+        }
+        $("#operationInTitle_address").html(_operationTitle);
+
+        //$(data).each(function (i) {
+        //    console.log(data[i].Street);
+        //    //console.log("Street" + dados[i].Street);
+        //    //document.writeln("<p>Nome: " + dados[i].Nome + " | URL: " + dados[i].URL + "</p>")
+        //    //$('#colorpickerField1').attr('value', '#000000')
+        //});
+    }
+</script>
+
+controller:
+[HttpPost]
+public JsonResult _jsonAdressesFormFill(int __addressId = 0, string __operation = "a")
+{
+    if (!String.IsNullOrEmpty(__operation))
+    {
+        if (__operation == "a" || __operation == "e" || __operation == "d" || __operation == "v")
+        {
+            Advertiser_address _obj = new Advertiser_address();
+
+            if (__operation != "a")
+            {
+                if (__addressId > 0)
+                    _obj = _context.Advertisers_adresses.FirstOrDefault(x => x.Id == __addressId);
+            }
+
+            return Json(_obj, JsonRequestBehavior.AllowGet);
+        }
+    }
+
+    return null;
+}
+
+no html:
+<td>
+    <a href="#" class="modalAddresView" onclick="advAdressesLinkMaintenance(@_items.Id, 'v')"><span class="glyphicon glyphicon-eye-open"></span></a>
+    <a href="#" class="editButton_inList" onclick="advAdressesLinkMaintenance(@_items.Id, 'e')"><span class="glyphicon glyphicon-pencil"></span></a>
+</td>
+
+outros exemplos:
+
+<script>
+    function _jsonAdvAdressesFormFill(__addressId, __operation) {
+        console.log("_jsonAdvAdressesFormFill");
+
+        event.preventDefault();
+        jQuery.ajax({
+            type: "POST",
+            url: "/backEnd/Advertisers_adresses/_jsonAdressesFormFill/",
+            dataType: "json",
+            data: { __addressId: __addressId, __operation: __operation },
+            success: function (data) {
+                if (__operation == "v" || __operation == "d") {
+                    MostrarForm("adressesView", "adressesMaintenanceForm");
+                    advAdressesFillNoRefreshView(data, __operation);
+                    console.log("__operation:" + __operation);
+                    if (__operation == "v") {
+                        console.log("entrou no v");
+                        $('#deleteButton_aux').hide();
+                    }
+                    else if (__operation == "d") {
+                        console.log("entrou no d");
+                        $('#deleteButton_aux').show();
+                    }
+                }
+                else {
+                    MostrarForm("adressesMaintenanceForm", "adressesView");
+                    advAdressesFillNoRefreshForm(data, __operation);
+                }
+            }
+        });
+    }
+
+    function advAdressesFillNoRefreshForm(data, __operation) {
+        console.log("advAdressesFillNoRefreshForm");
+        $('#DisplayOrder_address').attr('value', data.DisplayOrder);
+        $('#Description_address').attr('value', data.Description);
+        $('#Street_address').attr('value', data.Street);
+        $('#Street_address').html(data.Street);
+        document.getElementById("Street_address").value = data.Street;
+        $('#OpeningHours_address').attr('value', data.OpeningHours);
+        $('#Type_address').attr('value', data.Type);
+        $('#ZipCode_address').attr('value', data.ZipCode);
+        document.getElementById("GoogleMaps_address").value = data.GoogleMaps;
+        document.getElementById("Type_address").value = parseInt(data.Type);
+        document.getElementById("Uf_address").value = data.Uf;
+        document.getElementById("CityId_address").value = data.CityId;
+        document.getElementById("inputAddressId").value = data.Id;
+        document.getElementById("inputAdvertiserId").value = data.AdvertiserId;
+
+        var _operationTitle = "";
+        if (__operation == "a") {
+            _operationTitle = "incluir";
+        }
+        else if (__operation == "e") {
+            _operationTitle = "editar";
+        }
+
+        var _iconStatus = "glyphicon glyphicon-exclamation-sign";
+        if (parseInt(data.St) == 1) {
+            $('#St1').prop('checked', true);
+            _iconStatus = "glyphicon glyphicon-thumbs-up text-primary";
+        }
+        else {
+            $('#St2').prop('checked', true);
+            _iconStatus = "glyphicon glyphicon-thumbs-down text-danger";
+        }
+
+        $("#stIconInTitle_address").html('<i class="' + _iconStatus + '"></i>');
+        $("#idInTitle_address").html(data.Id);
+        $("#operationInTitle_address").html(_operationTitle);
+    }
+
+    function advAdressesFillNoRefreshView(data, __operation) {
+        console.log("advAdressesFillNoRefreshView");
+        $('#Description_addressView').text(data.Description);
+        $('#DisplayOrder_addressView').text(data.DisplayOrder);
+        $('#OpeningHours_addressView').text(data.OpeningHours);
+        $('#Street_addressView').text(data.Street);
+        $('#ZipCode_addressView').text(data.ZipCode);
+        $('#Uf_addressView').text(data.Uf);
+        $('#CityName_addressView').text(data.CityName);
+        document.getElementById("CityName_addressView").value = data.CityName;
+
+        if (data.GoogleMaps != null) {
+            if (data.GoogleMaps != "") {
+                $("#GoogleMaps_addressView").html('<iframe src="' + data.GoogleMaps + '" width="100%" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>');
+            }
+            else {
+                $("#GoogleMaps_addressView").html('<img src="noGoogleImage.jpg" width="100%" height="350" />');
+            }
+        }
+
+        var _operationTitle = "";
+        if (__operation == "v") {
+            _operationTitle = "visualizar";
+        }
+        else if (__operation == "d") {
+            _operationTitle = "deletar";
+        }
+
+        var _iconStatusView = "glyphicon glyphicon-exclamation-sign";
+        if (parseInt(data.St) == 1) {
+            _iconStatusView = "glyphicon glyphicon-thumbs-up text-primary";
+        }
+        else if (parseInt(data.St) == 0) {
+            _iconStatusView = "glyphicon glyphicon-thumbs-down text-danger";
+        }
+
+        $("#stIconInTitle_addressView").html('<i class="' + _iconStatusView + '"></i>');
+        $("#idInTitle_addressView").html(data.Id);
+        $("#operationInTitle_addressView").html(_operationTitle);
+    }
+</script>

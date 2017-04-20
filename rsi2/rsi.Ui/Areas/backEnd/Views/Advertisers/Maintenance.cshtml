@@ -1,0 +1,342 @@
+﻿<!--
+    view...........: Maintenance.cshtml
+    local..........: ~/Areas/backEnd/Views/Advertisers/List.cshtml
+    controller.....: Advertisers
+    system.........: rsi2
+    descrição......: manutenção de anunciantes
+    author.........: anselmolucas@gmail.com
+    date...........: 16/abr/2017
+    status.........: 60% ok
+    pendências.....: manutenção dos meios de comunicação
+                     inserir medias
+                     inserir instruções de uso/help e revisão geral e pequenos detalhes
+-->
+
+@model rsi.Entities.Advertiser
+@using rsi.Apps
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+
+            <div class="nav-tabs-custom">
+                                        
+                @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsTop.cshtml")
+                
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1-1">
+                        <div class="box box-purple">
+                            <br />                            
+                            @using (Html.BeginForm("Maintenance", "Advertisers", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal", @id = "advertisersForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.Id)
+                               
+                                <div class="box-body">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.Name)
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "nome da sub-categoria", @id = "Name" } })
+                                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.Slogan)
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                @Html.EditorFor(model => model.Slogan, new { htmlAttributes = new { @class = "form-control", @placeholder = "Slogan", @id = "Slogan" } })
+                                                @*@Html.ValidationMessageFor(model => model.Slogan, "", new { @class = "text-danger" })*@
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.Situation)
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                @Html.EnumDropDownListFor(model => model.Situation, "qual a situação?", new { @class = "form-control", @id = "Situation" })
+                                                @Html.ValidationMessageFor(model => model.Situation, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.PfPj)
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                @Html.EnumDropDownListFor(model => model.PfPj, "pessoa física ou jurídica?", new { @class = "form-control", @id = "PfPj" })
+                                                @Html.ValidationMessageFor(model => model.PfPj, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" id="CPF_div">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.CPF)
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @class = "form-control", @placeholder = "CPF", @id = "CPF" } })
+                                                @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" id="CNPJ_div">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.CNPJ)
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                @Html.EditorFor(model => model.CNPJ, new { htmlAttributes = new { @class = "form-control", @placeholder = "CNPJ", @id = "CNPJ" } })
+                                                @Html.ValidationMessageFor(model => model.CNPJ, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.Contact)
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control", @placeholder = "pessoa de contato", @id = "Contact" } })
+                                                @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.LabelFor(model => model.Tags)
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                @Html.TextAreaFor(model => model.Tags, new { @class = "form-control", @rows = 5, @id = "Tags", @placeholder = "lista de tags" })
+                                                @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+
+                                if (ViewBag.Operation == "a" || ViewBag.Operation == "e")
+                                {
+                                    <div class="box-body" id="statusFormRadioButtons">
+                                        <fieldset class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                @Html.Label("status")
+                                            </div>
+
+                                            <div class="col-sm-10">
+                                                <div id="registerStatus_row">
+                                                    @Html.RadioButtonFor(model => model.St, "on", new { htmlAttributes = new { @id = "st1" } })
+                                                    <span>ativo</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                                    @Html.RadioButtonFor(model => model.St, "off", new { htmlAttributes = new { @id = "st2" } })
+                                                    <span>inativo</span>
+                                                    @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                }
+
+                                <div class="box-footer">
+                                    @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsBottomAux.cshtml")
+                                </div>                                
+                            }
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab_2-2">
+                        @if (Model.Id > 0)
+                        {
+                            @*@Html.Action("_fileUpload", "Elements", new { id = Model.Id, tab = "Advertisers" })*@
+                        }
+                        else
+                        {
+                            <h2>adicionar imagem</h2>
+                            <hr />
+                            <h4>*** para ativar essa função é necessário criar um novo registro ou atualizar um já existente!</h4>
+                        }
+                    </div>
+                </div>
+            </div>  
+            
+            <br />
+            @Html.Action("_list", "Advertisers_adresses", new { __advertiserId = Model.Id})
+
+            <br />
+            @Html.Action("_list", "Advertisers_coms", new { __advertiserId = Model.Id })
+        </div>
+
+        <!-- display medias sideBar Right-->
+        <div class="col-md-3">
+
+            <div id="imageBox" class="box box-purple">
+                <div class="box-header with-border">
+                    <h3 class="box-title">imagem</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        @{
+                            string _img = Functions.__displayIconFileName(Model.FileName, "Advertisers");
+                            <img src="@Url.Content(_img)" class="img-thumbnail img-responsive" width="100%" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalAdvertiserView2323"></div><!-- div para abertura do modal de visualização do anunciante -->
+
+
+<script>
+    /*=============================================================================================
+        *** advertisers ***
+=============================================================================================*/
+/*************************************************************************
+        formulário: Maintenance
+        full path.: ~/Areas/backEnd/Views/Advertisers/Maintenance.cshtml
+     ************************************************************************/
+//  1.1.1) funções anônimas
+
+//  + theBegin: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+$(document).ready(function () {
+
+    var _op = '@ViewBag.FormHeaderAux["Operation"]';
+
+    if (_op == "v" || _op == "d") { // view ou delete
+
+        //  + theBegin: desabilitando a edição
+        document.getElementById("Name").disabled = true;
+        document.getElementById("Slogan").disabled = true;
+        document.getElementById("Tags").disabled = true;
+        document.getElementById("Situation").disabled = true;
+        document.getElementById("Contact").disabled = true;
+        document.getElementById("PfPj").disabled = true;
+        document.getElementById("CPF").disabled = true;
+        document.getElementById("CNPJ").disabled = true;
+
+    } else if (_op == "a" || _op == "e") {
+
+        //  + theBegin: habilitando a edição
+        document.getElementById("Name").disabled = false;
+        document.getElementById("Slogan").disabled = false;
+        document.getElementById("Tags").disabled = false;
+        document.getElementById("Situation").disabled = false;
+        document.getElementById("Contact").disabled = false;
+        document.getElementById("PfPj").disabled = false;
+        document.getElementById("CPF").disabled = false;
+        document.getElementById("CNPJ").disabled = false;
+
+        if (_op == "a" || _op == "e") {
+            document.getElementById("saveFormButton").disabled = true;
+        }
+        else {
+            document.getElementById("saveFormButton").disabled = false;
+        }
+    }
+
+    pJPf_verify();
+});
+//  - theEnd: desabilita a edição de registros de acordo com o valor da ViewBag.Status
+
+function addRegister() {
+    console.log("addRegister");
+}
+
+function enableTheEditForm() {
+    console.log("enabletheEditFormButton");
+    document.getElementById("Name").disabled = false;
+    document.getElementById("Slogan").disabled = false;
+    document.getElementById("Tags").disabled = false;
+    document.getElementById("Situation").disabled = false;
+    document.getElementById("Contact").disabled = false;
+    document.getElementById("PfPj").disabled = false;
+    if ($("#CPF") != null) {
+        document.getElementById("CPF").disabled = false;
+    }
+    if ($("#CNPJ") != null) {
+        document.getElementById("CNPJ").disabled = false;
+    }
+}
+
+function enableTheEditButton() {
+    document.getElementById("saveButton").disabled = false;
+    document.getElementById("resetButton").disabled = false;
+    document.getElementById("additionButton").disabled = false;
+    document.getElementById("deleteButton").disabled = false;
+    document.getElementById("enabletheEditButton").disabled = true;
+    $('#statusWithRadioButton').show(); // exibir os radios bottons de mudança do status do registro
+
+    //  + theBegin: habilitando a edição
+    document.getElementById("name").disabled = false;
+    document.getElementById("details").disabled = false;
+    //  - theEnd: habilitando a edição
+}
+
+//  + theBegin: invoca a função mediaTypeChange(), caso o dropDownList com os tipos de mídia seja alterado
+$("#PfPj").change(function () {
+    pJPf_verify();
+})
+
+function pJPf_verify() {
+    var _pfPj_option = document.getElementById("PfPj");
+    var _pfPj_option_selected = _pfPj_option.options[_pfPj_option.selectedIndex].value;
+
+    if (_pfPj_option_selected == 1) // se selecionar CNPJ
+    {
+        $('#CPF_div').hide();
+        $('#CNPJ_div').show();
+    }
+    else if (_pfPj_option_selected == 0) // se selecionar CPF
+    {
+        $('#CPF_div').show();
+        $('#CNPJ_div').hide();
+    }
+    else {
+        $('#CPF_div').hide();
+        $('#CNPJ_div').hide();
+    }
+}
+
+/*
+    habilitar o botão save quando o formulário for alterado
+*/
+$("#advertisersForm").change(function () {
+    document.getElementById("saveFormButton").disabled = false;
+})
+
+/*=============================================================================================
+    *** function: resetForm() ***
+    finalidade: resetar o formulário e disabilitar o botão save
+=============================================================================================*/
+function resetForm() {
+
+    console.log("******** resetForm no advertiser ********");
+    document.getElementById("advertisersForm").reset();
+    document.getElementById("saveFormButton").disabled = true;
+
+}
+/*=============================================================================================
+    *** function: advertiserView2() ***
+    finalidade: modal pra visualizar o anunciante
+    http://www.linhadecodigo.com.br/artigo/3686/aspnet-mvc-e-bootstrap-exibindo-views-modais.aspx
+=============================================================================================*/
+    function advertiserView2(__advertiserId) {
+        //event.preventDefault();
+        console.log("******** chamando o modal ***********");
+        console.log("__advertiserId: " + __advertiserId);
+        $("#modalAdvertiserView2323").load("/backEnd/Advertisers/_modalView?__advertiserId=" + __advertiserId, function () {
+            $("#modalAdvertiserView2323").modal();
+        //    $("#modalAdvertiserView2323").modal("show");
+        })
+
+    }
+</script>

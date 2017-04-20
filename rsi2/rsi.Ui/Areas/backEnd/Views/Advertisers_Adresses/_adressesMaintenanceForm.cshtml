@@ -1,0 +1,375 @@
+﻿<!--
+    view...........: _adressMaintenanceForm.cshtml
+    local..........: ~/Areas/backEnd/Views/Advertisers_Adresses/_adressesMaintenanceForm.cshtml
+    controller.....: Advertisers_Adresses
+    system.........: rsi2
+    descrição......: manutenção de endereços dos anunciantes
+    author.........: anselmolucas@gmail.com
+    date...........: 16/abr/2017
+    status.........: 90% ok
+    pendências.....: inserir instruções de uso/help e revisão geral e pequenos detalhes
+-->
+
+@model rsi.Entities.Advertiser_address
+
+<div id="addressMaintenanceDiv">
+   @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsTopAux.cshtml")
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        @using (Html.BeginForm("_jsonAdressesMaintenanceFormSubmit", "Advertisers_adresses", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal", @id="addressMaintenanceForm" }))
+        {
+            <div class="form-horizontal">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })   
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.AdvertiserId)            
+
+                <input type="hidden" id="inputAddressId" name="inputAddressId" value="@ViewBag.AddressId"/>
+                <input type="hidden" id="inputAdvertiserId" name="inputAdvertiserId" value="@Model.AdvertiserId" />
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.DisplayOrder)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control", @placeholder = "ordem", @id = "DisplayOrder_address" } })
+                        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Description)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "título e/ou descrição do endereço", @id = "Description_address" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Uf)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(model => model.Uf, (SelectList)ViewBag.Ddl_States, "-- qual a UF? --", new { @class = "form-control", @id = "Uf_address" })
+                        @Html.ValidationMessageFor(model => model.Uf, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.CityId)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(model => model.CityId, (SelectList)ViewBag.Ddl_Cities, "-- qual a cidade? --", new { @class = "form-control", @id = "CityId_address" })
+                        @Html.ValidationMessageFor(model => model.CityId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Street)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.Street, new { htmlAttributes = new { @class = "form-control", @placeholder = "nome do logradouro (rua/av/estrada/alameda/rod)", @id = "Street_address" } })
+                        @Html.ValidationMessageFor(model => model.Street, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.OpeningHours)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.OpeningHours, new { htmlAttributes = new { @class = "form-control", @placeholder = "horário de funcionamento", @id = "OpeningHours_address" } })
+                        @Html.ValidationMessageFor(model => model.OpeningHours, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Type)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EnumDropDownListFor(model => model.Type, "qual o tipo?", new { @class = "form-control", @id = "Type_address" })
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.ZipCode)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "cep", @id = "ZipCode_address", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.GoogleMaps)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.TextAreaFor(model => model.GoogleMaps, new { @class = "form-control", @rows = 5, @id = "GoogleMaps_address", @placeholder = "cole aqui a url do google maps" })  @*o parâmetro @cols = 80 parece não ter efeito*@
+                        @Html.ValidationMessageFor(model => model.GoogleMaps, "", new { @class = "text-danger" })
+                        <br />
+                        <small><b>instruções campo google maps:</b></small>
+                        <br />
+                        <small>1) no google maps após digitar o endereço desejado, escolha compartilhar</small>
+                        <br />
+                        <small>2) escolha “Incorporar mapa”</small>
+                        <br />
+                        <small>3) copie o texto entre haspas após “< iframe src=”, por exemplo em: < iframe src="https:// www.google.com/pb=!1m18!1m12!"></ iframe>, copie o texto https:// www.google.com/pb=!1m18!1m12! (sem as haspas)</small>
+                        <br />
+                        <small>4) salvar esse registro e pronto.</small>
+                    </div>
+                </div>
+
+                <br /><br />
+                <div id="statusWithRadioButton_inModal" class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.Label("status")
+                    </div>
+
+                    <div class="col-sm-10">
+                        <div id="registerStatus_row">
+                            @Html.RadioButtonFor(model => model.St, "on", new { htmlAttributes = new { @id = "st1_inModal" } })
+                            <span>ativo</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            @Html.RadioButtonFor(model => model.St, "off", new { htmlAttributes = new { @id = "st2_inModal" } })
+                            <span>inativo</span>
+                            @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+              
+                <hr />
+
+                @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsBottomAux.cshtml")
+
+            </div>
+        }<!-- fim do formulário -->
+    </div>  
+</div>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/this/this.js"></script>
+<script>
+    /*=============================================================================================
+        *** submit form by ajax/json ***
+        finalidade..: attach a submit handler to the form
+    =============================================================================================*/
+    $("#addressMaintenanceForm").submit(function (event) {
+
+        var form = $("#addressMaintenanceForm");
+        var dados = jQuery(this).serialize();
+        var _operation = '@ViewBag.FormHeaderAux["Operation"]';
+    console.log("Operation: " + _operation);
+    console.log("url post: " + form.attr("action"));
+
+    jQuery.ajax({
+        type: "POST",
+        url: form.attr("action"),
+        data: form.serialize(),
+        dataType: "json",
+        success: function (data) {
+            //advAdressesFillNoRefreshForm(data, _operation);
+            advAdressesFillNoRefreshList(data, _operation);
+        }
+    });
+
+    event.preventDefault();
+
+    return null;
+});
+
+    /*=============================================================================================
+        *** function: advAdressesFillNoRefreshList() ***
+        finalidade..: atualizar / preencher as informações da lista com os dados recebidos do $("#addressMaintenanceForm").submit
+        dependência.: $("#addressMaintenanceForm").submit
+        parâmetros..: data (obj, __operation)
+    =============================================================================================*/
+    function advAdressesFillNoRefreshList(data, __operation) {
+        console.log("advAdressesFillNoRefreshList");
+        var _line = "#tabAddressLineId_" + data.Id;
+
+        // apaga a linha da lista que foi afetada
+        $(_line).remove();
+
+        // recria a linha da lista que foi afetada
+        var _iconStatusView = "glyphicon glyphicon-exclamation-sign";
+        if (parseInt(data.St) == 1) {
+            _iconStatusView = "glyphicon glyphicon-thumbs-up text-primary";
+        }
+        else if (parseInt(data.St) == 0) {
+            _iconStatusView = "glyphicon glyphicon-thumbs-down text-danger";
+        }
+
+        _iconStatusView = "<i class='" + _iconStatusView + "'></i>";
+
+        $("#addressListTab tbody").append(
+            "<tr id='tabAddressLineId_" + data.Id + "'>" +
+            "<td>" + data.DisplayOrder + "</td>" +
+            "<td>" + data.Id + "</td>" +
+            "<td>" + _iconStatusView + "</td>" +
+            "<td>" + data.Description + "</td>" +
+            "<td>" + data.ZipCode + "</td>" +
+            "<td>" + data.Street + "</td>" +
+            "<td>" + data.OpeningHours + "</td>" +
+            "<td>" +
+            "<a href='#' class='modalAddresView' onclick='advAddressViewDelete(\u0022" + data.Id + "\u0022,\u0022v\u0022" + ")'><span class='glyphicon glyphicon-eye-open'></span></a>" +
+            "<a href='#' class='editButton_inList' onclick='advAddressMaintenance(\u0022" + data.Id + "\u0022,\u0022e\u0022" + ")'><span class='glyphicon glyphicon-pencil'></span></a>" +
+            "<a href='#' class='modalAddresView' onclick='advAddressViewDelete(\u0022" + data.Id + "\u0022,\u0022d\u0022" + ")'><span class='glyphicon glyphicon-trash'></span></a>" +
+            "</td>" +
+            "</tr>");
+
+        $("#adressesMaintenanceForm").load("/backEnd/Advertisers_adresses/_adressesMaintenanceForm?__addressId=" + data.Id + "&__operation=" + "e" + "&__advertiserId=" + data.AdvertiserId, function () {
+        })
+    }
+
+    /***************************************************************************************************/
+    /*=============================================================================================
+        *** validação do formulário ***
+        fonte: http://www.linhadecodigo.com.br/artigo/3706/jquery-validate-validacao-de-formularios-html.aspx
+        vide maiores detalhes: http://www.devmedia.com.br/validacao-com-jquery-como-usar-o-plugin-validation/33670
+    =============================================================================================*/
+    $("#addressMaintenanceForm").validate({
+        rules: {
+            DisplayOrder: {
+                required: false,
+                min: 1
+            },
+            Description: {
+                required: false,
+                minlength: 2
+            },
+            Uf: {
+                required: false
+            },
+            CityId: {
+                required: false
+            },
+            Street: {
+                required: false,
+                minlength: 2,
+                maxlength: 100
+            },
+            OpeningHours: {
+                required: false,
+                minlength: 2,
+                maxlength: 100
+            },
+            Type: {
+                required: false,
+                min: 1
+            },
+            ZipCode: {
+                required: true,
+                rangelength: [8, 9]
+
+            },
+            GoogleMaps: {
+                required: false
+            },
+            St: {
+                required: false
+            }
+        },
+        messages: {
+            DisplayOrder: {
+                required: "*** Por favor, informe a ordem de exibição ***",
+                min: "informe um valor mínio de 1"
+            },
+            Description: {
+                required: "*** Por favor, informe descrição ***",
+                minlength: "a descrição deve ter pelo menos 2 caracteres"
+            },
+            Uf: {
+                required: "*** Por favor, informe a UF ***"
+            },
+            CityId: {
+                required: "*** Por favor, informe o cep ***"
+            },
+            Street: {
+                required: "*** Por favor, informe a rua ***",
+                minlength: "O campo rua deve ter pelo menos 2 caracteres",
+                maxlength: "O campo deve ter no máxsimo 100 caracteres"
+            },
+            OpeningHours: {
+                required: "*** Por favor, informe o horário de funcionamento ***",
+                minlength: "O horário de funcionamento deve ter pelo menos 2 caracteres"
+            },
+            Type: {
+                required: "*** Por favor, informe o cep ***",
+                min: "é preciso escolher uma das opções"
+            },
+            ZipCode: {
+                required: "*** Por favor, informe o cep ***",
+                rangelength: "O cep deve ter 8 números"
+            },
+            GoogleMaps: {
+                required: "É necessário informar a url do google"
+            },
+            St: {
+                required: "*** Por favor, definir o status ***"
+            }
+        }
+    });
+
+    /*=============================================================================================
+        *** mascaras de edição de campos ***
+        fonte: http://www.macoratti.net/15/12/mvc_mask1.htm
+        plugin jquery InputMask
+    =============================================================================================*/
+    $(document).ready(function () {
+        $("#ZipCode_address").inputmask("mask", { "mask": "99999-999" });
+
+        var _operation = '@ViewBag.FormHeaderAux["Operation"]';
+
+        if (_operation == "a" || _operation == "e") {
+            document.getElementById("saveFormButton_address").disabled = true;
+        }
+        else {
+            document.getElementById("saveFormButton_address").disabled = false;
+        }
+    });
+
+    /*
+    habilitar o botão save quando o formulário for alterado
+*/
+    $("#addressMaintenanceForm").change(function () {
+        document.getElementById("saveFormButton_address").disabled = false;
+    })
+    /*=============================================================================================
+            *** function: sendAddressToDeleteAddressInView() ***
+            finalidade: tem como objetivo pegar o id do endereço a ser excluído e enviar para "_ajaxDeleteAddress()"
+        =============================================================================================*/
+    function sendAddressToDeleteInView(__divToHide, __idInHeader) {
+        console.log("sendAddressToDeleteAddressInView");
+        var _addressId = $(__idInHeader).html();
+        //var _divToHide = "adressesView"; // id da div do formulário de endereços
+        var _divDeteleButtomToHide = "deleteRegisterConfirm_addressView";
+        var _controllerURL = "/backEnd/Advertisers_adresses/_jsonAdressesDelete/"; // url do controller que efetiva o delete
+        var _tableLineToRemove = "#tabAddressLineId_" + _addressId;;
+        // backEnd/this.js: enviar o __addressId para o controller, via ajax, do registro a apagar e após o retorno do controller fechar a div (formulário ou view) e eliminar a linha do endereço de "_list.cshtml"
+        _ajaxDeleteAddress(_addressId, _controllerURL, __divToHide, _divDeteleButtomToHide, _tableLineToRemove);
+
+        return false;
+    }
+
+    /*=============================================================================================
+        *** function: resetForm_address() ***
+        finalidade: resetar o formulário e disabilitar o botão save
+    =============================================================================================*/
+    function resetForm_address() {
+
+        console.log("******** resetForm no advertiser ********");
+        document.getElementById("addressMaintenanceForm").reset();
+        document.getElementById("saveFormButton_address").disabled = true;
+
+    }
+</script>

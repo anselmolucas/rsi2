@@ -1,0 +1,109 @@
+﻿<!--
+    view...........: View.cshtml
+    local..........: ~/Views/EmailBox/View.cshtml
+    controller.....: EmailBox
+    system.........: rsi
+    descrição......: ver mensagens
+    author.........: anselmolucas@gmail.com
+    date...........: 01/set/2016
+    status.........: 90% ok (falta impressão da mensagem)
+-->
+
+@model rsi.Entities.EmailBox
+
+@section mailboxFoldersMenu
+{
+    @Html.Partial("~/Areas/backEnd/Views/EmailBox/_partialViews/_sideBarLeft.cshtml")
+}
+
+@{
+    string _dataHora = Model.AddDate.ToLongDateString() + " - " + Model.AddDate.ToShortTimeString();
+}
+
+<div class="box box-purple">
+    <div class="box-header with-border">
+        <h3 class="box-title">(@ViewBag.PageTitle) ler e-mail</h3>
+        <div class="box-tools pull-right">
+            <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Previous" disabled><i class="fa fa-chevron-left"></i></a>
+            <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Next" disabled><i class="fa fa-chevron-right"></i></a>
+        </div>
+    </div>
+    <div class="box-body no-padding">
+        <div class="mailbox-read-info">
+            <h3>@Html.DisplayFor(model => model.Email_Subject)</h3>
+            <h5>
+                De: (@Html.DisplayFor(model => model.Email_Sender)) <b>@Html.DisplayFor(model => model.Email_Sender_Name)</b>
+                <span class="mailbox-read-time pull-right">@_dataHora</span>
+            </h5>
+        </div>
+        <div class="mailbox-controls with-border text-center">
+            <div class="btn-group">
+                @if (Model.ReadingStatus == rsi.Entities.readingStatus.trash)
+                {
+                    <a href="@Url.Action("UpdateStatusMessage", "EmailBox", new { id = Model.Id, s = "archived" })" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="enviar para a lixeira">
+                        <i class="fa fa-trash text-green"></i>
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("UpdateStatusMessage", "EmailBox", new { id = Model.Id, s = "trash" })" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="enviar para a lixeira">
+                        <i class="fa fa-trash-o"></i>
+                    </a>
+                    if (Model.ReadingStatus != rsi.Entities.readingStatus.archived)
+                    {
+                        <a href="@Url.Action("UpdateStatusMessage", "EmailBox", new { id = Model.Id, s = "archived" })" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="arquivar">
+                            <i class="fa fa-archive"></i>
+                        </a>
+                    }
+                }
+
+                <a href="@Url.Action("ReplyForwardCompose", "EmailBox", new { id = Model.Id, o = "reply" })" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="responder">
+                    <i class="fa fa-reply"></i>
+                </a>
+                <a href="@Url.Action("ReplyForwardCompose", "EmailBox", new { id = Model.Id, o = "forward" })" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="encaminhar">
+                    <i class="fa fa-share"></i>
+                </a>
+            </div>
+            <a href="@Url.Action("Print","EmailBox", new { id = Model.Id})" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="imprimir" disabled>
+                <i class="fa fa-print"></i>
+            </a>
+            @if (Model.ReadingStatus == rsi.Entities.readingStatus.read)
+            {
+                <a href="@Url.Action("UpdateStatusMessage","EmailBox", new { id = Model.Id, s = "Unread"})" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="marcar como não lida">
+                    <i class="fa fa-eye text-red"></i>
+                </a>
+            }
+        </div>
+        <div class="mailbox-read-message">
+            <p>@Html.DisplayFor(model => model.Email_Body)</p>
+        </div>
+    </div>
+
+    <div class="box-footer">
+        <div class="pull-right">
+            <a href="@Url.Action("ReplyForwardCompose", "EmailBox", new { id = Model.Id, o = "reply" })" type="button" class="btn btn-default"><i class="fa fa-reply"></i> responder</a>
+            <a href="@Url.Action("ReplyForwardCompose", "EmailBox", new { id = Model.Id, o = "forward" })" type="button" class="btn btn-default"><i class="fa fa-share"></i> encaminhar</a>
+        </div>
+        @{
+            if (Model.ReadingStatus == rsi.Entities.readingStatus.trash)
+            {
+                <a href="@Url.Action("UpdateStatusMessage", "EmailBox", new { id = Model.Id, s = "archived" })" type="button" class="btn btn-default"><i class="fa fa-trash-o text-green"></i> recuperar</a>
+            }
+            else
+            {
+                <a href="@Url.Action("UpdateStatusMessage", "EmailBox", new { id = Model.Id, s = "trash" })" type="button" class="btn btn-default"><i class="fa fa-trash-o"></i> lixeira</a>
+
+                if (Model.ReadingStatus != rsi.Entities.readingStatus.archived)
+                {
+                    <a href="@Url.Action("UpdateStatusMessage", "EmailBox", new { id = Model.Id, s = "archived" })" type="button" class="btn btn-default"><i class="fa fa-archive"></i> arquivar</a>
+                }
+            }
+            if (Model.ReadingStatus == rsi.Entities.readingStatus.read)
+            {
+                <a href="@Url.Action("UpdateStatusMessage","EmailBox", new { id = Model.Id, s = "Unread"})" type="button" class="btn btn-default"><i class="fa fa-eye text-red"></i> marcar como não lida</a>
+            }
+        }
+        <a href="@Url.Action("Print","EmailBox", new { id = Model.Id})" type="button" class="btn btn-default" disabled><i class="fa fa-print"></i> imprimir</a>
+    </div>
+</div>
+

@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="wide_layout relative">
+    <div class="container">
+       
+        <!-- monitores -->
+        <div class="row">
+            @*<div class="col-lg-3 col-xs-6">
+                @Html.Action("Watchers_onLineviews", "Dashboard")
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                @Html.Action("Watchers_advertisersTotal", "Dashboard")
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                @Html.Action("Watchers_messagesToAdvertisersTotal", "Dashboard")                
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                @Html.Action("Watchers_messagesToSiteTotal", "Dashboard")                
+            </div>*@
+        </div>
+       
+        <br /><br />
+        <div class="row"></div>
+
+        <!-- charts-->
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Action("AreaChartJs", "Dashboard")
+            </div>
+        </div>
+        <div class="row">           
+            <div class="col-md-12">
+                @Html.Action("LineChartJs", "Dashboard")
+            </div>            
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Action("BarChartJs", "Dashboard")
+            </div>
+            <div class="col-md-6">
+                @Html.Action("PieChartJs", "Dashboard")
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                @*@Html.Action("RecentlyAddedAdvertisings", "Dashboard")*@
+            </div>
+
+            <div class="col-md-6">
+                @*@Html.Action("LatestAdvertisers", "Dashboard")*@
+            </div>
+        </div>
+       
+        @*<section class="col-lg-7 connectedSortable">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs pull-right">
+                    <li class="active"><a href="#revenue-chartyyyy" data-toggle="tab">bar</a></li>
+                    <li><a href="#sales-charttttt" data-toggle="tab">Donut</a></li>
+                    <li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
+                </ul>
+                <div class="tab-content no-padding">
+                    <div class="chart tab-pane active" id="revenue-chartyyyy">
+                        @Html.Action("BarChartJs", "Dashboard")
+                    </div>
+                    <div class="chart tab-pane" id="sales-charttttt">
+                        @Html.Action("AreaChartJs", "Dashboard")
+                        @Html.Action("PieChartJs", "Dashboard")
+                    </div>
+                </div>
+            </div>
+        </section>*@
+
+        <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Charts/ChartsJs-menu.js"></script>
+
+        <div class="control-sidebar-bg"></div>
+
+        <script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/chartjs/js/chart.min.js"></script>
+    </div>   
+</div>
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+

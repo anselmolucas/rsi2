@@ -1,0 +1,158 @@
+﻿<!--
+    view (partial).: _list_menuList.cshtml
+    local..........: ~/Areas/backEnd/Views/Displays/_partialViews/_list_menuList.cshtml
+    controller.....: Displays 
+    system.........: rsi
+    descrição......: lista as opções do menu de categorias
+    author.........: anselmolucas@gmail.com
+    date...........: -6/fev/2017
+    status.........: 80% ok (falta paginação)
+-->
+
+@model rsi.Entities.Display
+@using rsi.Apps
+
+<div class="col-md-12">
+    <div class="box box-purple">
+
+        <div class="box-header">
+            <h3 class="box-title">opções de menu vinculadas</h3>
+            <br />            
+            <a href="#" onclick="_directAccessMenuItemMaintenance(0,@Model.Id,'a');" class="modalAddbutton"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>            
+        </div>
+        <div class="box-body">
+            <table id="directAccessMenu" class="table table-hover table-condensed table-responsive">
+                <thead>
+                    <tr>                        
+                        <th>#</th>
+                        <th>id</th>
+                        <th>st</th>
+                        <th>media</th>
+                        <th>título</th>
+                        <th>descrição</th>
+                        <th>link</th>
+                        <th>tp</th>
+                        
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var _item in Model.MenuList)
+                    {
+                        <tr id="_line_@_item.Id">
+                            @{
+                                string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                         _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                         "glyphicon glyphicon-exclamation-sign";
+                                string _link = Functions.__maximumSizeOfTheText(_item.Link, 20);
+                                var _img = "";
+
+                                <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id">@_item.DisplayOrder</a></td>
+                                <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id">@_item.Id</a></td>
+                                <td><i class="@_stx"></i></td>
+
+                                if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.icon && !String.IsNullOrEmpty(_item.Icon))
+                                {
+                                    <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id"><span class="@_item.Icon"></span></a></td>
+                                }
+
+                                else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image || _item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.url)
+                                {
+                                    if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.image && !String.IsNullOrEmpty(_item.MediaFileName))
+                                    {
+                                        _img = Functions.__displayIconFileName(_item.MediaFileName, "DirectMenu");
+                                    }
+                                    else if (_item.Media_type == rsi.Entities.AdvertiserDetails.mediaType.url && !String.IsNullOrEmpty(_item.URL))
+                                    {
+                                        _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconSite;
+                                    }
+                                    else
+                                    {
+                                        _img = rsi.Entities.configurations.theSetup.noImage_path;
+                                    }
+                                    <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id"><img src="@Url.Content(_img)" width="50" class="img-thumbnail img-responsive" /></a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }                            
+                            
+                            <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id">@_item.Title</a></td>
+                            <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id">@_item.Description</a></td>
+                            @{
+                                if (String.IsNullOrEmpty(_item.Link))
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td><a href="@Url.Content(_item.Link)">@_link</a></td>
+                                }
+                            }
+                            
+                            <td><a href="#" class="modalMenuList_view" role="button" data-viewId="@_item.Id">@_item.Media_type</a></td>
+                            
+                            <td>
+                                <a href="#" onclick="_directAccessMenuItemMaintenance(@_item.Id,@Model.Id,'v');" class="modalMenuList_view"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a href="#" onclick="_directAccessMenuItemMaintenance(@_item.Id,@Model.Id,'e');" class="modalMenuList_edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="#" onclick="_directAccessMenuItemDeleteInLine(@_item.Id);" class="modalMenuList_del"><span class="glyphicon glyphicon-remove"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            <br />
+            @{ 
+                rsi.Apps.Context _context = new rsi.Apps.Context();
+                ViewBag.DirectAccessMenuItensSelectedsCount = _context.Menus.Where(x => x.DisplaysId == Model.Id && x.St == rsi.Entities.status.on).Count();
+                ViewBag.DirectAccessMenuItensTotalsCount = _context.Menus.Where(x => x.St == rsi.Entities.status.on).Count();
+                ViewBag.DirectAccessMenuItensOffCount = _context.Menus.Where(x => x.DisplaysId == Model.Id && x.St == rsi.Entities.status.off).Count();
+
+            }
+
+            <h5><b>@ViewBag.DirectAccessMenuItensSelectedsCount</b> medias vinculadas a essa vitrine de <b>@ViewBag.DirectAccessMenuItensTotalsCount</b> medias totais (obs.: @ViewBag.DirectAccessMenuItensOffCount registros desabilitados)</h5>
+        </div>
+    </div>
+</div>
+
+<script src="~/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<script>
+    function _directAccessMenuItemMaintenance(__id, __dId, __operation) {
+        console.log("__id: " + __id);
+        console.log("__dId: " + __dId);
+        console.log("__operation: " + __operation);
+        $("#modalDisplay").load("/backEnd/Displays/_modal_DirectAccessMenuItemMaintenance?__id=" + __id + "&__dId=" + __dId + "&__operation=" + __operation, function () { 
+            $("#modalDisplay").modal();
+        })
+    }
+
+    // essa função tem como objetivo pegar o id do item do menu a ser excluído, enviar para o controller deletar e excluir visualmente a linha da tabela referente ao registro eliminado
+    function _directAccessMenuItemDeleteInLine(__id)
+    {
+        $.ajax({
+            url: '/backEnd/Displays/_json_DirectAccessMenuItemDeleteInLine',
+            type: 'POST',
+            contentType: 'application/json;',
+            data: JSON.stringify({ __id: __id}),
+            success: function (valid) {
+                if (valid) {
+                    var _rowToDelete = "_line_"+__id;
+                    var row = document.getElementById(_rowToDelete);
+                    var table = row.parentNode;
+                    while (table && table.tagName != 'TABLE')
+                        table = table.parentNode;
+                    if (!table)
+                        return;
+                    table.deleteRow(row.rowIndex);               
+                } else {
+                    //show that id is not valid
+                }
+            }
+        });
+    }
+
+</script>

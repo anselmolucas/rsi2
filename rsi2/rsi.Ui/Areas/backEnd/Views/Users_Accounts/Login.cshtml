@@ -1,0 +1,72 @@
+﻿@model rsi.Entities.Login
+
+@{
+    Layout = "~/Areas/backEnd/Views/Shared/_LayoutLogInAccess.cshtml";
+}
+
+<div class="col-md-4">
+    <div class="loginPage">
+        <h3 Style="color:white;">
+            Benvindo ao BackEnd do
+        </h3>
+        <h2 Style="color:white;"><b>Rosana Scott - Indica</b></h2>
+        <br />
+        <div class="panel" style="padding:20px;">
+            <div class="panel-heading">
+                <p class="login-box-msg"><b>por gentileza, faça o seu login...</b></p>
+            </div>
+
+            <div class="panel-body">
+                @using (Html.BeginForm("Login", "UserAccounts", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal", id = "login" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <fieldset>
+                        <div class="form-group has-feedback">
+
+                            @Html.EditorFor(model => model.UserEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "email" } })
+                            @Html.ValidationMessageFor(model => model.UserEmail, "", new { @class = "text-danger" })
+                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            @Html.EditorFor(model => model.UserPassword, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "senha de acesso" } })
+                            @Html.ValidationMessageFor(model => model.UserPassword, "", new { @class = "text-danger" })
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <div class="col-sm-10">
+                                @Html.CheckBoxFor(model => model.LetMeConnected)
+                                <span>deixe-me conectado</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                @Html.ValidationMessageFor(model => model.LetMeConnected, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat">login</button>
+                        </div>
+
+                        <div class="pull-left">
+                            <a href="" class="btn btn-default btn-block btn-flat">alterar senha</a>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+
+            <div class="panel-footer">
+                <a href="/backEnd/UserAccounts/SendNewPassword">eu esqueci a minha password</a><br>
+                <a href="#" class="text-center">solicitar desbloqueio de usuário</a><br />
+                <a href="#" class="text-center">solicitar uma conta de usuário</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <!-- validação dos formulários (jquery validate)-->
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery-validate/js/jquery.validate.min.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery-validate/js/jquery.validate.unobtrusive.min.js"></script>
+}

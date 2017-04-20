@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = ViewBag.PageTitle;
+    ViewBag.SubTitle = "lista";
+}
+
+@section mailboxFoldersMenu
+{
+    @Html.Partial("~/Areas/backEnd/Views/EmailBox/_partialViews/_sideBarLeft.cshtml")
+}
+
+@Html.Partial("~/Areas/backEnd/Views/EmailBox/_partialViews/_inbox.cshtml", (IEnumerable<rsi.Entities.EmailBox>)@ViewBag.MessagesList)

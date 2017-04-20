@@ -1,0 +1,60 @@
+﻿@model rsi.Entities.Advertiser_address
+@using rsi.Apps
+
+
+<div>
+    @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsTopAux.cshtml")
+
+    @{ 
+        string _description = Functions.__maximumSizeOfTheText(Model.Description, 30);
+
+    }
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 control-label">
+                <b>descrição:&nbsp;</b><span id="Description_addressView">@_description</span> 
+                (<span id="Type_addressView">@Model.Type</span>)
+                <div class="pull-right"><b>ordem de exibição:&nbsp;</b><span id="DisplayOrder_addressView">@Model.DisplayOrder</span></div>                
+            </div>
+        </div>
+
+        <br />       
+
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 control-label">
+                <b>horário de funcionamento: </b><span id="OpeningHours_addressView">@Model.OpeningHours</span>
+            </div>
+        </div>
+        
+        <br /><br />
+
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 control-label">
+                <div class="responsive">
+                    <div class="thumbnail">
+                        <div id="GoogleMaps_addressView">
+                            @if (!string.IsNullOrEmpty(Model.GoogleMaps))
+                            {
+                                <iframe src="@Url.Content(Model.GoogleMaps)" width="100%" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            }
+                            else
+                            {
+                                <img src="~/Areas/backEnd/assets/images/elements/noGoogleImage.jpg" width="100%" height="350" />
+                            }
+                        </div>                                                                       
+                        <div class="caption">
+                            <i class="glyphicon glyphicon-map-marker"></i><b>&nbsp;endereço:&nbsp;</b><span id="Street_addressView">@Model.Street</span>&nbsp;-&nbsp;<span id="CityName_addressView">@Model.CityName</span>/<span id="Uf_addressView">@Model.Uf</span><b>&nbsp;cep:&nbsp;</b><span id="ZipCode_addressView">@Model.ZipCode</span>                                                                                             
+                        </div>
+                    </div>                            
+                </div>                
+            </div>           
+        </div>     
+
+        <hr />
+
+        @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsBottomAux.cshtml")
+        
+    </div>    
+</div>
+

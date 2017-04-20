@@ -1,0 +1,42 @@
+﻿@model IEnumerable<rsi.Entities.Statistic>
+
+<div class="wide_layout relative">
+    <div class="container">
+
+        <div class="row">
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>anunciante</th>
+                            <th>data</th>                           
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int _cont = 1;
+                            foreach (var _item in Model.OrderBy(x=>x.StartOfVisit).ThenBy(x=>x.AdvertiserName))
+                            {
+                                <tr>
+                                    <td>@_item.Id</td>
+                                    <td>@_item.AdvertiserId</td>
+                                    <td>@_item.AdvertiserName</td>
+                                    <td>@_item.StartOfVisit / @_item.EndOfVisit</td>
+                                    <td></td>
+                                </tr>
+                                _cont++;
+                            }
+                        }
+                    </tbody>
+                </table>
+                <span>total: @_cont</span>
+            </div>
+        </div>
+
+        <br /><br />
+
+    </div>
+</div>

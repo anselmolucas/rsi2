@@ -1,0 +1,51 @@
+﻿<div class="box-footer">
+    <div class="col-sm-6">
+        <div class="btn-group btn-group-lg" role="group" aria-label="...">
+            <a href="@Url.Action("List")" type="button" class="btn btn-default" title="retornar à lista"><span class="glyphicon glyphicon-arrow-left"></span></a>
+            <button id="resetFormButton" onclick="resetForm('@ViewBag.FormHeader["FormId"]')" type="reset" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+
+            @if (ViewBag.FormHeader["Operation"] == "e" || ViewBag.FormHeader["Operation"] == "v" || ViewBag.FormHeader["Operation"] == "d")
+            {
+                <button id="addFormButton" type="submit" class="btn btn-default" title="inserir um novo registro" name="operation" value="add"><span class="glyphicon glyphicon-plus"></span></button>
+                if (ViewBag.FormHeader["Operation"] == "v" || ViewBag.FormHeader["Operation"] == "d")
+                {
+                    <button id="enabletheEditFormButton" type="button" onclick="enableTheEditForm();" class="btn btn-default" title="habilitar a edição do registro"><span class="glyphicon glyphicon-pencil"></span></button>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+            @if (ViewBag.FormHeader["Operation"] == "a" || ViewBag.FormHeader["Operation"] == "e" || ViewBag.FormHeader["Operation"] == "d")
+            {
+                if (ViewBag.FormHeader["Operation"] != "d")
+                {
+                    <button id="saveFormButton" type="submit" class="btn btn-primary" title="salvar alterações" name="operation" value="save"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                }
+                if (ViewBag.FormHeader["Operation"] != "a")
+                {
+                    <button id="deleteFormButton" type="button" class="btn btn-danger" title="excluir o registro" onclick="Show_Hide('deleteRegisterConfirm')"><span class="glyphicon glyphicon-trash"></span></button>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- div escondida para confirmação da exclusão do registro -->
+    <div id="deleteRegisterConfirm" class="col-sm-12" style="display:none;">
+        <div class="form-group">
+            <h2 style="text-align:center;color:red;">*** confirmar exclusão ***</h2>
+            <div class="col-md-6">
+                <div class="pull-left" role="group">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" title="retornar ao anunciante (fecha janela)" onclick="Show_Hide('deleteRegisterConfirm')">desistir</button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="pull-right" role="group">
+                    <button type="submit" class="btn btn-danger" name="operation" value="delete" title="excluir o registro"><span class="glyphicon glyphicon-trash"></span> excluir registro !!!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,144 @@
+﻿@model IEnumerable<rsi.Entities.AdvertiserDetails.Media>
+@using rsi.Apps
+@using rsi.Entities.AdvertiserDetails
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">mídias</h3>
+                <br />
+                <a href="#" onclick="advInfosMaintenance('0', @ViewBag.AdvertiserId, 'a')" class="modalAddbutton"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>st</th>
+                            <th>ícone</th>
+                            <th>título</th>
+                            <th>descrição</th>
+                            @*<th>arquivo/url</th>*@
+                            <th>type</th>
+                            <th></th>                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var _items in Model)
+                        {
+                            string _title = Functions.__maximumSizeOfTheText(_items.Title, 30);
+                            string _description = Functions.__maximumSizeOfTheText(_items.Description, 30);
+                            string _url = Functions.__maximumSizeOfTheText(_items.URL, 15);
+                            string _fileName = Functions.__maximumSizeOfTheText(_items.FileName, 15);
+                            string _stx = _items.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                                         _items.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                                         "glyphicon glyphicon-exclamation-sign";
+
+                            ViewBag.AdvertiserId = _items.AdvertiserId;
+                            <tr>
+                                <td>@_items.DisplayOrder</td>
+                                <td><i class="@_stx"></i></td>
+                                @{
+                                    string _mediaType = (_items.Type == rsi.Entities.AdvertiserDetails.mediaType.image || _items.Type == rsi.Entities.AdvertiserDetails.mediaType.logo || _items.Type == rsi.Entities.AdvertiserDetails.mediaType.mainImage || _items.Type == rsi.Entities.AdvertiserDetails.mediaType.slider || _items.Type == rsi.Entities.AdvertiserDetails.mediaType.gallery || _items.Type == rsi.Entities.AdvertiserDetails.mediaType.thumbnail) ? "image" : "others";
+
+                                    if (_mediaType == "image")
+                                    {
+                                        var _img = "";
+
+                                        if (!String.IsNullOrEmpty(_items.FileName))
+                                        {
+                                            _img = "";
+                                            if (_items.FileName.ToLower().Contains(".mp4") || _items.URL.ToLower().Contains("youtube") || _items.URL.ToLower().Contains("vimeo"))
+                                            {
+                                                _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconVideo;
+
+                                            }
+                                            if (_items.FileName.ToLower().Contains(".jpg") || _items.FileName.ToLower().Contains(".png") || _items.FileName.ToLower().Contains(".jpeg") || _items.FileName.ToLower().Contains(".gig") || _items.FileName.ToLower().Contains(".bmp")) /*images*/
+                                            {
+                                                _img = rsi.Entities.configurations.thePaths.advertisersImages + _items.FileName;
+                                            }
+
+                                            else if (_items.FileName.ToLower().Contains(".pdf") || _items.FileName.ToLower().Contains(".epub") || _items.FileName.ToLower().Contains(".txt") || _items.FileName.ToLower().Contains(".doc") || _items.FileName.ToLower().Contains(".docx")) /*textos*/
+                                            {
+                                                _img = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconTxt;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            _img = rsi.Entities.configurations.theSetup.noImage_path;
+                                        }
+
+                                        <td><img src="@Url.Content(_img)" width="25" height="25" /></td>
+                                    }
+
+                                    else
+                                    {
+                                        var _img2 = rsi.Entities.configurations.theSetup.noImage_path;
+
+                                        if (!String.IsNullOrEmpty(_items.URL))
+                                        {
+                                            if (_items.URL.ToLower().Contains("youtube"))
+                                            {
+                                                _img2 = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconYoutube;
+                                            }
+                                            if (_items.URL.ToLower().Contains("vimeo"))
+                                            {
+                                                _img2 = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconVimeo;
+                                            }
+                                            if (_items.URL.ToLower().Contains("soundcloud"))
+                                            {
+                                                _img2 = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconSoundCloud;
+                                            }
+                                            if (_items.Type == mediaType.url)
+                                            {
+                                                _img2 = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconUrl;
+                                            }
+                                            if (_items.Type == mediaType.pdf)
+                                            {
+                                                _img2 = rsi.Entities.configurations.thePaths.icons + rsi.Entities.configurations.theSetup.iconPdf;
+                                            }
+                                            <td><img src = "@Url.Content(_img2)" width = "25" height = "25" /></td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                    }  
+                                }
+
+                                <td>@_title</td>
+                                <td>@_description</td>
+                                <td>@_items.Type</td>
+
+                                <td>
+                                    <a href="#" onclick="advInfosMaintenance(@_items.Id, @_items.AdvertiserId, 'v')"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#" onclick="advInfosMaintenance(@_items.Id, @_items.AdvertiserId, 'e')" class="editButton_inList"><span class="glyphicon glyphicon-pencil"></span></a>                                    
+                                    @if (!string.IsNullOrEmpty(_items.URL))
+                                    {
+                                        <a href="@Url.Content(_items.URL)" class="modalAddresMap"><span class="glyphicon glyphicon-globe"></span></a>
+                                    }    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/this/myScriptsBackEnd.js"></script>
+
+<script>
+    //abrir o modal de manutenção de registros
+    function advInfosMaintenance(_id, _advertiserId, _operation) {
+        $("#modalAdvertiser").load("/backEnd/Advertisers_Medias/_modalView?id=" + _id + "&advId=" + _advertiserId + "&o=" + _operation, function () {
+            $("#modalAdvertiser").modal();
+        })
+    }
+</script>

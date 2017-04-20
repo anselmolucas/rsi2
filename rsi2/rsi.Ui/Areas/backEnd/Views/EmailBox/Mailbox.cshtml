@@ -1,0 +1,291 @@
+﻿<!--
+    view...........: Mailbox.cshtml
+    local..........: ~/Views/EmailBox/Mailbox.cshtml
+    controller.....: EmailBox
+    system.........: rsi
+    descrição......: menu lateral das mensagens
+    author.........: anselmolucas@gmail.com
+    date...........: 01/set/2016
+    status.........: 90% ok (falta atualizar via javaScript a opção ativa no momento)
+-->
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/icheck/css/all.css" rel="stylesheet" />
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/bootstrap-wysihtml5/css/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+
+@section mailboxFoldersMenu
+{
+    @Html.Partial("~/Areas/backEnd/Views/EmailBox/_partialViews/_sideBarLeft.cshtml")
+}
+
+@Html.Partial("~/Areas/backEnd/Views/EmailBox/_partialViews/_inbox.cshtml", (IEnumerable<rsi.Entities.EmailBox>)@ViewBag.MessagesList)
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Compose-menu.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Compose.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Inbox-menu.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Inbox.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Read-menu.js"></script>
+
+<script>
+
+    function DisplayInboxPage() {
+        var display = document.getElementById('inboxPage').style.display;
+        if (display == "none")
+            document.getElementById('inboxPage').style.display = 'block';
+
+        //document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'active';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayRsiPage() {
+        var display = document.getElementById('rsiPage').style.display;
+        if (display == "none")
+            document.getElementById('rsiPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        //document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'active';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayAdvertisersPage() {
+        var display = document.getElementById('advertisersPage').style.display;
+        if (display == "none")
+            document.getElementById('advertisersPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        //document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'active';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayBudgetRequestPage() {
+        var display = document.getElementById('budgetRequestPage').style.display;
+        if (display == "none")
+            document.getElementById('budgetRequestPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        //document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'active';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayArchivedPage() {
+        var display = document.getElementById('archivedPage').style.display;
+        if (display == "none")
+            document.getElementById('archivedPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        //document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'active';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayMessagesDraftPage() {
+        var display = document.getElementById('draftPage').style.display;
+        if (display == "none")
+            document.getElementById('draftPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        //document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'active';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayMessagesSentPage() {
+        var display = document.getElementById('sentPage').style.display;
+        if (display == "none")
+            document.getElementById('sentPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        //document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'active';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayMessagesDeletedPage() {
+        var display = document.getElementById('messagesDeletedPage').style.display;
+        if (display == "none")
+            document.getElementById('messagesDeletedPage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        //document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'active';
+    }
+
+    function DisplayComposePage() {
+        var display = document.getElementById('composePage').style.display;
+        if (display == "none")
+            document.getElementById('composePage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        //document.getElementById('composePage').style.display = 'none';
+        document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+
+    function DisplayViewMessagePage() {
+        var display = document.getElementById('viewMessagePage').style.display;
+        if (display == "none")
+            document.getElementById('viewMessagePage').style.display = 'block';
+
+        document.getElementById('inboxPage').style.display = 'none';
+        document.getElementById('rsiPage').style.display = 'none';
+        document.getElementById('advertisersPage').style.display = 'none';
+        document.getElementById('budgetRequestPage').style.display = 'none';
+        document.getElementById('archivedPage').style.display = 'none';
+        document.getElementById('messagesDeletedPage').style.display = 'none';
+        document.getElementById('draftPage').style.display = 'none';
+        document.getElementById('sentPage').style.display = 'none';
+        document.getElementById('composePage').style.display = 'none';
+        //document.getElementById('viewMessagePage').style.display = 'none';
+
+        document.getElementById('messagesInbox').classList = 'inactive';
+        document.getElementById('messagesRSI').classList = 'inactive';
+        document.getElementById('messagesAdvertisers').classList = 'inactive';
+        document.getElementById('messagesBudgetRequest').classList = 'inactive';
+        document.getElementById('messagesArchived').classList = 'inactive';
+        document.getElementById('messagesDraft').classList = 'inactive';
+        document.getElementById('messagesSent').classList = 'inactive';
+        document.getElementById('messagesDeleted').classList = 'inactive';
+    }
+</script>
+
+

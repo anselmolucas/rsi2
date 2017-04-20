@@ -1,0 +1,64 @@
+﻿@model rsi.Entities.Advertiser_com
+@using rsi.Apps
+
+@{ 
+    ViewBag.DivId = ViewBag.FormHeaderAux["DivId"];
+}
+<div>
+    @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsTopAux.cshtml")
+
+    @{
+        string _description = Functions.__maximumSizeOfTheText(Model.Description, 30);
+
+    }
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 control-label">
+                <b>descrição:&nbsp;</b><span id="Description_addressView">@_description</span>
+      
+                <div class="pull-right"><b>ordem de exibição:&nbsp;</b><span id="DisplayOrder_addressView">@Model.DisplayOrder</span></div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 control-label">
+            @if ((Convert.ToInt16(Model.TypeCom) > 0 && Convert.ToInt16(Model.TypeCom) < 4) && !string.IsNullOrEmpty(Model.Tel))
+            {
+                <i class="fa fa-phone"></i><b>&nbsp;tel:&nbsp;</b><span id="Street_addressView">@Model.Tel</span>
+            }
+            else if (Convert.ToInt16(Model.TypeCom) == 5 && !string.IsNullOrEmpty(Model.URL))
+            {
+                <br /><br />
+
+                <div class="responsive">
+                    <div class="thumbnail">
+                        <div id="GoogleMaps_addressView">
+                            <iframe src="@Url.Content(Model.URL)" width="100%" height="350"></iframe>
+                        </div>
+                        <div class="caption">
+                            <i class="fa fa-globe"></i><b>&nbsp;url:&nbsp;</b><span id="Street_addressView">@Model.URL</span>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else if (Convert.ToInt16(Model.TypeCom) > 5 && !string.IsNullOrEmpty(Model.URL))
+            {
+                <i class="fa fa-globe"></i><b>&nbsp;url:&nbsp;</b><span id="Street_addressView">@Model.URL</span>
+                }
+                else if ((Convert.ToInt16(Model.TypeCom) == 4) && !string.IsNullOrEmpty(Model.Email)) // email
+                {
+                    var _emailTo= "mailto:" + Model.Email + "?Subject=contato%20via%20site";
+
+                <i class="fa fa-envelope"></i><b>&nbsp;e-mail:&nbsp;</b><span id="Street_addressView"><a href="@Url.Content(_emailTo)" target="_top">@Model.Email</a></span>
+            }
+        </div>
+
+        <hr />
+
+        @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsBottomAux.cshtml")
+
+    </div>
+</div>

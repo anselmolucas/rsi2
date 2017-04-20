@@ -1,0 +1,29 @@
+﻿<!--
+    view...........: List.cshtml
+    local..........: ~/Areas/backEnd/Views/SubCategories/List.cshtml
+    controller.....: SubCategories
+    system.........: rsi
+    descrição......: listar as sub-categorias
+    author.........: anselmolucas@gmail.com
+    date...........: 17/jan/2017
+    status.........: 80% ok
+    pendências.....:
+-->
+
+@using rsi.Apps;
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/css/jquery.dataTables_themeroller.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    @Html.Action("_list", "SubCategories")
+</div>
+
+@section Scripts
+{
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Data-menu.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Data.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Tables/Simple-menu.js"></script>
+}
+

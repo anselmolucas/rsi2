@@ -1,0 +1,78 @@
+﻿<!--
+    view...........: List.cshtml
+    local..........: ~/Views/Users/List.cshtml
+    controller.....: Users
+    system.........: rsi
+    descrição......: listar os usuários
+    author.........: anselmolucas@gmail.com
+    date...........: 01/set/2016
+    status.........: 70% ok (paginação, ordenação de colunas e search por javascript)
+-->
+
+@model IEnumerable<rsi.Entities.User>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box box-purple">
+            <div class="box-header">
+                <a href="@Url.Action("Maintenance","Users", new { id = 0, o = "a" })" class="modalAddresAdd modalAddbutton" role="button"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>st</th>
+                            <th>ícone</th>
+                            <th>email</th>
+                            <th>nome</th>
+                            <th>power</th>
+                            <th>depto</th>
+                            <th>dt</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int _registersCount = 1;
+                            foreach (var _item in Model)
+                            {
+                                var _name = Functions.__maximumSizeOfTheText(_item.UserFirstName, 20) + " " + Functions.__maximumSizeOfTheText(_item.UserLastName, 20);
+                                var _email = Functions.__maximumSizeOfTheText(_item.UserEmail, 25);
+                                var _img = Functions.__displayIconFileName(_item.FileName, "Users");
+                                var _day = Functions.__displayDateinFormat_ddmmm(_item.AddDate);
+                                string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                            _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                            "glyphicon glyphicon-exclamation-sign";
+                                <tr>
+                                    <td>@_registersCount</td>
+                                    <td>@_item.Id</td>
+                                    <td><i class="@_stx"></i></td>
+                                    <td><img src="@Url.Content(_img)" width="40" class="img-circle" /></td>
+                                    <td>@_email</td>
+                                    <td><a href="@Url.Action("Maintenance","Users", new { id = _item.Id, o = "v" })">@_name</a></td>
+                                    <td>@_item.UserPower</td>
+                                    <td>@_item.Department</td>
+                                    <td>@_day</td>
+                                    <td>
+                                        <a href="@Url.Action("Maintenance","Users", new { id = _item.Id, o = "v" })"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="@Url.Action("Maintenance","Users", new { id = _item.Id, o = "e" })"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a href="@Url.Action("Maintenance","Users", new { id = _item.Id, o = "d" })"><span class="glyphicon glyphicon-trash"></span></a>
+                                    </td>
+                                </tr>
+
+                                _registersCount++;
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

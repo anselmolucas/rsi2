@@ -1,0 +1,183 @@
+﻿@model IEnumerable<rsi.Entities.Advertiser_com>
+@using rsi.Apps
+@using rsi.Entities
+
+@{
+//ViewBag.DivId_maintenanceForm = ViewBag.FormHeaderAux["DivId_maintenanceForm"];
+//ViewBag.DivId_view = ViewBag.FormHeaderAux["DivId_view"];
+}
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <!-- formulário -->
+                <div id="comsMaintenanceForm" style="display:none;"></div>
+
+                <!-- view / delete -->
+                <div id="comsView" style="display:none;"></div>
+
+                <h3 class="box-title">meios de comunicação cadastrados</h3>
+                <br />
+                <a href="#" onclick="advComsMaintenance(0, 'a', @ViewBag.AdvertiserId)"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive" id="comsListTab">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>st</th>
+                            <th>com</th>
+                            <th>descrição</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var _item in Model)
+                        {
+                            string _description = Functions.__maximumSizeOfTheText(_item.Description, 30);
+                            string _stx = _item.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                            _item.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                            "glyphicon glyphicon-exclamation-sign";
+
+                            string _typeCom = _item.TypeCom.ToString();
+                            string _icon = ViewBag.Icons[_typeCom];
+                            string _com =   _item.TypeCom == typeCom.tel || _item.TypeCom == typeCom.cel || _item.TypeCom == typeCom.whatsapp ? "("+_item.DDD + ") " + _item.Tel :
+                                            _item.TypeCom == typeCom.email ? _item.Email : _item.URL ;
+                            bool _url = Convert.ToInt16(_item.TypeCom)>4 ? true : false;
+
+                            ViewBag.AdvertiserId = _item.AdvertiserId;
+                            ViewBag.AddressId = _item.Id;
+
+                            <tr id="tabComLineId_@_item.Id">
+                                <td id="col_DisplayOrder">@_item.DisplayOrder</td>
+                                <td id="Col_Id">@_item.Id</td>
+                                <td id="col_St"><i class="@_stx"></i></td>
+                                @if (_url)
+                                {
+                                    <td id="Com"><a href="@Url.Content(_item.URL)" target="_blank"><i class="@_icon"></i>&nbsp;@_com</a></td>
+                                }
+                                else
+                                {
+                                    if (_item.TypeCom == typeCom.email)
+                                    {
+                                        <td id="Com"><a href="@Url.Content(_item.Email)" target="_blank"><i class="@_icon"></i>&nbsp;@_item.Email</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td id="Com"><span class="@_icon"></span> @_com</td>
+                                    }
+
+                                }
+                                
+                                <td id="col_Description">@_description</td>
+
+                                <td>
+                                    <a href="#" onclick="advComsViewDelete(@_item.Id,'v')"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#" onclick="advComsMaintenance(@_item.Id, 'e', @_item.AdvertiserId)"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a href="#" onclick="advComsViewDelete(@_item.Id,'d')"><span class="glyphicon glyphicon-trash"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /*=============================================================================================
+    *** function: advComsMaintenance() ***
+    parametros..: __addressId, __operation, __advertiserId
+    finalidade..: exibir o formulário de manutenção de registros
+=============================================================================================*/
+    function advComsMaintenance(__comsId, __operation, __advertiserId) {
+        console.log("advComsMaintenance");
+        console.log("__comsId: " + __comsId);
+        console.log("__operation: " + __operation);
+        console.log("__advertiserId: " + __advertiserId);
+        event.preventDefault();
+        $("#comsMaintenanceForm").load("/backEnd/Advertisers_coms/_comsMaintenanceForm?__comsId=" + __comsId + "&__operation=" + __operation + "&__advertiserId=" + __advertiserId, function () {
+            MostrarForm("comsMaintenanceForm", "comsView");
+        })
+    }
+
+    /*=============================================================================================
+    *** function: advComsViewDelete() ***
+    parametros..: __addressId, __operation
+    finalidade..: exibir os detalhes dos registros
+=============================================================================================*/
+    function advComsViewDelete(__comsId, __operation) {
+        event.preventDefault();
+        console.log("advComsViewDelete");
+        console.log("__comsId: " + __comsId);
+        console.log("__operation: " + __operation);
+        $("#comsView").load("/backEnd/Advertisers_coms/_comsView?__comsId=" + __comsId + "&__operation=" + __operation, function () {
+            MostrarForm("comsView", "comsMaintenanceForm");
+        })
+    }
+
+    /*=============================================================================================
+   *** function: sendComsToDeleteInForm() ***
+   finalidade..: tem como objetivo pegar o id do endereço a ser excluído e enviar para "_ajaxDeleteComs()"
+=============================================================================================*/
+function sendComsToDeleteInForm(__divToHide, __idInHeader) {
+    console.log("sendComsToDeleteInForm");
+    var _comsId = $(__idInHeader).html();
+    console.log("linha para apagar: " + _comsId);
+    //var _divToHide = 'ViewBag.DivId'; // id da div do formulário de endereços
+    var _divDeteleButtomToHide = "deleteRegisterConfirm_coms";
+    var _controllerURL = "/backEnd/Advertisers_coms/_jsonDelete/"; // url do controller que efetiva o delete
+    var _tableLineToRemove = "#tabComLineId_" + _comsId;
+
+    // backEnd/this.js: enviar o __addressId para o controller, via ajax, do registro a apagar e após o retorno do controller fechar a div (formulário ou view) e eliminar a linha do endereço de "_list.cshtml"
+    _ajaxDelete(_comsId, _controllerURL, __divToHide, _divDeteleButtomToHide, _tableLineToRemove);
+
+    return false;
+}
+
+/*=============================================================================================
+    *** function: _ajaxDelete() ***
+    parametros: _comsId
+                __divToHide (id da div para esconder, por exemplo: pode ser o formulário de endereços ou a view de consulta ao endereço)
+                __controllerURL (url do controller que efetiva o delete)
+    finalidade: enviar o _comsId para o controller, via ajax, do registro a apagar e após o retorno do controller fechar a div (formulário ou view) e eliminar a linha do endereço de "_list.cshtml"
+=============================================================================================*/
+function _ajaxDelete(__comsId, __controllerURL, __divToHide, __divDeteleButtomToHide, __tableLineToRemove) {
+    event.preventDefault();
+    console.log("********************************* ");
+    console.log("_ajaxDelete");
+    console.log("__comsId: " + __comsId);
+    console.log("__controllerURL: " + __controllerURL);
+    console.log("__divToHide: " + __divToHide);
+    console.log("__divDeteleButtomToHide: " + __divDeteleButtomToHide);
+    console.log("__tableLineToRemove: " + __tableLineToRemove);
+    console.log("********************************* ");
+    var _lineToRemove = "";
+    jQuery.ajax({
+        type: "POST",
+        url: __controllerURL,
+        dataType: "json",
+        data: { __comsId: __comsId },
+        success: function (data) {
+            if (__divToHide != null)
+                if (__divToHide != "")
+                    EsconderForm(__divToHide);
+
+            if (__divDeteleButtomToHide != null)
+                if (__divDeteleButtomToHide != "")
+                    EsconderForm(__divDeteleButtomToHide); // corrige um bug fechando o trecho do formulário com o botão que efetiva a deleção do registro
+
+            if (__tableLineToRemove != null)
+                if (__tableLineToRemove != "")
+                    $(__tableLineToRemove).fadeOut(4000);  //$(__tableLineToRemove).remove();
+
+            return false;
+        }
+    });
+}
+</script>

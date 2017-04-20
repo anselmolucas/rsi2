@@ -1,0 +1,336 @@
+﻿<!--
+    view...........: _comsMaintenanceForm.cshtml
+    local..........: ~/Areas/backEnd/Views/Advertisers_coms/_comsMaintenanceForm.cshtml
+    controller.....: Advertisers_com
+    system.........: rsi2
+    descrição......: manutenção de endereços dos anunciantes
+    author.........: anselmolucas@gmail.com
+    date...........: 17/abr/2017
+    status.........: 90% ok
+    pendências.....: inserir instruções de uso/help e revisão geral e pequenos detalhes
+-->
+
+@model rsi.Entities.Advertiser_com
+
+@{
+    ViewBag.DivId = ViewBag.FormHeaderAux["DivId"];
+}
+
+<div id="addressMaintenanceDiv">
+    @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsTopAux.cshtml")
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        @using (Html.BeginForm("_jsonComsMaintenanceFormSubmit", "Advertisers_coms", FormMethod.Post, new { @id = "comsMaintenanceForm2" }))
+        {
+            <div class="form-horizontal">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.AdvertiserId)
+                
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.DisplayOrder)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control", @placeholder = "ordem", @id = "DisplayOrder_com" } })
+                        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.TypeCom)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EnumDropDownListFor(model => model.TypeCom, "qual o tipo?", new { @class = "form-control", @id = "TypeCom_com" })
+                        @Html.ValidationMessageFor(model => model.TypeCom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Description)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "título e/ou descrição do endereço", @id = "Description_com" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="tel">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.DDD)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EditorFor(model => model.DDD, new { htmlAttributes = new { @class = "form-control", @placeholder = "DDD", @id = "DDD_com" } })
+                        @Html.ValidationMessageFor(model => model.DDD, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Tel)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.EditorFor(model => model.Tel, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tel", @id = "Tel_com" } })
+                        @Html.ValidationMessageFor(model => model.Tel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="email">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.Email)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email", @id = "Email_com" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" id="url">
+                    <div class="col-sm-2 control-label">
+                        @Html.LabelFor(model => model.URL)
+                    </div>
+
+                    <div class="col-sm-10">
+                        @Html.EditorFor(model => model.URL, new { htmlAttributes = new { @class = "form-control", @placeholder = "URL", @id = "URL_com" } })
+                        @Html.ValidationMessageFor(model => model.URL, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <br /><br />
+                <div id="statusWithRadioButton_inModal" class="form-group">
+                    <div class="col-sm-2 control-label">
+                        @Html.Label("status")
+                    </div>
+                   
+                    <div class="col-sm-10">
+                        <div id="registerStatus_row">
+                            @Html.RadioButtonFor(model => model.St, "on", new { htmlAttributes = new { @id = "st1_aux" } })
+                            <span>ativo</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            @Html.RadioButtonFor(model => model.St, "off", new { htmlAttributes = new { @id = "st2_aux" } })
+                            <span>inativo</span>
+                            @Html.ValidationMessageFor(model => model.St, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                @Html.Partial("~/Areas/backEnd/Views/_partialViews/forms/_formsBottomAux.cshtml")
+
+            </div>
+        }<!-- fim do formulário -->
+    </div>
+</div>
+
+<script>
+    /*=============================================================================================
+            *** advertisers coms ***
+    =============================================================================================*/
+    /*=============================================================================================
+    *** submit form by ajax/json ***
+    finalidade..: attach a submit handler to the form
+=============================================================================================*/
+$("#comsMaintenanceForm2").submit(function (event) {
+
+    var form = $("#comsMaintenanceForm2");
+    var _operation = '@ViewBag.FormHeaderAux["Operation"]';
+    //var _operation = "@ViewBag.Operation";
+    console.log("Operation: " + _operation);
+    console.log("url post: " + form.attr("action"));
+
+    jQuery.ajax({
+        type: "POST",
+        url: form.attr("action"),
+        data: form.serialize(),
+        dataType: "json",
+        success: function (data) {
+            advComsFillNoRefreshList(data, _operation);
+        }
+    });
+
+    event.preventDefault();
+
+    return null;
+});
+
+/*=============================================================================================
+    *** function: advComsFillNoRefreshList() ***
+    finalidade..: atualizar / preencher as informações da lista com os dados recebidos do $("#addressMaintenanceForm").submit
+    dependência.: $("#addressMaintenanceForm").submit
+    parâmetros..: data (obj, __operation)
+=============================================================================================*/
+function advComsFillNoRefreshList(data, __operation) {
+    console.log("advComsFillNoRefreshList");
+    var _line = "#tabComLineId_" + data.Id;
+
+    // apaga a linha da lista que foi afetada
+    $(_line).remove();
+
+    // recria a linha da lista que foi afetada
+    var _iconStatusView = "glyphicon glyphicon-exclamation-sign";
+    if (parseInt(data.St) == 1) {
+        _iconStatusView = "glyphicon glyphicon-thumbs-up text-primary";
+    }
+    else if (parseInt(data.St) == 0) {
+        _iconStatusView = "glyphicon glyphicon-thumbs-down text-danger";
+    }
+
+    var _comDetails = "";
+
+    var typeCom = data.TypeCom;
+
+    var _icon = '<i class="' + getTypeComIcon(data.TypeCom) + '"></i>';
+
+    if (data.TypeCom == 0)
+        _comDetails = _icon;
+    if (data.TypeCom == 1)
+        _comDetails = _icon + " (" + data.DDD + ") " + data.Tel;
+    else if (data.TypeCom == 2)
+        _comDetails = _icon + " (" + data.DDD + ") " + data.Tel;
+    else if (data.TypeCom == 3)
+        _comDetails = _icon + " (" + data.DDD + ") " + data.Tel;
+    else if (data.TypeCom == 4)
+        _comDetails = ' <a href="' + data.Email + '" target="' + '_blank' + '">' + _icon + " " + data.Email + '</a>';
+    else if (data.TypeCom > 4)
+        _comDetails = ' <a href="' + data.URL + '" target="' + '_blank' + '">' + _icon + " " + data.URL + '</a>';
+
+    $("#comsListTab tbody").append(
+        "<tr id='tabComLineId_" + data.Id + "'>" +
+        "<td>" + data.DisplayOrder + "</td>" +
+        "<td>" + data.Id + "</td>" +
+        "<td><i class='" + _iconStatusView + "'></i></td>" +
+        "<td>" + _comDetails + "</td>" +
+        "<td>" + data.Description + "</td>" +
+        "<td>" +
+        "<a href='#' onclick='advComsViewDelete(\u0022" + data.Id + "\u0022,\u0022v\u0022" + ")'><span class='glyphicon glyphicon-eye-open'></span></a>" +
+        "<a href='#' onclick='advComsMaintenance(\u0022" + data.Id + "\u0022,\u0022e\u0022,\u0022" + data.AdvertiserId + "\u0022)'><span class='glyphicon glyphicon-pencil'></span></a>" +
+        "<a href='#' onclick='advComsViewDelete(\u0022" + data.Id + "\u0022,\u0022d\u0022" + ")'><span class='glyphicon glyphicon-trash'></span></a>" +
+        "</td>" +
+        "</tr>");
+
+    $("#comsMaintenanceForm").load("/backEnd/Advertisers_coms/_comsMaintenanceForm?__comsId=" + data.Id + "&__operation=" + "e" + "&__advertiserId=" + data.AdvertiserId, function () {
+    })
+}
+
+    /*=============================================================================================
+            *** on load form ***
+            finalidade..: averifica a opção escolhida no momento de leitura da página
+        =============================================================================================*/
+    $(document).ready(function () {
+        typeCom_verify(); // verifica a opção escolhida
+        document.getElementById("saveFormButton_coms").disabled = true;
+    })
+
+    /*=============================================================================================
+        *** on change ***
+        finalidade..: verifica se TypeCom foi alterado
+    =============================================================================================*/
+    $("#TypeCom_com").change(function () {
+        typeCom_verify();
+    })
+
+    /*=============================================================================================
+        *** function: typeCom_verify() ***
+        finalidade..: exibe o input apenas de uma das opções de typeCom: noInformation, tel, cel, whatsapp, email, site, facebook, twitter, instagram, youtube, googlePlus, linkedin, vimeo, pinterest, flickr, mySpace, soundCloud
+    =============================================================================================*/
+    function typeCom_verify() {
+        var _typeCom_com_option = document.getElementById("TypeCom_com");
+        var _typeCom_com_option_selected = _typeCom_com_option.options[_typeCom_com_option.selectedIndex].value;
+
+        if (_typeCom_com_option_selected == 0) // nada selecionado
+        {
+            $('#tel').hide();
+            $('#email').hide();
+            $('#url').hide();
+        }
+        else if (_typeCom_com_option_selected == 1 || _typeCom_com_option_selected == 2 || _typeCom_com_option_selected == 3) // tel, cel, whatsapp
+        {
+            $('#tel').show();
+            $('#email').hide();
+            $('#url').hide();
+        }
+        else if (_typeCom_com_option_selected == 4) // e-mail
+        {
+            $('#tel').hide();
+            $('#email').show();
+            $('#url').hide();
+        }
+        else {                                      // site, facebook, twitter, instagram, youtube, googlePlus, linkedin, vimeo, pinterest, flickr, mySpace, soundCloud
+            $('#tel').hide();
+            $('#email').hide();
+            $('#url').show();
+        }
+    }
+
+
+    /*=============================================================================================
+        *** function: getTypeComIcon() ***
+        finalidade..: setar o icon do typeCom (tipo de com, por exemplo: tel, email, url, etc)
+        dependência.: advComsFillNoRefreshList
+        parâmetros..: data (data.TypeCom: tipo da com)
+    =============================================================================================*/
+    function getTypeComIcon(__typeCom) {
+        var _icon = "";
+        if (__typeCom == 0)
+            _icon = "fa fa-ellipsis-h";
+        else if (__typeCom == 1)
+            _icon = "fa fa-phone";
+        else if (__typeCom == 2)
+            _icon = "fa fa-mobile";
+        else if (__typeCom == 3)
+            _icon = "fa fa-whatsapp";
+        else if (__typeCom == 4)
+            _icon = "fa fa-envelope";
+        else if (__typeCom == 5)
+            _icon = "fa fa-globe";
+        else if (__typeCom == 6)
+            _icon = "fa fa-facebook";
+        else if (__typeCom == 7)
+            _icon = "fa fa-twitter";
+        else if (__typeCom == 8)
+            _icon = "fa fa-instagram";
+        else if (__typeCom == 9)
+            _icon = "fa fa-youtube";
+        else if (__typeCom == 10)
+            _icon = "fa fa-google-plus";
+        else if (__typeCom == 11)
+            _icon = "fa fa-linkedin";
+        else if (__typeCom == 12)
+            _icon = "fa fa-vimeo";
+        else if (__typeCom == 13)
+            _icon = "fa fa-pinterest";
+        else if (__typeCom == 14)
+            _icon = "fa fa-flickr";
+        else if (__typeCom == 15) //myspace
+            _icon = "fa fa-question-circle";
+        else if (__typeCom == 16)
+            _icon = "fa fa-soundcloud";
+        else
+            _icon = "fa fa-ellipsis-h";
+        return _icon;
+    }
+
+    /*=============================================================================================
+            *** function: resetForm_address() ***
+            finalidade: resetar o formulário e disabilitar o botão save
+        =============================================================================================*/
+    function resetForm_coms() {
+
+        console.log("******** resetForm no advertiser ********");
+        document.getElementById("comsMaintenanceForm2").reset();
+        document.getElementById("saveFormButton_coms").disabled = true;
+
+    }
+
+    $("#comsMaintenanceForm2").change(function () {
+        document.getElementById("saveFormButton_coms").disabled = false;
+    })
+</script>
+
+

@@ -1,0 +1,153 @@
+﻿@model IEnumerable<rsi.Entities.Advertiser_address>
+@using rsi.Apps
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <div class="box-header">
+                <!-- formulário -->
+                <div id="adressesMaintenanceForm" style="display:none;"></div>                   
+
+                <!-- view / delete -->
+                <div id="adressesView" style="display:none;"></div>
+                                    
+                <h3 class="box-title">endereços cadastrados</h3>
+                <br />                                
+                <a href="#" onclick="advAddressMaintenance(0, 'a', @ViewBag.AdvertiserId)"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;novo registro</a>                                                                     
+            </div>
+            <div class="box-body">
+                <table class="table table-hover table-condensed table-responsive" id="addressListTab">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>id</th>
+                            <th>st</th>
+                            <th>descrição</th>
+                            <th>cep</th>
+                            <th>rua</th>  
+                            <th>horário</th>                          
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var _items in Model)
+                        {
+                            string _description = Functions.__maximumSizeOfTheText(_items.Description, 30);
+                            string _street = Functions.__maximumSizeOfTheText(_items.Street, 30);
+                            string _openingHours = Functions.__maximumSizeOfTheText(_items.OpeningHours, 50);
+                            string _stx = _items.St == rsi.Entities.status.off ? "glyphicon glyphicon-thumbs-down text-danger" :
+                                            _items.St == rsi.Entities.status.on ? "glyphicon glyphicon-thumbs-up text-primary" :
+                                            "glyphicon glyphicon-exclamation-sign";
+
+                            ViewBag.AdvertiserId = _items.AdvertiserId;
+                            ViewBag.AddressId = _items.Id;
+
+                            <tr id="tabAddressLineId_@_items.Id">
+                                <td id="col_DisplayOrder">@_items.DisplayOrder</td>
+                                <td id="col_Id">@_items.Id</td>
+                                <td id="col_St"><i class="@_stx"></i></td>
+                                <td id="col_Description">@_description</td>
+                                <td id="col_ZipCode">@_items.ZipCode</td>
+                                <td id="col_Street">@_street</td>
+                                <td id="col_OpeningHours">@_openingHours</td>
+
+                                <td>
+                                    <a href="#" onclick="advAddressViewDelete(@_items.Id,'v')"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#" onclick="advAddressMaintenance(@_items.Id, 'e', @_items.AdvertiserId)"><span class="glyphicon glyphicon-pencil"></span></a>                                                                                                         
+                                    <a href="#" onclick="advAddressViewDelete(@_items.Id,'d')"><span class="glyphicon glyphicon-trash"></span></a>
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /*=============================================================================================
+    *** function: advAddressMaintenance() ***
+    parametros..: __addressId, __operation, __advertiserId
+    finalidade..: exibir o formulário de manutenção de registros
+=============================================================================================*/
+function advAddressMaintenance(__addressId, __operation, __advertiserId) {
+    console.log("advAddressMaintenance");
+    console.log("__addressId: " + __addressId);
+    console.log("__operation: " + __operation);
+    console.log("__advertiserId: " + __advertiserId);
+    event.preventDefault();
+    $("#adressesMaintenanceForm").load("/backEnd/Advertisers_adresses/_adressesMaintenanceForm?__addressId=" + __addressId + "&__operation=" + __operation + "&__advertiserId=" + __advertiserId, function () {
+        MostrarForm("adressesMaintenanceForm", "adressesView");
+    })
+    }
+
+    /*=============================================================================================
+        *** function: advAddressViewDelete() ***
+        parametros..: __addressId, __operation
+        finalidade..: exibir os detalhes dos registros
+    =============================================================================================*/
+    function advAddressViewDelete(__addressId, __operation) {
+        event.preventDefault();
+        console.log("advAddressViewDelete");
+        $("#adressesView").load("/backEnd/Advertisers_adresses/_adressesView?__addressId=" + __addressId + "&__operation=" + __operation, function () {
+            MostrarForm("adressesView", "adressesMaintenanceForm");
+        })
+    }
+
+    /*=============================================================================================
+   *** function: sendAddressToDeleteInForm() ***
+   finalidade..: tem como objetivo pegar o id do endereço a ser excluído e enviar para "_ajaxDeleteAddress()"
+=============================================================================================*/
+    function sendAddressToDeleteInForm(__divToHide, __idInHeader) {
+        console.log("sendAddressToDeleteInForm");
+        //var _addressId = $("#idInTitle_address").html();
+        var _addressId = $(__idInHeader).html();
+        console.log("linha para apagar: " + _addressId);
+        //var _divToHide = "adressesMaintenanceForm"; // id da div do formulário de endereços
+        var _divDeteleButtomToHide = "deleteRegisterConfirm_address";
+        var _controllerURL = "/backEnd/Advertisers_adresses/_jsonAdressesDelete/"; // url do controller que efetiva o delete
+        var _tableLineToRemove = "#tabAddressLineId_" + _addressId;
+
+        // backEnd/this.js: enviar o __addressId para o controller, via ajax, do registro a apagar e após o retorno do controller fechar a div (formulário ou view) e eliminar a linha do endereço de "_list.cshtml"
+        _ajaxDeleteAddress(_addressId, _controllerURL, __divToHide, _divDeteleButtomToHide, _tableLineToRemove);
+
+        return false;
+    }
+    /*=============================================================================================
+       *** function: _ajaxDeleteAddress() ***
+       parametros: __addressId 
+                   __divToHide (id da div para esconder, por exemplo: pode ser o formulário de endereços ou a view de consulta ao endereço)
+                   __controllerURL (url do controller que efetiva o delete)
+       finalidade: enviar o __addressId para o controller, via ajax, do registro a apagar e após o retorno do controller fechar a div (formulário ou view) e eliminar a linha do endereço de "_list.cshtml"
+   =============================================================================================*/
+    function _ajaxDeleteAddress(__addressId, __controllerURL, __divToHide, __divDeteleButtomToHide, __tableLineToRemove) {
+        event.preventDefault();
+        console.log("******** _ajaxDeleteAddress **********");
+        var _lineToRemove = "";
+        jQuery.ajax({
+            type: "POST",
+            url: __controllerURL,
+            dataType: "json",
+            data: { __addressId: __addressId },
+            success: function (data) {
+                if (__divToHide != null)
+                    if (__divToHide != "")
+                        EsconderForm(__divToHide);
+
+                if (__divDeteleButtomToHide != null)
+                    if (__divDeteleButtomToHide != "")
+                        EsconderForm(__divDeteleButtomToHide); // corrige um bug fechando o trecho do formulário com o botão que efetiva a deleção do registro
+
+                if (__tableLineToRemove != null)
+                    if (__tableLineToRemove != "")
+                        $(__tableLineToRemove).fadeOut(4000);  //$(__tableLineToRemove).remove();
+
+                return false;
+            }
+        });
+    }
+   </script>

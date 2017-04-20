@@ -1,0 +1,175 @@
+﻿@model IEnumerable<rsi.Entities.Advertiser>
+
+@section Menu {
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Inbox.js"></script>
+    <script src="~/Areas/backEnd/assets/stylesAndScripts/Scripts/Mailbox/Inbox-menu.js"></script>
+}
+
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/icheck/css/all.css" rel="stylesheet" />
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/icheck/css/flat/_all.css" rel="stylesheet" />
+<link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/icheck/css/flat/blue.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-purple">
+                <div class="box-header with-border">
+                    <h3 class="box-title">lista completa de anunciantes</h3>
+                    <div class="box-tools pull-right">
+                        <div class="has-feedback">
+                            <input type="text" class="form-control input-sm" placeholder="buscar anunciante">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <div class="mailbox-controls">
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                            <i class="fa fa-square-o"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                        <div class="pull-right">
+                            @*1-50/200*@
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive mailbox-messages">
+                        @using (Html.BeginForm("_manualAdmin_advertisersShortList", "Advertisers_ShortList", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data" }))
+            {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            //@Html.HiddenFor(model => model.Id)
+
+                            <input type="hidden" name="DisplayId" value="@ViewBag.DisplayId" />
+
+                            <table id="manualAdminAdvertisersShortList" class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fa fa-check"></i></th>
+                                        <th>#</th>
+                                        <th>imagem</th>
+                                        <th>nome</th>
+                                        <th>situação</th>
+                                        <th>st</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        rsi.Apps.Context _context = new rsi.Apps.Context();
+
+                                        foreach (var _item in Model)
+                                        {
+                                            <tr id="@_item.Id">
+                                                <td><input type="checkbox" name="id_@_item.Id" value="@_item.Id"></td>
+                                                <td><a href="#" class="detailsAdvertiser" role="button" data-viewId="@_item.Id">@_item.Id</a></td>
+
+                                                @{
+                                                    var _img = _context.Medias.FirstOrDefault(x => x.AdvertiserId == _item.Id && x.Type == rsi.Entities.AdvertiserDetails.mediaType.logo).FileName;
+
+                                                    if (!String.IsNullOrEmpty(_img))
+                                                    {
+                                                        _img = rsi.Entities.configurations.thePaths.advertisersImages + _img;
+                                                        <td><a href="#" class="detailsAdvertiser" role="button" data-viewId="@_item.Id"><img src="@Url.Content(_img)" width="30" class="img-thumbnail img-responsive" /></a></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                }
+                                                <td><a href="#" class="detailsAdvertiser" role="button" data-viewId="@_item.Id">@_item.Name</a></td>
+                                                <td><a href="#" class="detailsAdvertiser" role="button" data-viewId="@_item.Id">@_item.Situation</a></td>
+                                                <td><a href="#" class="detailsAdvertiser" role="button" data-viewId="@_item.Id">@_item.St</a></td>
+                                                <td><a href="#" class="detailsAdvertiser" role="button" data-advertiserId="@_item.Id"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                                                <td><a onclick="listAdd(@_item.Id)" role="button" data-advertisershowlistId="@_item.Id"><span class="glyphicon glyphicon-plus"></span></a></td>
+                                                @*<td><a href="#" class="list3453" role="button" data-advertisershowlistId="@_item.Id"><span class="glyphicon glyphicon-plus"></span></a></td>*@
+
+                                            </tr>
+                                                    }
+                                    }
+                                </tbody>
+                            </table>
+                            <div style="padding:20px;">
+                                <button type="submit" nave="operation" value="updateVitrineListTable" class="btn btn-primary btn-block margin-bottom">atualizar lista de anunciantes</button>
+                            </div>
+                                                    }
+                    </div>
+                </div>
+                <div class="box-footer no-padding">
+                    <div class="mailbox-controls">
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                            <i class="fa fa-square-o"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
+                        <div class="pull-right">
+                            @*1-50/200*@
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
+                                <button type="button" class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+<script>
+    /*
+        fontes:
+        http://www.rodolfofadino.com.br/2011/08/chamada-ajax-com-json-e-asp-net-mvc/
+        https://social.msdn.microsoft.com/Forums/pt-BR/51d3b63a-1b85-4d32-8cd7-7d90d714b53d/retornando-um-list-com-json-mvc-4?forum=mvcpt
+    */
+    function listAdd(id) {
+        console.log(id);
+        console.log("chegou na função de adição...");
+        $.ajax({
+            url: '/backEnd/Advertisers_ShortList/AdvertisersShortList_add_Ajax?id=' + id + "&dId=" + @ViewBag.DisplaysId,
+            type: 'POST',
+            contentType: 'application/json;',
+            data: JSON.stringify({ retorno: $("#txtBusca").val()}),
+            success: function (valid) {
+                if (valid) {
+                    console.log("retornou do controller, ok... falta inserir a linha com o retorno do controller...");
+                    $("#list_advertisersShortList_Display").append("<tr><td></td><td></td><td></td><td></td><td>novo anunciante adicionado...</td><td>");
+
+                    //console.log(txtBusca);
+                    //$("#manualAdminAdvertisersShortList").empty();
+                    //$(dados).each(function (i, val) {
+                    //    var result = val.split(",");
+                    //    //var id = parseInt(result[0]);
+                    //    console.log("o controller devolveu...");
+                    //    console.log(result);
+                    //    $("#manualAdminAdvertisersShortList").append("<tr><td>" +
+                    //                                  result[0] + "</td>" +
+                    //                                  "</tr>"
+                    //                                );
+                    //})
+
+                } else {
+                    //show that id is not valid
+                }
+            }
+        });
+    }
+
+    $(function () {
+        $(".list3453").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-advertisershowlistId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            console.log("chegou na função de inclusão jquery...");
+            $("#modalAddressView137361576").load("/backEnd/Advertisers/_modalDetails?id=" + id, function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modalAddressView137361576").modal();
+            })
+        });
+    })
+</script>
+
+
+

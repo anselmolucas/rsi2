@@ -1,0 +1,7 @@
+﻿<form action="/backend/Images/imagem" method="post" name="form" id="form1" accept-charset="utf-8" enctype="multipart/form-data">
+    <input type="file" name="__file"  id="__file" accept="image/*">
+    <input type="submit">
+</form>
+
+<br /><br />
+@Html.Action("_list","Images", new { area = "backEnd"})

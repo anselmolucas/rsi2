@@ -1,0 +1,45 @@
+﻿<!--
+    view (partial).: _displaysOrderView_sideBarLeft.cshtml
+    local..........: ~/Areas/backEnd/Views/Displays/_partialViews/_displaysOrderView_sideBarLeft.cshtml
+    controller.....:
+    system.........: rsi
+    descrição......: menu lateral para organizar a ordem de exibição das displays
+    author.........: anselmolucas@gmail.com
+    date...........: 22/set/2016
+    status.........: 90% ok (falta atualizar via javascrpt a opção ativa no momento)
+-->
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">diplays</h3>
+        <div class="box-tools">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body no-padding">
+        <ul id="messages" class="nav nav-pills nav-stacked">
+            <li id="messagesInbox" class="active">
+                <a href="@Url.Action("DisplaysOrder","Displays", new { id = "hom"})">
+                    <i class="fa fa-inbox text-red"></i><span>elementos da home</span>
+                </a>
+            </li>
+
+            <li id="messagesInbox">
+                <a href="@Url.Action("DisplaysOrder","Displays", new { id = "sec"})">
+                    <i class="fa fa-inbox text-red"></i><span>seções da home</span>
+                </a>
+            </li>
+
+            <li id="messagesInbox">
+                <a href="@Url.Action("DisplaysOrder","Displays", new { id = "sid"})">
+                    <i class="fa fa-inbox text-red"></i><span>sidebar</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+

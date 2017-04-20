@@ -1,0 +1,42 @@
+﻿<!--
+    view (partial).: List.cshtml
+    local..........: ~/Views/_partialViews/_list_tags_Tags.cshtml
+    controller.....: Tags
+    system.........: rsi
+    descrição......: listar as categorias
+    author.........: anselmolucas@gmail.com
+    date...........: 06/set/2016
+    status.........: 70% ok (falta processar a lista de tags)
+-->
+
+@model IEnumerable<rsi.Entities.AdvertiserDetails.Tag>
+
+@{
+    string[] _colors = new string[8];
+    _colors[0] = "info";
+    _colors[1] = "primary";
+    _colors[2] = "success";
+    _colors[3] = "default";
+    _colors[4] = "warning";
+    _colors[5] = "danger";
+    _colors[6] = "success";
+    _colors[7] = "warning";
+
+    int _colorIndex = 0;
+
+    <div class="btn-group" role="group">
+        @{
+                int _tagsCount = 0;
+                foreach (var _item in Model)
+                {
+                    var _buttonColor = "btn-" + _colors[_colorIndex];
+                    var _tag = _item.TagText.Trim().ToLower();
+                    var _link = "/Search/FindKey/" + _tag + "?o=t";
+                    <a href="@Url.Content(_link)" class="listTagsAdvertisers btn @_buttonColor" role="button" data-tagId="@_item.Id" class="btn @_buttonColor"><span class="glyphicon glyphicon-tag"></span>&nbsp;@_tag</a>
+                _colorIndex++;
+                _colorIndex = (_colorIndex > (_colors.Length - 1) ? 0 : _colorIndex);
+                _tagsCount++;
+            }
+        }
+    </div>
+}

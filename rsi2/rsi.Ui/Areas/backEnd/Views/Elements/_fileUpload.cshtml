@@ -1,0 +1,131 @@
+﻿@model rsi.ViewModels.fileUpload
+@using rsi.Entities.configurations
+@using rsi.Apps
+
+<div class="panel panel-default">
+   
+    <div class="panel-body">
+        <div class="col-md-12">
+
+            @{
+                string _img = !string.IsNullOrEmpty(ViewBag.FileImage) ? ViewBag.FileImagePath + ViewBag.FileImage : rsi.Entities.configurations.theSetup.noImage_path;
+
+                <div class="pull-right">
+                    <img id="@ViewBag.ImageId" src="@Url.Content(_img)" class="img-thumbnail img-responsive" width="100" />
+                </div>
+            }
+
+            <p>por gentileza, selecione a imagem desejada...</p>
+
+            <br />
+            @using (Html.BeginForm("_fileUpload", "Elements", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+            {
+                <div class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.tableRecordId)
+                    @Html.HiddenFor(model => model.table)
+                    @Html.HiddenFor(model => model.fileName)
+
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">
+                            @if (!String.IsNullOrEmpty(Model.fileName))
+                            {
+                                @Html.Label("substituir arquivo de mídia")
+                            }
+                            else
+                            {
+                                @Html.Label("inserir arquivo arquivo de mídia")
+                            }
+
+                        </div>
+
+                        <div class="col-sm-10">
+                            <label id="inputFileText" for='__file'>Selecionar um arquivo &#187;</label>
+                            <input type="file" id="__file" name="__file" class="form-control">
+                            <p class="help-block">você importa imagens (.jpg, .png)</p>
+                        </div>
+                    </div>
+
+                    <br /><br />
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                                @{
+                                    string _imgActual = Functions.__displayIconFileName(Model.fileName, ViewBag.Tab);
+                                }
+                                <button id="resetButton_inModal" onclick="resetImagFileUpload('@_imgActual')" type="button" class="btn btn-default" title="ignorar alterações"><span class="glyphicon glyphicon-refresh"></span></button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="btn-group btn-group-lg pull-right" role="group" aria-label="...">
+                                <button id="saveButton_inModal" type="submit" name="operation" value="save" class="btn btn-primary submitButton" title="salvar alterações"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }<!-- fim do formulário -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    // fonte: http://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded
+    $("#__file").change(function () {
+        document.getElementById("saveButton_inModal").disabled = false;
+        document.getElementById("resetButton_inModal").disabled = false;
+       
+        var _imageId = "@ViewBag.ImageId";
+        readImageURL(this, _imageId);
+    });
+
+    $(document).ready(function () {
+        document.getElementById("saveButton_inModal").disabled = true; 
+        document.getElementById("resetButton_inModal").disabled = true;
+    })
+
+    function readImageURL(input, idImage) {
+              
+        console.log("imagem: " + idImage);
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                
+                $('#' + idImage).attr('src', e.target.result);
+                //$('#imgActual').attr('src', e.target.result);
+                //$('#logo').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+</script>
+<style>
+    /*
+        fonte: http://pt.stackoverflow.com/questions/90179/como-estilizar-um-input-do-tipo-file
+    */
+    /* Esconde o input */
+    /*input[type='file'] {
+        display: none;
+    }*/
+    #__file{
+        display: none;
+    }
+    /* Aparência que terá o seletor de arquivo */
+    #inputFileText {
+        background-color: #3498db;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        margin: 10px;
+        padding: 6px 20px;
+    }
+
+</style>

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<rsi.Entities.AdvertiserDetails.Tag>
+
+<div class="wide_layout relative">
+    <div class="container">
+
+        <div class="row">
+            @using (Html.BeginForm("TagsListProcess", "Tags", FormMethod.Post, new { i = "commentForm", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    
+                <input type="hidden" name="view" value="tags" />
+                <input type="hidden" name="id" value="0" />                
+               
+                <!-- theBegin: + tags visíveis -->
+                <div class="box box-purple">
+                    <div class="box-header">
+                        <h3 class="box-title">tags visíveis</h3>
+                        <span class="label label-success">@ViewBag.TagsVisiblesCount</span>
+
+                        <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="box-body" style="display:block;">
+
+                        @Html.Partial("~/Areas/backEnd/Views/_partialViews/_list_tags_Tags.cshtml", (IEnumerable<rsi.Entities.AdvertiserDetails.Tag>)@Model)
+
+                    </div>
+                </div>
+                <!-- theEnd: - tags visíveis -->
+
+                <!-- theBegin: + tags escondidas -->
+                <div class="box box-purple">
+                    <div class="box-header">
+                        <h3 class="box-title">tags escondidas</h3>
+                        <span class="label label-success">@ViewBag.TagListHiddenCount</span>
+
+                        <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="box-body" style="display:block;">
+
+                        @Html.Partial("~/Areas/backEnd/Views/_partialViews/_list_tags_Tags.cshtml", (IEnumerable<rsi.Entities.AdvertiserDetails.Tag>)@ViewBag.TagListHidden)
+
+                    </div>
+                </div>
+                <!-- theEnd: - tags escondidas -->
+
+                <!-- theBegin: + tags totais -->
+                <div class="box box-purple">
+                    <div class="box-header">
+                        <h3 class="box-title">tags (todas)</h3>
+                        <span class="label label-success">@ViewBag.TagListTotalCount</span>
+
+                        <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="box-body" style="display:block;">
+
+                        @Html.Partial("~/Areas/backEnd/Views/_partialViews/_list_tags_Tags.cshtml", (IEnumerable<rsi.Entities.AdvertiserDetails.Tag>)@ViewBag.TagListTotal)
+
+                    </div>
+                </div>
+                <!-- theEnd: - tags escondidas -->
+
+                <br />
+                <div class="col-md-6">
+                    <button type="submit" nave="operation" value="updateVitrineListTable" class="btn btn-primary btn-block margin-bottom">atualizar lista de tags</button>
+                </div>                                     
+            }                                    
+        </div>
+
+    </div>
+</div>
+

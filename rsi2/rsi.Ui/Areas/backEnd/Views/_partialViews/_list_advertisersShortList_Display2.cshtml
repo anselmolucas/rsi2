@@ -1,0 +1,255 @@
+﻿<!--
+    view (partial).: ListAdvertisers.cshtml
+    local..........: ~/Views/Advertiser/ListAdvertisers.cshtml
+    controller.....: Advertisers (é chamada por /ShowCases/Maintenance)
+    system.........: rsi
+    descrição......: manutençãode vitrines e anúncios
+    author.........: anselmolucas@gmail.com
+    date...........: 01/set/2016
+    status.........: 0% ok (falta revisão geral para levantar o status atual)
+-->
+
+@model IEnumerable<rsi.Entities.AdvertisersShortList>
+
+<div class="col-md-12">
+    <div class="box box-purple">
+
+        <div class="box-header">
+            <ul class="navx nav-tabsx list-inline" style="list-style-type: none;">
+                <li class="dropdownx">
+                    <a class="dropdown-togglex" data-toggle="dropdown" href="#" style="text-decoration: none;">
+                        <i class="fa fa-gear" style="text-align:left;"></i>
+                    </a>      
+                    @foreach(var _itemx in Model)
+                    {
+                        ViewBag.DisplaysId = _itemx.DisplaysId;
+                        break;
+                    }
+                    <ul class="dropdown-menu">
+                        <li><a role="menuitem" href="/Displays/DeleteDisplayRecords/@ViewBag.DisplaysId">apagar todos os anunciantes já vinculados</a></li>
+                        <li><a role="menuitem" href="#" onclick="manualAdd_advertisersShortList('_manualAdmin_advertisersShortList')">vincular novos anunciantes </a></li> 
+
+                        @*<button type="button" class="btn btn-danger" title="excluir o registro" @ViewBag.EnableTheDeleteButton "><span class="glyphicon glyphicon-trash"></span></button>  
+                        <button type="button" class="btn btn-danger" title="excluir o registro" @ViewBag.EnableTheDeleteButton onclick="manualAdd_advertisersShortList('_manualAdmin_advertisersShortList')"><span class="glyphicon glyphicon-trash"></span></button>*@                     
+                    </ul>
+                </li>
+                <li><h3 class="box-title">anunciantes vinculados</h3></li>
+            </ul>
+        </div>
+        <div class="box-body">
+            <table id="list_advertisersShortList_Display" class="table table-hover table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th><i class="fa fa-check"></i></th>
+                        <th>ordem</th>
+                        <th>imagem</th>
+                        <th>id</th>
+                        <th>nome</th>
+                        <th>filtro</th>
+                        <th>situação</th>
+                        <th>st</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var _item in Model)
+                    {
+                        var _img = rsi.Entities.configurations.thePaths.advertisersImages + _item.MediaFileName;
+                        var _name = rsi.Apps.Functions.__maximumSizeOfTheText(_item.Name, 15);
+                        var _filter = rsi.Apps.Functions.__maximumSizeOfTheText(_item.FilterExpression, 15);
+                        <tr id="@_item.Id">
+                            <td><a  class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_item.DisplayOrder</a></td>
+                            <td><a  class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_item.Id</a></td>
+                            <td><a  class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId"><img src="@Url.Content(_img)" width="30" class="img-thumbnail img-responsive" /></a></td>
+                            
+                            <td><a  class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_item.AdvertiserId</a></td>
+                            <td><a class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_name</a></td>
+                            <td><a class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_filter</a></td>
+                            <td><a  class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_item.Situation</a></td>
+                            <td><a  class="detailsAdvertiser" role="button" data-advertiserId="@_item.AdvertiserId">@_item.St</a></td>
+
+                            <td>
+                                <a class="detailsAdvertiser"  role="button" data-advertiserId="@_item.AdvertiserId"><span class="glyphicon glyphicon-eye-open"></span></a>                                
+                                <a class="editAdvertiseruiyx" role="button" data-advertisershowlistId="@_item.Id"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="deleteAdvertiseruiyx" role="button" data-advertisershowlistId="@_item.Id"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a onclick="advertisersShortListDelete(@_item.Id)" role="button" data-advertisershowlistId="@_item.Id"><span class="glyphicon glyphicon-remove bg-red"></span></a>
+                                @*<a href="/backEnd/Displays/DeleteDisplayRecords/@_item.DisplaysId?__adv=@_item.Id"><span class="glyphicon glyphicon-remove"></span></a>*@
+                                @*<a href="#" class="modalAdvertiserDel8992" role="button" data-viewId="@_item.Id"><span class="glyphicon glyphicon-remove"></span></a>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            <br />
+
+            <h5><b><span id="ShowCaseAdvertisersCount">@ViewBag.ShowCaseAdvertisersCount</span></b> anunciantes vinculados de <b><span id="AdvertisersCount">@ViewBag.AdvertisersCount</span></b> anunciantes totais (obs.: @ViewBag.AdvertisersOffCount registros desabilitados)</h5>
+        </div>
+    </div>
+
+    <br /><br />
+    @*<div id="_manualAdmin_advertisersShortList" style="display:none;">*@
+   
+</div>
+
+<!-- le modais-->
+<!-- add record -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal fade" id="modal-addAdvertiser992" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                incluir um novo anunciante
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            @*@Html.Partial("~/Views/Advertiser/ListAdvertisers.cshtml", (IEnumerable<rsi.Entities.ShowCaseAdvertiser>)@ViewBag.ShowCaseAdvertisers)*@
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Close
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+
+<div class="modal" id="modalAddressView137361576"></div><!-- div usada para abrir o modal -->
+
+<div class="modal" id="modalDetailsAdvertiser34365"></div><!-- div usada para abrir o modal -->
+<script>
+    //abrir o modal de visulização do registro
+    //$(function () {
+    //    $(".modalAdvertiserView8992").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+    //        var id = $(this).attr("data-viewId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+    //        console.log(id);
+    //        $("#modalAddressView1373615").load("/backEnd/Advertiser/ModalAdvertiserView?id=" + id + "&o=v", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+    //            $("#modalAddressView1373615").modal();
+    //        })
+    //    });
+    //})
+
+    //abrir o modal de visulização do registro
+    $(function () {
+        $(".detailsAdvertiser").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-advertiserId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            console.log("função de detalhes do anunciante");
+            $("#modalAddressView137361576").load("/backEnd/Advertiser/ModalDetails?id=" + id, function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modalAddressView137361576").modal();
+            })
+        });
+    })
+
+    function manualAdd_advertisersShortList(el) {
+        var display = document.getElementById(el).style.display;
+        if (display == "none")
+            document.getElementById(el).style.display = 'block';
+        else
+            document.getElementById(el).style.display = 'none';
+    }
+
+
+    //abrir o modal de edição de registros *********
+    $(function () {
+        $(".editAdvertiseruiyx").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-advertisershowlistId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            console.log("editando...");
+            $("#modalDetailsAdvertiser34365").load("/backEnd/Displays_AdvertisersShortList/Modal_AdvertisersShortList_Maintenance?id=" + id + "&vId=" + @ViewBag.DisplaysId + "&o=e", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modalDetailsAdvertiser34365").modal();
+            })
+        });
+    })
+
+    //abrir o modal de deleção de registros *********
+    $(function () {
+        $(".deleteAdvertiseruiyx").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-advertisershowlistId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            console.log("excluindo...");
+            $("#modalDetailsAdvertiser34365").load("/backEnd/Displays_AdvertisersShortList/Modal_AdvertisersShortList_Maintenance?id=" + id + "&vId=" + @ViewBag.DisplaysId + "&o=d", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modalDetailsAdvertiser34365").modal();
+            })
+        });
+    })
+
+    // essa função tem como objetivo pegar o id do anunciante a ser excluído, enviar para o controller deletar e excluir visualmente a linha da tabela referente ao registro eliminado
+    function advertisersShortListDelete(id)
+    {
+        console.log(id);
+        console.log("chegou na função de exclusão...");
+        $.ajax({
+            url: '/backEnd/Displays_AdvertisersShortList/AdvertisersShortList_delete_Ajax/' + id,
+            type: 'POST',
+            contentType: 'application/json;',
+            data: JSON.stringify({ id: id}),
+            success: function (valid) {
+                if (valid) {
+                    console.log("excluindo via ajax ...");
+                    var row = document.getElementById(id);
+                    var table = row.parentNode;
+                    while (table && table.tagName != 'TABLE')
+                        table = table.parentNode;
+                    if (!table)
+                        return;
+                    table.deleteRow(row.rowIndex);
+                    var ShowCaseAdvertisersCount = document.getElementById('ShowCaseAdvertisersCount').innerHTML;
+                    console.log(ShowCaseAdvertisersCount);
+                    ShowCaseAdvertisersCount = ShowCaseAdvertisersCount - 1;
+                    document.getElementById('ShowCaseAdvertisersCount').innerHTML = ShowCaseAdvertisersCount;
+                } else {
+                    //show that id is not valid
+                }
+            }
+        });
+    }
+
+    //abrir o modal de deleção de registros *********
+    $(function () {
+        $(".deleteAdvertiseruiyx2").click(function () { /* nesse exemplo estou usando uma classe, mas pode ser tb um id, essa classe ou id deve estar no <a href que irá invocar essa função para executar o modal */
+            var id = $(this).attr("data-advertisershowlistId"); /* esse é o parâmetro que conterá a chave de pesquisa do registro o importante é ter o radical "data-" */
+            console.log(id);
+            console.log("excluindo...");
+
+            var row = document.getElementById(id);
+            var table = row.parentNode;
+            while (table && table.tagName != 'TABLE')
+                table = table.parentNode;
+            if (!table)
+                return;
+            table.deleteRow(row.rowIndex);
+
+            $("#modalDetailsAdvertiser34365").empty().load('/Aluno/Details');
+            $("#modalDetailsAdvertiser34365").load("/backEnd/Displays_AdvertisersShortList/AdvertisersShortList_Maintenance_Ajax?id=" + id + "&vId=" + @ViewBag.DisplaysId + "&o=d", function () { /*Lê o modal e o insere na div do modal, perceba que o id da div do modal é invocada aqui, em load temos o controle/view responsáveis para pesquisar o id e invocar o modal */
+                $("#modalDetailsAdvertiser34365").modal();
+            })
+        });
+    })
+
+
+</script>
+
+
+
+
+

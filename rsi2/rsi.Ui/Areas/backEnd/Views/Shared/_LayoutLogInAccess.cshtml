@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RSI - BackEnd</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/ico" href="~/assets/images/logos/favicon.png">
+
+    <!-- styles AdminLTE - theme-->
+    <link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/dist/css/admin-lte.min.css" rel="stylesheet" />
+    <link href="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/dist/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <style>
+        .loginPage {
+            margin-top: 100px;
+        }
+
+        body {
+            background-color: #663399;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4"></div>
+
+            @RenderBody()
+
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    
+</body>
+</html><script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/jquery/js/jQuery-2.1.4.min.js"></script>
+
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/slimscroll/js/jquery.slimscroll.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/plugins/fastclick/js/fastclick.min.js"></script>
+<script src="~/Areas/backEnd/assets/stylesAndScripts/AdminLTE/dist/js/app.min.js"></script>
+@RenderSection("scripts", required: false)
+
+
